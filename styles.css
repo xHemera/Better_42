@@ -126,7 +126,6 @@ body.dark-theme .text-gray-900 {
   color: #e0e0e0 !important;
 }
 
-/* Override white backgrounds with high specificity */
 body.dark-theme *[style*="background-color: white"],
 body.dark-theme *[style*="background-color: #fff"],
 body.dark-theme *[style*="background-color: #ffffff"],
@@ -136,13 +135,11 @@ body.dark-theme *[style*="background: #ffffff"] {
   background-color: #2d2d2d !important;
 }
 
-/* Light theme (default) */
 body.light-theme {
   background-color: #ffffff !important;
   color: #333333 !important;
 }
 
-/* Smooth transition between themes */
 body, body * {
   transition: background-color 0.3s ease, color 0.3s ease !important;
 }
