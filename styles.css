@@ -1,0 +1,148 @@
+#theme-switcher {
+  position: fixed !important;
+  top: 15px !important;
+  right: 190px !important;
+  background: #000000 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  z-index: 10000 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+#theme-switcher:hover {
+  background: #0056b3 !important;
+  transform: scale(1.05) !important;
+}
+
+body.dark-theme {
+  background-color: #1a1a1a !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .content {
+  background-color: #1a1a1a !important;
+}
+
+body.dark-theme .content.md\:pl-20 {
+  background-color: #1a1a1a !important;
+}
+
+body.dark-theme div {
+  background-color: #1a1a1a !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme [style*="background-color: rgb(255, 255, 255)"],
+body.dark-theme [style*="background-color: rgb(250, 250, 250)"],
+body.dark-theme [style*="background-color: rgb(241, 245, 249)"],
+body.dark-theme [style*="background-color: rgb(244, 244, 245)"] {
+  background-color: #2d2d2d !important;
+}
+
+body.dark-theme .card, 
+body.dark-theme .panel,
+body.dark-theme .container,
+body.dark-theme section,
+body.dark-theme article,
+body.dark-theme aside {
+  background-color: #2d2d2d !important;
+  border-color: #444 !important;
+}
+
+body.dark-theme .sidebar-animation {
+  background-color: #2d2d2d !important;
+}
+
+body.dark-theme * {
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme h1, 
+body.dark-theme h2, 
+body.dark-theme h3, 
+body.dark-theme h4, 
+body.dark-theme h5, 
+body.dark-theme h6 {
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme p, 
+body.dark-theme span, 
+body.dark-theme div {
+  color: #e0e0e0 !important;
+}
+
+/* Form elements */
+body.dark-theme input, 
+body.dark-theme textarea, 
+body.dark-theme select {
+  background-color: #333 !important;
+  color: #e0e0e0 !important;
+  border-color: #555 !important;
+}
+
+/* Links */
+body.dark-theme a {
+  color: #4da6ff !important;
+}
+
+body.dark-theme a:hover {
+  color: #66b3ff !important;
+}
+
+/* Buttons */
+body.dark-theme button {
+  background-color: #333 !important;
+  color: #e0e0e0 !important;
+  border-color: #555 !important;
+}
+
+/* Override Tailwind CSS classes */
+body.dark-theme .bg-white {
+  background-color: #2d2d2d !important;
+}
+
+body.dark-theme .bg-gray-50 {
+  background-color: #2d2d2d !important;
+}
+
+body.dark-theme .bg-gray-100 {
+  background-color: #333 !important;
+}
+
+body.dark-theme .text-black {
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .text-gray-900 {
+  color: #e0e0e0 !important;
+}
+
+/* Override white backgrounds with high specificity */
+body.dark-theme *[style*="background-color: white"],
+body.dark-theme *[style*="background-color: #fff"],
+body.dark-theme *[style*="background-color: #ffffff"],
+body.dark-theme *[style*="background: white"],
+body.dark-theme *[style*="background: #fff"],
+body.dark-theme *[style*="background: #ffffff"] {
+  background-color: #2d2d2d !important;
+}
+
+/* Light theme (default) */
+body.light-theme {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+}
+
+/* Smooth transition between themes */
+body, body * {
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
