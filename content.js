@@ -17,6 +17,9 @@ function earlyLoadDefaultProfile() {
     
     const data = JSON.parse(profileData);
     
+    // Charger le dark mode par défaut
+    document.body.classList.add('dark-theme');
+    
     if (data.backgroundUrl && !data.backgroundUrl.includes('youtube.com/watch') && !data.backgroundUrl.includes('youtu.be/')) {
         const style = document.createElement('style');
         style.textContent = `
@@ -54,7 +57,11 @@ window.addEventListener('load', function() {
 
         const btn = document.createElement('button');
         btn.id = 'theme-switcher';
-        btn.innerHTML = 'Worse';
+        
+        // Déterminer l'état initial basé sur s'il y a un profil par défaut
+        const hasDefaultProfile = localStorage.getItem('default-profile-id');
+        let isDark = !!hasDefaultProfile; // Si profil par défaut = dark mode
+        btn.innerHTML = isDark ? 'Worse' : 'Better';
 
         const settingsBtn = document.createElement('button');
         settingsBtn.id = 'settings-btn';
@@ -107,7 +114,6 @@ window.addEventListener('load', function() {
         `;
         settingsPopup.classList.remove('show');
 
-        let isDark = true;
         let currentProfile = null;
         
         function getDefaultProfile() {
@@ -404,23 +410,7 @@ window.addEventListener('load', function() {
         }
 
         function removeCustomizations() {
-            const bgElements = document.querySelectorAll('.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black, .w-full.xl\\:h-72.bg-center.bg-cover');
-            bgElements.forEach(el => {
-                const contentDiv = el.querySelector('div[style*="z-index:2"]');
-                if (contentDiv) {
-                    el.innerHTML = contentDiv.innerHTML;
-                }
-                
-                el.removeAttribute('style');
-                el.className = 'w-full xl:h-72 bg-center bg-cover bg-ft-black';
-            });
-            
-            const pfpElements = document.querySelectorAll('.w-52.h-52.text-black.md\\:w-40.md\\:h-40.lg\\:h-28.lg\\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full');
-            pfpElements.forEach(el => {
-                el.removeAttribute('style');
-                el.className = 'w-52 h-52 text-black md:w-40 md:h-40 lg:h-28 lg:w-28 bg-cover bg-no-repeat bg-center rounded-full bg-gray-300 border-2 shadow-base';
-            });
-            
+            // Supprimer tous les styles injectés par l'extension
             const injectedStyles = document.querySelectorAll('style');
             injectedStyles.forEach(style => {
                 if (style.textContent.includes('w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black') || 
@@ -428,29 +418,31 @@ window.addEventListener('load', function() {
                     style.remove();
                 }
             });
+            
+            // Simplement recharger la page pour revenir à l'état original
+            location.reload();
         }
 
-        document.body.classList.add('dark-theme');
-        updateLogtime();
-        startLogtimeWatcher();
-        
-        loadDefaultProfileOnStartup();
+        // Activer le dark mode si profil par défaut
+        if (isDark) {
+            document.body.classList.add('dark-theme');
+            updateLogtime();
+            startLogtimeWatcher();
+            loadDefaultProfileOnStartup();
+        }
 
         btn.addEventListener('click', function() {
             if (isDark) {
-                document.body.classList.remove('dark-theme');
-                btn.innerHTML = 'Better';
-                isDark = false;
-                restoreLogtime();
-                
+                // Passer en mode normal (Better) - rechargement pour éviter les bugs
                 removeCustomizations();
                 
             } else {
+                // Passer en mode dark (Worse)
                 document.body.classList.add('dark-theme');
                 btn.innerHTML = 'Worse';
                 isDark = true;
                 updateLogtime();
-                
+                startLogtimeWatcher();
                 loadDefaultProfileOnStartup();
             }
         });
