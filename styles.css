@@ -1,88 +1,196 @@
 #theme-switcher {
-  position: fixed !important;
-  top: 15px !important;
-  right: 190px !important;
-  background: #333 !important;
-  color: white !important;
-  border: none !important;
-  padding: 8px 12px !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
-  z-index: 10000 !important;
-  font-size: 14px !important;
+	position: fixed !important;
+	top: 15px !important;
+	right: 190px !important;
+	background: #333 !important;
+	color: white !important;
+	border: none !important;
+	padding: 8px 12px !important;
+	border-radius: 6px !important;
+	cursor: pointer !important;
+	z-index: 10000 !important;
+	font-size: 14px !important;
 }
 
 #theme-switcher:hover {
-  background: #555 !important;
+	background: #555 !important;
+}
+
+/* TOP BAR SEARCH */
+body.dark-theme .flex.flex-row.items-center.justify-between.h-full.px-5.bg-white.gap-4 {
+  background-color: #2a2a2a !important;
+}
+body.dark-theme .w-full.h-full.outline-none {
+	background-color: #2a2a2a !important;
+}
+
+/* ALL BUTON  */
+body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\.5.px-2.cursor-pointer.text-xs.uppercase,
+body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\.5.px-1.cursor-pointer.text-xs.uppercase {
+ color: #5c058f !important;
+ border-color: #5c058f !important;
 }
 
 /* Dark theme */
 body.dark-theme {
-  background-color: #0f0f0f !important;
+	background-color: #0f0f0f !important;
+}
+
+
+/* -----=====TOP USER PART=====----- */
+
+
+/* USER PICTURE BORDER */
+body.dark-theme .w-52.h-52.text-black.md\:w-40.md\:h-40.lg\:h-28.lg\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full.bg-gray-300.border-2.shadow-base {
+ border-color: #5c058f !important;
 }
 
 /* CIRCLE DAY */
 body.dark-theme .dropdown .flex.flex-row.items-center.text-stone-500 {
-  background-color: #5c058f !important;
+	background-color: #5c058f !important;
 }
-
 body.dark-theme .stroke-\[hsla\(180\,\_100\%\,\_37\%\,\_0\.3\)\] {
-  background-color: #5c058fCC !important;
+	background-color: #8f0505 !important;
 }
 
 /* ALL MILESTONE */
 body.dark-theme .h-10.rounded {
-  background-color: #5c058f !important;
+	background-color: #5c058f !important;
 }
 
-/* ALL EVENT */
-body.dark-theme .w-20.pt-2 {
-  background-color: #5c058f !important;
+/* COMPLETE DAY ON MILESTONE CIRCLE GRAPH */
+body.dark-theme .stroke-legacy-main {
+	stroke: #5c058f !important;
 }
 
-body.dark-theme .border.grow {
-  background-color: #5c058f !important;
-}
-
-body.dark-theme .relative.flex-shrink {
-  background-color: #5c058f !important;
-}
-
-body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main-muted.pl-2 {
- background-color: #350452 !important;
-}
-
-body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main.pl-2 {
- background-color: #5c058f !important;
-}
-
-
-                /* LOGTIME GRAPH WEEKS */
+/* LOGTIME GRAPH WEEKS */
+body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer,
 body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer:hover {
-  background-color: #5c058f80 !important;
+	background-color: #5c058f !important;
 }
 
+/* MAIL && PHONE USER */
+body.dark-theme [style*="color: rgb(181, 22, 63);"] {
+	color: #5c058f !important;
+}
 
 /* BAR LEVEL XP USER */
 body.dark-theme .h-full.w-full.flex-1.transition.duration-1000.ease-out {
-  background-color: #5c058f !important;
+	background-color: #5c058f !important;
+}
+body.dark-theme .w-full.h-2\.5.rounded.drop-shadow-md.relative.overflow-hidden.bg-secondary {
+  background-color: #2a2a2a !important;
 }
 
-/* Pour ta nouvelle classe */
-body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main.pl-2 {
-  background-color: #5c058f !important;
+
+/* -----=====BELOW TOP USER STATS=====----- */
+
+
+/* BACKGROUND COLOR */
+body.dark-theme .grid.grid-cols-1.lg\:grid-cols-2.\32 xl\:grid-cols-3.bg-zinc-50.text-xs.gap-0\.5.md\:gap-4.md\:p-4 {
+   background-color: #0f0f0f !important;
 }
 
-body.dark-theme .stroke-legacy-main {
-  stroke: #5c058f !important;
+/* PROJECT IN PROGRESS */
+body.dark-theme .block.px-2\.5.py-2.font-medium.hover\:text-teal-700.text-legacy-main {
+ color: #5c058f !important;
+}
+body.dark-theme .block.px-2\.5.py-2.font-medium.hover\:text-teal-700.text-legacy-main:hover {
+ color: #5c058f !important;
 }
 
-/* Vire les outlines */
+
+/* -----LOGTIME----- */
+
+
+/* EVENT CASE COLOR */
+body.dark-theme .text-xs.border-white.border {
+	border-color: #2a2a2a !important;
+	background-color: #2a2a2a !important;
+}
+
+
+/* -----EVENT PART----- */
+
+
+/* BACKGROUND EVENT COLOR */
+body.dark-theme .bg-white.md\:h-96.overflow-y-auto.md\:drop-shadow-md.md\:rounded-lg.p-6 {
+  background-color: #2a2a2a !important;
+}
+
+/* ASSOC EVENT */
+body.dark-theme [style*="background-color: rgb(162, 179, 229)"] {
+   background-color: #5c058f80 !important;
+}
+body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(162, 179, 229)"] {
+   color: #5c058f !important;
+}
+
+/* EXAM EVENT */
+body.dark-theme [style*="background-color: rgb(237, 129, 121)"] {
+   background-color: #ff353580 !important;
+}
+body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(237, 129, 121)"],
+body.dark-theme .flex.flex-row.gap-4.flex-wrap[style*="color: rgb(237, 129, 121)"] {
+   color: #ff3535 !important;
+}
+
+/* MEET UP EVENT */
+body.dark-theme [style*="background-color: rgb(0, 186, 188)"] {
+   background-color: #00f7ff80 !important;
+}
+body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(0, 186, 188)"],
+body.dark-theme .flex.flex-row.gap-4.flex-wrap[style*="color: rgb(0, 186, 188)"] {
+   color: #00f7ff !important;
+}
+
+/* BLACK TEXT EVENT */
+body.dark-theme .inline-block.text-sm[style*="color: rgb(162, 179, 229)"],
+body.dark-theme .inline-block.text-sm[style*="color: rgb(237, 129, 121)"],
+body.dark-theme .inline-block.text-sm[style*="color: rgb(0, 186, 188)"],
+body.dark-theme .block.text-xs[style*="color: rgb(162, 179, 229)"],
+body.dark-theme .block.text-xs[style*="color: rgb(237, 129, 121)"],
+body.dark-theme .block.text-xs[style*="color: rgb(0, 186, 188)"] {
+  color: #ffffff !important;
+}
+
+
+/* OUTLINE */
 * {
-  outline: none !important;
+	outline: none !important;
 }
 
 *:focus {
-  outline: none !important;
-  box-shadow: none !important;
+	outline: none !important;
+	box-shadow: none !important;
 }
+
+
+/* SCROLLBAR */
+body.dark-theme * {
+  scrollbar-width: thin !important;
+  scrollbar-color: #333 #0f0f0f !important;
+}
+
+body.dark-theme *::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-track {
+  background: #0f0f0f !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-thumb {
+  background: #333 !important;
+  border-radius: 4px !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-thumb:hover {
+  background: #555 !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-corner {
+  background: #0f0f0f !important;
+}
+
