@@ -1,3 +1,15 @@
+/* Cache les boutons pendant le chargement */
+#theme-switcher,
+#settings-btn {
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+/* Les affiche quand la page est chargée */
+body.page-loaded #theme-switcher,
+body.page-loaded #settings-btn {
+    opacity: 1 !important;
+}
 
 /* TOP BAR SEARCH */
 body.dark-theme .flex.flex-row.items-center.justify-between.h-full.px-5.bg-white.gap-4 {
@@ -19,9 +31,7 @@ body.dark-theme {
 	background-color: #0f0f0f !important;
 }
 
-
 /* -----=====TOP USER PART=====----- */
-
 
 /* USER PICTURE BORDER */
 body.dark-theme .w-52.h-52.text-black.md\:w-40.md\:h-40.lg\:h-28.lg\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full.bg-gray-300.border-2.shadow-base {
@@ -65,9 +75,7 @@ body.dark-theme .w-full.h-2\.5.rounded.drop-shadow-md.relative.overflow-hidden.b
 	background-color: #2a2a2a !important;
 }
 
-
 /* -----=====BELOW TOP USER STATS=====----- */
-
 
 /* BACKGROUND COLOR */
 body.dark-theme .grid.grid-cols-1.lg\:grid-cols-2.\32 xl\:grid-cols-3.bg-zinc-50.text-xs.gap-0\.5.md\:gap-4.md\:p-4 {
@@ -82,9 +90,7 @@ body.dark-theme .block.px-2\.5.py-2.font-medium.hover\:text-teal-700.text-legacy
 	color: #5c058f !important;
 }
 
-
 /* -----LOGTIME----- */
-
 
 /* EVENT CASE COLOR */
 body.dark-theme .text-xs.border-white.border {
@@ -92,9 +98,7 @@ body.dark-theme .text-xs.border-white.border {
 	background-color: #2a2a2a !important;
 }
 
-
 /* -----EVENT PART----- */
-
 
 /* BACKGROUND EVENT COLOR */
 body.dark-theme .bg-white.md\:h-96.overflow-y-auto.md\:drop-shadow-md.md\:rounded-lg.p-6 {
@@ -137,7 +141,6 @@ body.dark-theme .block.text-xs[style*="color: rgb(0, 186, 188)"] {
 	color: #ffffff !important;
 }
 
-
 /* OUTLINE */
 * {
 	outline: none !important;
@@ -148,16 +151,15 @@ body.dark-theme .block.text-xs[style*="color: rgb(0, 186, 188)"] {
 	box-shadow: none !important;
 }
 
-
 /* SCROLLBAR */
 body.dark-theme * {
 	scrollbar-width: thin !important;
-  scrollbar-color: #2a2a2a #0f0f0f !important;
+	scrollbar-color: #2a2a2a #0f0f0f !important;
 }
 
 body.dark-theme *::-webkit-scrollbar {
 	width: 8px !important;
-  height: 8px !important;
+	height: 8px !important;
 }
 
 body.dark-theme *::-webkit-scrollbar-track {
@@ -166,7 +168,7 @@ body.dark-theme *::-webkit-scrollbar-track {
 
 body.dark-theme *::-webkit-scrollbar-thumb {
 	background: #2a2a2a !important;
-  border-radius: 4px !important;
+	border-radius: 4px !important;
 }
 
 body.dark-theme *::-webkit-scrollbar-thumb:hover {
@@ -177,107 +179,303 @@ body.dark-theme *::-webkit-scrollbar-corner {
 	background: #0f0f0f !important;
 }
 
-/* BOUTON WORSE/BETTER */
+/* BOUTON WORSE/BETTER - Gris par défaut, violet quand dark actif */
 #theme-switcher {
 	position: fixed !important;
 	top: 15px !important;
 	right: 190px !important;
-	background: #444444 !important;
+	background: linear-gradient(135deg, #444444, #666666) !important;
 	color: white !important;
 	border: none !important;
-	padding: 8px 12px !important;
-	border-radius: 6px !important;
+	padding: 10px 16px !important;
+	border-radius: 8px !important;
 	cursor: pointer !important;
 	z-index: 10000 !important;
 	font-size: 14px !important;
+	font-weight: 600 !important;
+	box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
+	transition: all 0.3s ease !important;
 }
 
 #theme-switcher:hover {
-	background: #444 !important;
+	transform: translateY(-2px) !important;
+	box-shadow: 0 6px 20px rgba(68, 68, 68, 0.4) !important;
+	background: linear-gradient(135deg, #666666, #888888) !important;
 }
 
-/* BOUTON ENGRENAGE */
+/* Bouton violet quand dark mode actif */
+body.dark-theme #theme-switcher {
+	background: linear-gradient(135deg, #5c058f, #7d1aaa) !important;
+	box-shadow: 0 4px 12px rgba(92, 5, 143, 0.3) !important;
+}
+
+body.dark-theme #theme-switcher:hover {
+	background: linear-gradient(135deg, #7d1aaa, #9d2acc) !important;
+	box-shadow: 0 6px 20px rgba(92, 5, 143, 0.4) !important;
+}
+
+/* BOUTON ENGRENAGE - Visible seulement en dark mode */
 #settings-btn {
 	position: fixed !important;
 	top: 15px !important;
-	right: 260px !important;
-	background: #444444 !important;
+	right: 280px !important;
+	background: linear-gradient(135deg, #5c058f, #7d1aaa) !important;
 	color: white !important;
 	border: none !important;
-	padding: 8px 10px !important;
-	border-radius: 6px !important;
+	padding: 10px 12px !important;
+	border-radius: 8px !important;
 	cursor: pointer !important;
 	z-index: 10000 !important;
-	font-size: 14px !important;
+	font-size: 16px !important;
+	font-weight: 600 !important;
+	box-shadow: 0 4px 12px rgba(92, 5, 143, 0.3) !important;
+	transition: all 0.3s ease !important;
+	display: none !important;
 }
 
 #settings-btn:hover {
-	background: #444 !important;
+	transform: translateY(-2px) !important;
+	box-shadow: 0 6px 20px rgba(92, 5, 143, 0.4) !important;
+	background: linear-gradient(135deg, #7d1aaa, #9d2acc) !important;
 }
 
-/* POPUP SETTINGS */
+/* Engrenage visible seulement quand dark mode actif */
+body.dark-theme #settings-btn {
+	display: block !important;
+}
+
+/* POPUP SETTINGS AMÉLIORÉ */
 #settings-popup {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        background: rgba(0, 0, 0, 0.8) !important;
-        z-index: 10001 !important;
-        display: none !important;
-        align-items: center !important;
-        justify-content: center !important;
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	background: rgba(0, 0, 0, 0.85) !important;
+	backdrop-filter: blur(10px) !important;
+	z-index: 10001 !important;
+	display: none !important;
+	align-items: center !important;
+	justify-content: center !important;
+	animation: fadeIn 0.3s ease !important;
 }
 
 #settings-popup.show {
-        display: flex !important;
+	display: flex !important;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 .popup-content {
-	background: #2a2a2a !important;
-	padding: 30px !important;
-	border-radius: 8px !important;
-	min-width: 400px !important;
+	background: linear-gradient(135deg, #2a2a2a, #1f1f1f) !important;
+	padding: 40px !important;
+	border-radius: 16px !important;
+	min-width: 550px !important;
+	max-width: 650px !important;
 	text-align: center !important;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+	border: 1px solid #444 !important;
+	transform: scale(0.9) !important;
+	animation: popIn 0.3s ease forwards !important;
+}
+
+@keyframes popIn {
+	to { transform: scale(1); }
 }
 
 .popup-content h3 {
 	color: #fff !important;
-	margin-bottom: 20px !important;
+	margin-bottom: 30px !important;
+	font-size: 24px !important;
+	font-weight: 700 !important;
+	background: linear-gradient(45deg, #5c058f, #ff3535, #00f7ff) !important;
+	background-clip: text !important;
+	-webkit-background-clip: text !important;
+	-webkit-text-fill-color: transparent !important;
 }
 
-#bg-url-input {
-	width: 100% !important;
-	padding: 10px !important;
-	margin-bottom: 20px !important;
-	border: 1px solid #555 !important;
-	border-radius: 4px !important;
-	background: #333 !important;
+/* SECTION PROFILS */
+.profile-section {
+	background: rgba(92, 5, 143, 0.1) !important;
+	border: 2px solid rgba(92, 5, 143, 0.3) !important;
+	border-radius: 12px !important;
+	padding: 25px !important;
+	margin-bottom: 25px !important;
+	transition: all 0.3s ease !important;
+}
+
+.profile-section:hover {
+	background: rgba(92, 5, 143, 0.15) !important;
+	border-color: rgba(92, 5, 143, 0.5) !important;
+}
+
+.profile-section h4 {
 	color: #fff !important;
+	margin-bottom: 15px !important;
+	font-size: 18px !important;
+	font-weight: 600 !important;
 }
 
-.popup-buttons {
+#profile-selector {
+	width: 100% !important;
+	padding: 12px 16px !important;
+	margin-bottom: 15px !important;
+	border: 2px solid #5c058f !important;
+	border-radius: 8px !important;
+	background: rgba(0, 0, 0, 0.3) !important;
+	color: #fff !important;
+	font-size: 16px !important;
+	font-weight: 600 !important;
+	cursor: pointer !important;
+	transition: all 0.3s ease !important;
+}
+
+#profile-selector:focus {
+	border-color: #7d1aaa !important;
+	box-shadow: 0 0 0 3px rgba(92, 5, 143, 0.3) !important;
+	background: rgba(0, 0, 0, 0.5) !important;
+}
+
+#profile-selector option {
+	background: #2a2a2a !important;
+	color: #fff !important;
+	padding: 10px !important;
+}
+
+.profile-buttons {
 	display: flex !important;
 	gap: 10px !important;
 	justify-content: center !important;
 }
 
-.popup-buttons button {
-	padding: 8px 16px !important;
+.profile-buttons button {
+	padding: 10px 20px !important;
 	border: none !important;
-	border-radius: 4px !important;
+	border-radius: 8px !important;
 	cursor: pointer !important;
 	color: white !important;
+	font-weight: 600 !important;
+	transition: all 0.3s ease !important;
+	font-size: 14px !important;
+}
+
+.profile-buttons button:hover {
+	transform: translateY(-2px) !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+#load-profile {
+	background: linear-gradient(135deg, #059669, #10b981) !important;
+}
+
+#save-profile {
+	background: linear-gradient(135deg, #5c058f, #7d1aaa) !important;
+}
+
+#delete-profile {
+	background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+}
+
+.settings-section {
+	background: rgba(255, 255, 255, 0.05) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	border-radius: 12px !important;
+	padding: 25px !important;
+	margin-bottom: 20px !important;
+	transition: all 0.3s ease !important;
+}
+
+.settings-section:hover {
+	background: rgba(255, 255, 255, 0.08) !important;
+	border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.settings-section h4 {
+	color: #fff !important;
+	margin-bottom: 15px !important;
+	font-size: 18px !important;
+	font-weight: 600 !important;
+}
+
+#bg-url-input,
+#pfp-url-input {
+	width: 100% !important;
+	padding: 12px 16px !important;
+	margin-bottom: 15px !important;
+	border: 2px solid #555 !important;
+	border-radius: 8px !important;
+	background: rgba(0, 0, 0, 0.3) !important;
+	color: #fff !important;
+	font-size: 14px !important;
+	transition: all 0.3s ease !important;
+}
+
+#bg-url-input:focus,
+#pfp-url-input:focus {
+	border-color: #5c058f !important;
+	box-shadow: 0 0 0 3px rgba(92, 5, 143, 0.3) !important;
+	background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.section-buttons {
+	display: flex !important;
+	gap: 10px !important;
+	justify-content: center !important;
+}
+
+.section-buttons button {
+	padding: 10px 20px !important;
+	border: none !important;
+	border-radius: 8px !important;
+	cursor: pointer !important;
+	color: white !important;
+	font-weight: 600 !important;
+	transition: all 0.3s ease !important;
+	font-size: 14px !important;
+}
+
+.section-buttons button:hover {
+	transform: translateY(-2px) !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 #apply-bg {
-	background: #5c058f !important;
+	background: linear-gradient(135deg, #5c058f, #7d1aaa) !important;
 }
 
 #reset-bg {
-	background: #dc2626 !important;
+	background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+}
+
+#apply-pfp {
+	background: linear-gradient(135deg, #059669, #10b981) !important;
+}
+
+#reset-pfp {
+	background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+}
+
+.popup-footer {
+	margin-top: 25px !important;
+	padding-top: 20px !important;
+	border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 #close-popup {
-	background: #666 !important;
+	background: linear-gradient(135deg, #666, #888) !important;
+	color: white !important;
+	border: none !important;
+	padding: 12px 24px !important;
+	border-radius: 8px !important;
+	cursor: pointer !important;
+	font-weight: 600 !important;
+	transition: all 0.3s ease !important;
+}
+
+#close-popup:hover {
+	background: linear-gradient(135deg, #888, #aaa) !important;
+	transform: translateY(-2px) !important;
 }
