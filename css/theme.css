@@ -1,0 +1,60 @@
+/* css/theme.css - Thème dark mode */
+
+/* -----=====FORCE BACKGROUND DARK=====----- */
+
+body.dark-theme,
+body.dark-theme html,
+body.dark-theme #root,
+body.dark-theme .App {
+    background-color: var(--better42-bg-dark) !important;
+    min-height: 100vh !important;
+}
+
+/* CONTENEUR PRINCIPAL */
+body.dark-theme .content.md\:pl-20.pt-16.content-animation {
+    background-color: var(--better42-bg-dark) !important;
+}
+
+/* GRILLE PRINCIPALE */
+body.dark-theme .grid.grid-cols-1.lg\:grid-cols-2.\\32 xl\:grid-cols-3 {
+    background-color: var(--better42-bg-dark) !important;
+}
+
+/* TOUS LES ÉLÉMENTS AVEC BG-ZINC-50 */
+body.dark-theme [class*="bg-zinc-50"] {
+    background-color: var(--better42-bg-dark) !important;
+}
+
+/* DERNIÈRE LIGNE DU FOOTER */
+body.dark-theme .justify-center.flex.flex-col.gap-4.text-sm.text-gray-500 {
+    background-color: var(--better42-bg-dark) !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 20px !important;
+}
+
+/* BACKGROUND EVENT COLOR */
+body.dark-theme .bg-white.md\:h-96.overflow-y-auto.md\:drop-shadow-md.md\:rounded-lg.p-6 {
+    background-color: var(--better42-bg-secondary) !important;
+}
+
+/* BACKGROUND COLOR */
+body.dark-theme .grid.grid-cols-1.lg\:grid-cols-2.\32 xl\:grid-cols-3.bg-zinc-50.text-xs.gap-0\.5.md\:gap-4.md\:p-4 {
+    background-color: var(--better42-bg-dark) !important;
+}
+
+/* DARK MODE */
+body.dark-theme .flex.flex-row.rounded-lg.bg-white.drop-shadow-md {
+    background-color: var(--better42-bg-secondary) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.dark-theme .bg-white.md\:h-96.overflow-y-auto.p-4.md\:rounded-r-lg {
+    background-color: var(--better42-bg-secondary) !important;
+    border: none !important;
+    outline: none !important;
+}
+
+body.dark-theme .flex.gap-4.p-4.flex-col.border-r.pr-4 {
+    border-right: none !important;
+}

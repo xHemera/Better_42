@@ -1,0 +1,42 @@
+/* css/text.css - Styles du texte */
+
+/* -----=====TEXT COLOR=====----- */
+
+/* PETITS TEXTES EN GRIS CLAIR */
+body.dark-theme .bg-slate-50.w-4.h-4.flex.justify-center.text-center.leading-5 {
+    color: var(--better42-text-light) !important;
+}
+
+/* HEADERS MONTHS/TEXT LOGTIME/ALL LITLE TEXT */
+body.dark-theme .font-bold.py-2,
+body.dark-theme .text-xs.border-white.border,
+body.dark-theme .text-xs {
+    color: var(--better42-text-light) !important;
+}
+
+/* TITLE LIKE MARKS */
+body.dark-theme .font-bold.text-black.uppercase.text-sm {
+    color: var(--better42-text-light) !important;
+}
+
+/* LINK DOWN PAGE */
+body.dark-theme .justify-center.flex.flex-col.gap-4.text-sm.text-gray-500.px-4.py-3.text-center.sm\:flex-row {
+    background-color: var(--better42-bg-dark) !important;
+    color: var(--better42-text-white) !important;
+}
+
+body.dark-theme .hover\:text-emerald-500 {
+    color: var(--better42-text-white) !important;
+}
+
+body.dark-theme .hover\:text-emerald-500:hover {
+    color: var(--better42-purple) !important;
+}
+
+body.dark-theme .hover\:text-emerald-500 a {
+    color: var(--better42-text-white) !important;
+}
+
+body.dark-theme .hover\:text-emerald-500:hover a {
+    color: var(--better42-purple) !important;
+}

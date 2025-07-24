@@ -1,0 +1,32 @@
+/* css/scrollbar.css - Styles des barres de défilement */
+
+/* -----=====SCROLLBAR=====----- */
+
+/* SCROLLBAR POUR FIREFOX */
+body.dark-theme * {
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--better42-bg-secondary) var(--better42-bg-dark) !important;
+}
+
+/* SCROLLBAR POUR WEBKIT (CHROME, SAFARI, EDGE) */
+body.dark-theme *::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-track {
+    background: var(--better42-bg-dark) !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-thumb {
+    background: var(--better42-bg-secondary) !important;
+    border-radius: 4px !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-thumb:hover {
+    background: var(--better42-bg-secondary) !important;
+}
+
+body.dark-theme *::-webkit-scrollbar-corner {
+    background: var(--better42-bg-dark) !important;
+}

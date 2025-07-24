@@ -1,0 +1,48 @@
+/* css/events.css - Styles des événements */
+
+/* -----=====EVENT PART=====----- */
+
+/* EVENT CASE COLOR */
+body.dark-theme .text-xs.border-white.border {
+    border-color: var(--better42-bg-secondary) !important;
+    background-color: var(--better42-bg-secondary) !important;
+}
+
+/* ASSOC EVENT */
+body.dark-theme [style*="background-color: rgb(162, 179, 229)"] {
+    background-color: rgba(92, 5, 143, 0.5) !important;
+}
+
+body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(162, 179, 229)"] {
+    color: var(--better42-purple) !important;
+}
+
+/* EXAM EVENT */
+body.dark-theme [style*="background-color: rgb(237, 129, 121)"] {
+    background-color: var(--better42-red-alpha) !important;
+}
+
+body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(237, 129, 121)"],
+body.dark-theme .flex.flex-row.gap-4.flex-wrap[style*="color: rgb(237, 129, 121)"] {
+    color: var(--better42-red) !important;
+}
+
+/* MEET UP EVENT */
+body.dark-theme [style*="background-color: rgb(0, 186, 188)"] {
+    background-color: var(--better42-cyan-alpha) !important;
+}
+
+body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(0, 186, 188)"],
+body.dark-theme .flex.flex-row.gap-4.flex-wrap[style*="color: rgb(0, 186, 188)"] {
+    color: var(--better42-cyan) !important;
+}
+
+/* BLACK TEXT EVENT */
+body.dark-theme .inline-block.text-sm[style*="color: rgb(162, 179, 229)"],
+body.dark-theme .inline-block.text-sm[style*="color: rgb(237, 129, 121)"],
+body.dark-theme .inline-block.text-sm[style*="color: rgb(0, 186, 188)"],
+body.dark-theme .block.text-xs[style*="color: rgb(162, 179, 229)"],
+body.dark-theme .block.text-xs[style*="color: rgb(237, 129, 121)"],
+body.dark-theme .block.text-xs[style*="color: rgb(0, 186, 188)"] {
+    color: var(--better42-text-white) !important;
+}

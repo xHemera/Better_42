@@ -6,8 +6,27 @@
   "content_scripts": [
     {
       "matches": ["https://profile-v3.intra.42.fr/*"],
-      "css": ["styles.css"],
-      "js": ["content.js"]
+      "css": [
+        "css/variables.css",
+        "css/theme.css",
+        "css/topbar.css",
+        "css/userStats.css",
+        "css/buttons.css",
+        "css/events.css",
+        "css/text.css",
+        "css/uiControls.css",
+        "css/popup.css",
+        "css/settingsSections.css",
+        "css/scrollbar.css"
+      ],
+      "js": [
+        "js/config.js",
+        "js/profileManager.js",
+        "js/backgroundManager.js",
+        "js/themeManager.js",
+        "js/uiManager.js",
+        "main.js"
+      ]
     }
   ],
   "permissions": ["activeTab"]
