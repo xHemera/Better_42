@@ -1,3 +1,5 @@
+// js/uiManager.js - Version mise à jour pour la nouvelle architecture
+
 class UIManager {
     constructor() {
         this.themeBtn = null;
@@ -30,6 +32,20 @@ class UIManager {
         this.settingsPopup.id = 'settings-popup';
         this.settingsPopup.innerHTML = this.getSettingsPopupHTML();
         this.settingsPopup.classList.remove('show');
+        
+        // Ajouter la section des couleurs après la création du popup
+        this.addColorThemeSection();
+    }
+
+    addColorThemeSection() {
+        const popupContent = this.settingsPopup.querySelector('.popup-content');
+        const popupFooter = popupContent.querySelector('.popup-footer');
+        
+        // Créer la section des couleurs avec la nouvelle architecture
+        const colorSection = window.ColorThemeManager.createUI();
+        
+        // L'insérer juste avant le footer
+        popupContent.insertBefore(colorSection, popupFooter);
     }
 
     getSettingsPopupHTML() {
@@ -38,41 +54,50 @@ class UIManager {
                 <h3>🎨 Better 42 Settings</h3>
                 
                 <div class="profile-section">
-                    <h4>📁 Profile Manager</h4>
-                    <div class="profile-controls">
-                        <input type="text" id="profile-name-input" placeholder="Profile name..." maxlength="20" />
-                        <button id="create-profile">➕ Create</button>
-                    </div>
-                    <select id="profile-selector">
-                        <option value="">-- No Profile Selected --</option>
-                    </select>
-                    <div class="profile-buttons">
-                        <button id="load-profile">📂 Load</button>
-                        <button id="save-profile">💾 Save</button>
-                        <button id="delete-profile">🗑️ Delete</button>
-                    </div>
-                </div>
-                
-                <div class="settings-section">
-                    <h4>🖼️ Background (IMG/GIF/VIDEO)</h4>
-                    <input type="text" id="bg-url-input" placeholder="URL: Image, GIF or YouTube video..." />
-                    <div class="section-buttons">
-                        <button id="apply-bg">Apply BG</button>
-                        <button id="reset-bg">Reset BG</button>
+                    <h4>📁 Gestionnaire de Profils</h4>
+                    <div class="profile-row">
+                        <div class="profile-create">
+                            <input type="text" id="profile-name-input" placeholder="Nom du profil..." maxlength="20" />
+                            <button id="create-profile">➕ Créer</button>
+                        </div>
+                        <select id="profile-selector">
+                            <option value="">-- Aucun Profil --</option>
+                        </select>
+                        <div class="profile-actions">
+                            <button id="load-profile">📂 Charger</button>
+                            <button id="save-profile">💾 Sauver</button>
+                            <button id="delete-profile">🗑️ Supprimer</button>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="settings-section">
-                    <h4>👤 Profile Picture (IMG/GIF only)</h4>
-                    <input type="text" id="pfp-url-input" placeholder="URL: Image or GIF only..." />
-                    <div class="section-buttons">
-                        <button id="apply-pfp">Apply PFP</button>
-                        <button id="reset-pfp">Reset PFP</button>
+                    <h4>🖼️ Fond d'écran (IMG/GIF/VIDEO)</h4>
+                    <div class="input-row">
+                        <input type="text" id="bg-url-input" placeholder="URL: Image, GIF ou vidéo YouTube..." />
+                        <div class="section-buttons">
+                            <button id="apply-bg">Appliquer</button>
+                            <button id="reset-bg">Reset</button>
+                        </div>
                     </div>
                 </div>
+                
+                <div class="settings-section">
+                    <h4>👤 Photo de profil (IMG/GIF)</h4>
+                    <div class="input-row">
+                        <input type="text" id="pfp-url-input" placeholder="URL: Image ou GIF..." />
+                        <div class="section-buttons">
+                            <button id="apply-pfp">Appliquer</button>
+                            <button id="reset-pfp">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- La section couleur sera ajoutée ici dynamiquement -->
                 
                 <div class="popup-footer">
-                    <button id="close-popup">✖️ Close</button>
+                    <button id="close-popup">✖️ Fermer</button>
+                    <button id="reset-all-themes" class="reset-themes-btn">🔄 Reset Couleurs</button>
                 </div>
             </div>
         `;
@@ -103,6 +128,98 @@ class UIManager {
         document.addEventListener('click', (e) => {
             this.handlePopupButtonClick(e);
         });
+
+        // Ajouter les styles pour le bouton de reset des thèmes
+        this.addResetButtonStyles();
+    }
+
+    addResetButtonStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .profile-row {
+                display: flex !important;
+                gap: 10px !important;
+                align-items: end !important;
+                flex-wrap: wrap !important;
+            }
+
+            .profile-create {
+                display: flex !important;
+                gap: 5px !important;
+                flex: 1 !important;
+                min-width: 200px !important;
+            }
+
+            .profile-actions {
+                display: flex !important;
+                gap: 5px !important;
+                flex-wrap: wrap !important;
+            }
+            
+            .profile-actions button {
+                background: linear-gradient(135deg, #6366f1, #818cf8) !important;
+                color: #fff !important;
+                border: none !important;
+                padding: 9px 18px !important;
+                border-radius: 7px !important;
+                cursor: pointer !important;
+                font-weight: 600 !important;
+                font-size: 14px !important;
+                box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10) !important;
+                transition: all 0.18s;
+                outline: none !important;
+            }
+            .profile-actions button:hover {
+                background: linear-gradient(135deg, #818cf8, #a5b4fc) !important;
+                color: #222 !important;
+                transform: translateY(-1px) scale(1.04);
+                box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            }
+
+            .input-row {
+                display: flex !important;
+                gap: 10px !important;
+                align-items: center !important;
+                flex-wrap: wrap !important;
+            }
+
+            .input-row input {
+                flex: 1 !important;
+                min-width: 250px !important;
+            }
+
+            .section-buttons {
+                display: flex !important;
+                gap: 5px !important;
+                flex-shrink: 0 !important;
+            }
+
+            .popup-footer {
+                display: flex !important;
+                gap: 10px !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+
+            .reset-themes-btn {
+                background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+                color: white !important;
+                border: none !important;
+                padding: 12px 20px !important;
+                border-radius: 8px !important;
+                cursor: pointer !important;
+                font-weight: 600 !important;
+                font-size: 14px !important;
+                transition: all 0.3s ease !important;
+            }
+
+            .reset-themes-btn:hover {
+                background: linear-gradient(135deg, #ef4444, #f87171) !important;
+                transform: translateY(-2px) !important;
+                box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3) !important;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     handlePopupButtonClick(e) {
@@ -134,6 +251,19 @@ class UIManager {
             case 'close-popup':
                 this.hideSettingsPopup();
                 break;
+            case 'reset-all-themes':
+                this.resetAllThemes();
+                break;
+        }
+    }
+
+    resetAllThemes() {
+        if (window.ColorThemeManager.resetToDefaults()) {
+            // Fermer et rouvrir le popup pour rafraîchir l'UI
+            this.hideSettingsPopup();
+            setTimeout(() => {
+                this.showSettingsPopup();
+            }, 500);
         }
     }
 
@@ -189,6 +319,9 @@ class UIManager {
                 if (pfpInput) pfpInput.value = data.profilePicUrl || '';
             }
         }
+
+        // Afficher les statistiques des thèmes dans la console (debug)
+        console.log('Theme Statistics:', window.ColorThemeManager.getThemeStats());
     }
 
     hideSettingsPopup() {

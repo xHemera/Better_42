@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Better 42",
-  "version": "1.0",
-  "description": "Google extensions for the intranet 42",
+  "version": "2.0",
+  "description": "Google extensions for the intranet 42 with advanced theme system",
   "content_scripts": [
     {
       "matches": ["https://profile-v3.intra.42.fr/*"],
@@ -21,6 +21,9 @@
       ],
       "js": [
         "js/config.js",
+        "js/urlHelper.js",
+        "js/profileDetector.js",
+        "js/colorThemeManager.js",
         "js/profileManager.js",
         "js/backgroundManager.js",
         "js/themeManager.js",

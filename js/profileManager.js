@@ -1,6 +1,34 @@
 class ProfileManager {
     constructor() {
         this.currentProfile = null;
+        this.isOwnProfile = true; // Par défaut, assumer que c'est son propre profil
+    }
+
+    // Callback appelé par ProfileDetector lors des changements de profil
+    onProfileChange(isOwnProfile) {
+        const wasOwnProfile = this.isOwnProfile;
+        this.isOwnProfile = isOwnProfile;
+        
+        console.log('ProfileManager: Profile change detected', { wasOwnProfile, isOwnProfile });
+        
+        if (wasOwnProfile && !isOwnProfile) {
+            // On quitte son propre profil vers celui d'un autre
+            this.removeCustomizations();
+        } else if (!wasOwnProfile && isOwnProfile) {
+            // On revient sur son propre profil
+            this.applyOwnProfileCustomizations();
+        }
+    }
+
+    // Vérifier si on doit appliquer les customisations
+    shouldApplyCustomizations() {
+        // Toujours vérifier avec ProfileDetector si disponible
+        if (window.ProfileDetector && window.ProfileDetector.initialized) {
+            return window.ProfileDetector.isViewingOwnProfile();
+        }
+        
+        // Fallback: utiliser la valeur locale
+        return this.isOwnProfile;
     }
 
     getDefaultProfile() {
@@ -33,6 +61,12 @@ class ProfileManager {
     }
 
     loadDefaultProfileOnStartup() {
+        // Ne pas appliquer les customisations si on n'est pas sur son propre profil
+        if (!this.shouldApplyCustomizations()) {
+            console.log('ProfileManager: Skipping customizations (not own profile)');
+            return;
+        }
+
         const defaultProfileId = this.getDefaultProfile();
         if (!defaultProfileId) return;
         
@@ -200,6 +234,20 @@ class ProfileManager {
             return;
         }
         
+        // Attendre que ProfileDetector soit initialisé
+        setTimeout(() => {
+            if (!this.shouldApplyCustomizations()) {
+                console.log('ProfileManager: Skipping early customizations (not own profile)');
+                document.documentElement.style.visibility = 'visible';
+                return;
+            }
+
+            this.applyEarlyCustomizations();
+        }, 50);
+    }
+
+    // Appliquer les customisations précoces (avant le chargement complet)
+    applyEarlyCustomizations() {
         const defaultProfileId = this.getDefaultProfile();
         if (!defaultProfileId) {
             document.documentElement.style.visibility = 'visible';
@@ -235,6 +283,77 @@ class ProfileManager {
         setTimeout(() => {
             document.documentElement.style.visibility = 'visible';
         }, 100);
+    }
+
+    // Appliquer les customisations du profil personnel
+    applyOwnProfileCustomizations() {
+        if (!this.shouldApplyCustomizations()) return;
+        
+        // Réappliquer le thème sombre
+        document.body.classList.add('dark-theme');
+        
+        // Recharger le profil par défaut
+        this.loadDefaultProfileOnStartup();
+    }
+
+    // Supprimer toutes les customisations
+    removeCustomizations() {
+        console.log('ProfileManager: Removing customizations');
+        
+        // Supprimer les styles injectés
+        const injectedStyles = document.querySelectorAll('style');
+        injectedStyles.forEach(style => {
+            if (style.textContent.includes('background-image: url') || 
+                style.textContent.includes(Better42Config.SELECTORS.BACKGROUND) ||
+                style.textContent.includes(Better42Config.SELECTORS.PROFILE_PIC)) {
+                style.remove();
+            }
+        });
+
+        // Supprimer la classe dark-theme si on n'est pas sur son profil
+        if (!this.shouldApplyCustomizations()) {
+            document.body.classList.remove('dark-theme');
+        }
+
+        // Réinitialiser les éléments modifiés
+        this.resetBackgroundElements();
+        this.resetProfilePicElements();
+    }
+
+    // Réinitialiser les éléments de background
+    resetBackgroundElements() {
+        const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
+        bgElements.forEach(el => {
+            // Supprimer les styles inline de background
+            const style = el.getAttribute('style') || '';
+            const newStyle = style.replace(/background-image:[^;]*;?/g, '');
+            if (newStyle !== style) {
+                el.setAttribute('style', newStyle);
+            }
+            
+            // Supprimer les iframes YouTube si présentes
+            const iframes = el.querySelectorAll('iframe[src*="youtube"]');
+            iframes.forEach(iframe => iframe.remove());
+            
+            // Restaurer le contenu original si nécessaire
+            const contentDiv = el.querySelector('div[style*="z-index:2"]');
+            if (contentDiv) {
+                el.innerHTML = contentDiv.innerHTML;
+            }
+        });
+    }
+
+    // Réinitialiser les éléments de photo de profil
+    resetProfilePicElements() {
+        const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
+        pfpElements.forEach(el => {
+            // Supprimer les styles inline de background
+            const style = el.getAttribute('style') || '';
+            const newStyle = style.replace(/background-image:[^;]*;?/g, '');
+            if (newStyle !== style) {
+                el.setAttribute('style', newStyle);
+            }
+        });
     }
 }
 
