@@ -26,12 +26,52 @@ body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legac
 	border-color: #5c058f !important;
 }
 
-/* Dark theme */
-body.dark-theme {
-	background-color: #0f0f0f !important;
+/* -----=====FORCE BACKGROUND DARK=====----- */
+
+body.dark-theme,
+body.dark-theme html,
+body.dark-theme #root,
+body.dark-theme .App {
+    background-color: #0f0f0f !important;
+    min-height: 100vh !important;
+}
+
+/* CONTENEUR PRINCIPAL */
+body.dark-theme .content.md\:pl-20.pt-16.content-animation {
+    background-color: #0f0f0f !important;
+}
+
+/* GRILLE PRINCIPALE */
+body.dark-theme .grid.grid-cols-1.lg\:grid-cols-2.\\32 xl\:grid-cols-3 {
+    background-color: #0f0f0f !important;
+}
+
+/* TOUS LES ÉLÉMENTS AVEC BG-ZINC-50 */
+body.dark-theme [class*="bg-zinc-50"] {
+    background-color: #0f0f0f !important;
+}
+
+/* DERNIÈRE LIGNE DU FOOTER */
+body.dark-theme .justify-center.flex.flex-col.gap-4.text-sm.text-gray-500 {
+    background-color: #0f0f0f !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 20px !important;
 }
 
 /* -----=====TOP USER PART=====----- */
+
+/* LOGIN TOP LEFT */
+body.dark-theme .hover\:text-legacy-main:hover {
+	color: #5c058f !important;
+}
+
+/* HOLY GRAPH */
+body.dark-theme .hover\:fill-legacy-main:hover {
+	fill: #5c058f !important;
+}
+body.dark-theme .hover\:stroke-legacy-main:hover {
+	stroke: #5c058f !important;
+}
 
 /* USER PICTURE BORDER */
 body.dark-theme .w-52.h-52.text-black.md\:w-40.md\:h-40.lg\:h-28.lg\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full.bg-gray-300.border-2.shadow-base {
@@ -42,18 +82,36 @@ body.dark-theme .w-52.h-52.text-black.md\:w-40.md\:h-40.lg\:h-28.lg\:w-28.bg-cov
 body.dark-theme .dropdown .flex.flex-row.items-center.text-stone-500 {
 	background-color: #5c058f !important;
 }
-body.dark-theme .stroke-\[hsla\(180\,\_100\%\,\_37\%\,\_0\.3\)\] {
-	background-color: #8f0505 !important;
+body.dark-theme .fill-legacy-main {
+	fill: #5c058f !important;
+}
+body.dark-theme .fill-gray-400 {
+	fill: #e5e5e5 !important;
 }
 
 /* ALL MILESTONE */
-body.dark-theme .h-10.rounded {
+body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main-muted {
+	background-color: #2a0241 !important;
+}
+
+body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main {
 	background-color: #5c058f !important;
+}
+
+/* CURR MILESTON POINT */
+body.dark-theme .rounded-full.mr-0.h-3.w-3.bg-red-500 {
+	background-color: #5c058f !important;
+}
+body.dark-theme .w-\[2px\].mr-0.h-full.bg-red-500 {
+	background-color: #430169 !important;
 }
 
 /* COMPLETE DAY ON MILESTONE CIRCLE GRAPH */
 body.dark-theme .stroke-legacy-main {
 	stroke: #5c058f !important;
+}
+body.dark-theme svg circle[class*="stroke-[hsla(180"] {
+	stroke: rgba(92, 5, 143, 0.3) !important;
 }
 
 /* LOGTIME GRAPH WEEKS */
@@ -140,6 +198,115 @@ body.dark-theme .block.text-xs[style*="color: rgb(237, 129, 121)"],
 body.dark-theme .block.text-xs[style*="color: rgb(0, 186, 188)"] {
 	color: #ffffff !important;
 }
+
+/* -----=====VIEW PROFILE=====----- */
+/* MARKS / ACHIVEMENTS */
+body.dark-theme .text-legacy-main.hover\:underline {
+	color: #5c058f !important;
+}
+
+/* MARKS / ACHIVEMENTS */
+body.dark-theme .text-legacy-main.hover\:underline:hover {
+	text-decoration: underline !important;
+	color: #5c058f !important;
+}
+
+/* ALL MARKS */
+body.dark-theme .cursor-pointer.text-xs.uppercase.font-bold.hover\:text-legacy-main.text-legacy-main {
+	color: #5c058f !important;
+}
+body.dark-theme .cursor-pointer.text-xs.uppercase.font-bold.hover\:text-legacy-main.text-legacy-main:hover {
+	color: #5c058f !important;
+}
+body.dark-theme .font-bold.text-legacy-main {
+	color: #5c058f !important;
+}
+
+/* ALL ACHIVEMENT */
+body.dark-theme svg[stroke="hsl(var(--legacy-main))"] {
+	stroke: #5c058f !important;
+}
+
+/* LAST ACHIVEMENT */
+body.dark-theme .bg-zinc-100.w-20.grid.place-items-center {
+	background-color: #2a2a2a !important;
+	border-left: 2px solid #e5e5e5 !important;
+	border-radius: 3px !important;
+}
+
+/* LEFT SIDEBAR DARK */
+body.dark-theme .bg-\[\#4E5566\] {
+	background-color: #2a2a2a !important;
+}
+body.dark-theme .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg {
+	stroke: #5c058f !important;
+}
+body.dark-theme .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg path {
+	stroke: #5c058f !important;
+}
+
+/* DARK MODE */
+body.dark-theme .flex.flex-row.rounded-lg.bg-white.drop-shadow-md {
+	background-color: #2a2a2a !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+body.dark-theme .bg-white.md\:h-96.overflow-y-auto.p-4.md\:rounded-r-lg {
+	background-color: #2a2a2a !important;
+	border: none !important;
+	outline: none !important;
+}
+body.dark-theme .flex.gap-4.p-4.flex-col.border-r.pr-4 {
+	border-right: none !important;
+}
+
+/* LINK DOWN PAGE */
+body.dark-theme .justify-center.flex.flex-col.gap-4.text-sm.text-gray-500.px-4.py-3.text-center.sm\:flex-row {
+	background-color: #0f0f0f !important;
+	color: #ffffff !important;
+}
+body.dark-theme .hover\:text-emerald-500 {
+	color: #ffffff !important;
+}
+body.dark-theme .hover\:text-emerald-500:hover {
+	color: #5c058f !important;
+}
+body.dark-theme .hover\:text-emerald-500 a {
+	color: #ffffff !important;
+}
+body.dark-theme .hover\:text-emerald-500:hover a {
+	color: #5c058f !important;
+}
+
+/* -----=====TEXT COLOR=====----- */
+
+/* PETITS TEXTES EN GRIS CLAIR */
+body.dark-theme .bg-slate-50.w-4.h-4.flex.justify-center.text-center.leading-5 {
+	color: #e5e5e5 !important;
+}
+
+/* HEADERS MONTHS/TEXT LOGTIME/ALL LITLE TEXT */
+body.dark-theme .font-bold.py-2,
+body.dark-theme .text-xs.border-white.border,
+body.dark-theme .text-xs {
+	color: #e5e5e5 !important;
+}
+
+/* TITLE LIKE MARKS */
+body.dark-theme .font-bold.text-black.uppercase.text-sm {
+   color: #e5e5e5 !important;
+}
+
+
+
+
+
+/* -----=====FIX PARAMS=====----- */
+
+
+
+
+
 
 /* OUTLINE */
 * {

@@ -1,9 +1,7 @@
 console.log("Better 42 loaded");
 
-// Cache la page immédiatement pour éviter le flash
 document.documentElement.style.visibility = 'hidden';
 
-// Fonction pour charger le profil par défaut très tôt
 function earlyLoadDefaultProfile() {
     const defaultProfileId = localStorage.getItem('default-profile-id');
     if (!defaultProfileId) {
@@ -19,7 +17,6 @@ function earlyLoadDefaultProfile() {
     
     const data = JSON.parse(profileData);
     
-    // Applique le CSS directement pour le background si c'est une image/gif
     if (data.backgroundUrl && !data.backgroundUrl.includes('youtube.com/watch') && !data.backgroundUrl.includes('youtu.be/')) {
         const style = document.createElement('style');
         style.textContent = `
@@ -30,7 +27,6 @@ function earlyLoadDefaultProfile() {
         document.head.appendChild(style);
     }
     
-    // Applique le CSS directement pour la photo de profil
     if (data.profilePicUrl) {
         const style = document.createElement('style');
         style.textContent = `
@@ -41,13 +37,11 @@ function earlyLoadDefaultProfile() {
         document.head.appendChild(style);
     }
     
-    // Montre la page après avoir appliqué les styles
     setTimeout(() => {
         document.documentElement.style.visibility = 'visible';
     }, 100);
 }
 
-// Charge le profil par défaut dès que possible
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', earlyLoadDefaultProfile);
 } else {
@@ -155,16 +149,17 @@ window.addEventListener('load', function() {
             
             const data = JSON.parse(profileData);
             
-            // Pour les vidéos YouTube, on doit utiliser la méthode iframe
-            if (data.backgroundUrl && (data.backgroundUrl.includes('youtube.com/watch') || data.backgroundUrl.includes('youtu.be/'))) {
-                setTimeout(() => {
+            setTimeout(() => {
+                if (data.backgroundUrl) {
                     applyCustomBackground(data.backgroundUrl);
-                }, 500);
-            }
+                }
+                if (data.profilePicUrl) {
+                    applyCustomPfp(data.profilePicUrl);
+                }
+            }, 100);
             
             currentProfile = defaultProfileId;
             
-            // Charge les valeurs dans les inputs quand ils existent
             setTimeout(() => {
                 const bgInput = document.getElementById('bg-url-input');
                 const pfpInput = document.getElementById('pfp-url-input');
@@ -333,13 +328,36 @@ window.addEventListener('load', function() {
             });
         }
 
+        function startLogtimeWatcher() {
+            if (!isDark) return;
+            
+            const observer = new MutationObserver(() => {
+                if (isDark) {
+                    updateLogtime();
+                }
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['style']
+            });
+            
+            setInterval(() => {
+                if (isDark) {
+                    updateLogtime();
+                }
+            }, 1000);
+        }
+
         function applyCustomBackground(url) {
             if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
                 const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
                 if (videoId) {
                     const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0`;
                     
-                    const bgElements = document.querySelectorAll('.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black');
+                    const bgElements = document.querySelectorAll('.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black, .w-full.xl\\:h-72.bg-center.bg-cover');
                     bgElements.forEach(el => {
                         const originalContent = el.innerHTML;
                         
@@ -355,7 +373,7 @@ window.addEventListener('load', function() {
                 }
             }
             
-            const bgElements = document.querySelectorAll('.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black');
+            const bgElements = document.querySelectorAll('.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black, .w-full.xl\\:h-72.bg-center.bg-cover');
             bgElements.forEach(el => {
                 const contentDiv = el.querySelector('div[style*="z-index:2"]');
                 if (contentDiv) {
@@ -385,10 +403,37 @@ window.addEventListener('load', function() {
             });
         }
 
+        function removeCustomizations() {
+            const bgElements = document.querySelectorAll('.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black, .w-full.xl\\:h-72.bg-center.bg-cover');
+            bgElements.forEach(el => {
+                const contentDiv = el.querySelector('div[style*="z-index:2"]');
+                if (contentDiv) {
+                    el.innerHTML = contentDiv.innerHTML;
+                }
+                
+                el.removeAttribute('style');
+                el.className = 'w-full xl:h-72 bg-center bg-cover bg-ft-black';
+            });
+            
+            const pfpElements = document.querySelectorAll('.w-52.h-52.text-black.md\\:w-40.md\\:h-40.lg\\:h-28.lg\\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full');
+            pfpElements.forEach(el => {
+                el.removeAttribute('style');
+                el.className = 'w-52 h-52 text-black md:w-40 md:h-40 lg:h-28 lg:w-28 bg-cover bg-no-repeat bg-center rounded-full bg-gray-300 border-2 shadow-base';
+            });
+            
+            const injectedStyles = document.querySelectorAll('style');
+            injectedStyles.forEach(style => {
+                if (style.textContent.includes('w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black') || 
+                    style.textContent.includes('w-52.h-52.text-black.md\\:w-40.md\\:h-40.lg\\:h-28.lg\\:w-28')) {
+                    style.remove();
+                }
+            });
+        }
+
         document.body.classList.add('dark-theme');
         updateLogtime();
+        startLogtimeWatcher();
         
-        // Charge le profil par défaut (seulement pour les vidéos YouTube maintenant)
         loadDefaultProfileOnStartup();
 
         btn.addEventListener('click', function() {
@@ -397,11 +442,16 @@ window.addEventListener('load', function() {
                 btn.innerHTML = 'Better';
                 isDark = false;
                 restoreLogtime();
+                
+                removeCustomizations();
+                
             } else {
                 document.body.classList.add('dark-theme');
                 btn.innerHTML = 'Worse';
                 isDark = true;
                 updateLogtime();
+                
+                loadDefaultProfileOnStartup();
             }
         });
 
@@ -413,7 +463,6 @@ window.addEventListener('load', function() {
                 settingsPopup.classList.add('show');
                 loadProfilesList();
                 
-                // Charge toujours les valeurs du profil actuel dans les inputs
                 const bgInput = document.getElementById('bg-url-input');
                 const pfpInput = document.getElementById('pfp-url-input');
                 const defaultProfileId = getDefaultProfile();
