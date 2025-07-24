@@ -14,7 +14,8 @@ const BETTER42_CONFIG = {
     STORAGE_KEYS: {
         DEFAULT_PROFILE: 'default-profile-id',
         PROFILES_LIST: 'profiles-list',
-        PROFILE_DATA_PREFIX: 'profile-data-'
+        PROFILE_DATA_PREFIX: 'profile-data-',
+        FORCE_WORSE_MODE: 'better42-force-worse-mode'
     }
 };
 
@@ -22,13 +23,16 @@ const Better42Utils = {
     isYouTubeVideo(url) {
         return url.includes('youtube.com/watch') || url.includes('youtu.be/');
     },
+
     extractYouTubeId(url) {
         const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
         return match?.[1];
     },
+
     generateYouTubeEmbedUrl(videoId) {
         return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0`;
     },
+
     onDOMReady(callback) {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', callback);
@@ -36,6 +40,7 @@ const Better42Utils = {
             callback();
         }
     },
+
     injectStyles(css) {
         const style = document.createElement('style');
         style.textContent = css;

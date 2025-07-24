@@ -4,6 +4,7 @@ class UIManager {
         this.settingsBtn = null;
         this.settingsPopup = null;
     }
+
     createUI() {
         this.createThemeButton();
         this.createSettingsButton();
@@ -11,22 +12,26 @@ class UIManager {
         this.attachEventListeners();
         this.appendToDOM();
     }
+
     createThemeButton() {
         this.themeBtn = document.createElement('button');
         this.themeBtn.id = 'theme-switcher';
         this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
     }
+
     createSettingsButton() {
         this.settingsBtn = document.createElement('button');
         this.settingsBtn.id = 'settings-btn';
         this.settingsBtn.innerHTML = '⚙️';
     }
+
     createSettingsPopup() {
         this.settingsPopup = document.createElement('div');
         this.settingsPopup.id = 'settings-popup';
         this.settingsPopup.innerHTML = this.getSettingsPopupHTML();
         this.settingsPopup.classList.remove('show');
     }
+
     getSettingsPopupHTML() {
         return `
             <div class="popup-content">
@@ -72,23 +77,34 @@ class UIManager {
             </div>
         `;
     }
+
     attachEventListeners() {
         this.themeBtn.addEventListener('click', () => {
+            if (window.ThemeManager.isDark) {
+                this.themeBtn.innerHTML = 'Better';
+            } else {
+                this.themeBtn.innerHTML = 'Worse';
+            }
+            
             window.ThemeManager.toggleTheme();
         });
+
         this.settingsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             this.toggleSettingsPopup();
         });
+
         this.settingsPopup.addEventListener('click', (e) => {
             if (e.target === this.settingsPopup) {
                 this.hideSettingsPopup();
             }
         });
+
         document.addEventListener('click', (e) => {
             this.handlePopupButtonClick(e);
         });
     }
+
     handlePopupButtonClick(e) {
         switch (e.target.id) {
             case 'create-profile':
@@ -120,6 +136,7 @@ class UIManager {
                 break;
         }
     }
+
     applyBackground() {
         const bgInput = document.getElementById('bg-url-input');
         const url = bgInput ? bgInput.value.trim() : '';
@@ -127,11 +144,13 @@ class UIManager {
             window.BackgroundManager.applyCustomBackground(url);
         }
     }
+
     resetBackground() {
         const bgInput = document.getElementById('bg-url-input');
         if (bgInput) bgInput.value = '';
         location.reload();
     }
+
     applyProfilePicture() {
         const pfpInput = document.getElementById('pfp-url-input');
         const url = pfpInput ? pfpInput.value.trim() : '';
@@ -139,11 +158,13 @@ class UIManager {
             window.BackgroundManager.applyCustomPfp(url);
         }
     }
+
     resetProfilePicture() {
         const pfpInput = document.getElementById('pfp-url-input');
         if (pfpInput) pfpInput.value = '';
         location.reload();
     }
+
     toggleSettingsPopup() {
         if (this.settingsPopup.classList.contains('show')) {
             this.hideSettingsPopup();
@@ -151,12 +172,15 @@ class UIManager {
             this.showSettingsPopup();
         }
     }
+
     showSettingsPopup() {
         this.settingsPopup.classList.add('show');
         window.ProfileManager.loadProfilesList();
+        
         const bgInput = document.getElementById('bg-url-input');
         const pfpInput = document.getElementById('pfp-url-input');
         const defaultProfileId = window.ProfileManager.getDefaultProfile();
+        
         if (defaultProfileId) {
             const profileData = localStorage.getItem(`${Better42Config.STORAGE_KEYS.PROFILE_DATA_PREFIX}${defaultProfileId}`);
             if (profileData) {
@@ -166,9 +190,11 @@ class UIManager {
             }
         }
     }
+
     hideSettingsPopup() {
         this.settingsPopup.classList.remove('show');
     }
+
     appendToDOM() {
         document.body.appendChild(this.themeBtn);
         document.body.appendChild(this.settingsBtn);
@@ -176,10 +202,12 @@ class UIManager {
         
         document.body.classList.add('page-loaded');
     }
+
     updateThemeButtonText() {
         if (this.themeBtn) {
             this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
         }
     }
 }
+
 window.UIManager = new UIManager();

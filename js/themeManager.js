@@ -6,13 +6,22 @@ class ThemeManager {
     }
 
     init() {
+        const forceWorseMode = localStorage.getItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
+        
+        if (forceWorseMode === 'true') {
+            localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
+            this.isDark = false;
+            return;
+        }
+        
         const hasDefaultProfile = window.ProfileManager.getDefaultProfile();
-        this.isDark = !!hasDefaultProfile;
+        this.isDark = !!hasDefaultProfile; 
         
         if (this.isDark) {
             this.activateDarkMode();
         }
     }
+
     activateDarkMode() {
         document.body.classList.add('dark-theme');
         this.isDark = true;
@@ -20,9 +29,12 @@ class ThemeManager {
         this.startLogtimeWatcher();
         window.ProfileManager.loadDefaultProfileOnStartup();
     }
+
     deactivateDarkMode() {
+        localStorage.setItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE, 'true');
         window.BackgroundManager.removeCustomizations();
     }
+
     toggleTheme() {
         if (this.isDark) {
             this.deactivateDarkMode();
@@ -30,8 +42,10 @@ class ThemeManager {
             this.activateDarkMode();
         }
     }
+
     updateLogtime() {
         const elements = document.querySelectorAll(Better42Config.SELECTORS.LOGTIME_ELEMENTS);
+        
         elements.forEach(el => {
             const style = el.getAttribute('style');
             const match = style.match(new RegExp(`${Better42Config.COLORS.TEAL.replace('(', '\\(')} ([\\d\\.]+)\\)`));
@@ -45,8 +59,10 @@ class ThemeManager {
             }
         });
     }
+
     restoreLogtime() {
         const elements = document.querySelectorAll(Better42Config.SELECTORS.LOGTIME_PURPLE);
+        
         elements.forEach(el => {
             const style = el.getAttribute('style');
             const match = style.match(new RegExp(`${Better42Config.COLORS.PURPLE.replace('(', '\\(')} ([\\d\\.]+)\\)`));
@@ -60,37 +76,45 @@ class ThemeManager {
             }
         });
     }
+
     startLogtimeWatcher() {
         if (!this.isDark) return;
+        
         this.observer = new MutationObserver(() => {
             if (this.isDark) {
                 this.updateLogtime();
             }
         });
+        
         this.observer.observe(document.body, {
             childList: true,
             subtree: true,
             attributes: true,
             attributeFilter: ['style']
         });
+        
         this.intervalId = setInterval(() => {
             if (this.isDark) {
                 this.updateLogtime();
             }
         }, 1000);
     }
+
     stopLogtimeWatcher() {
         if (this.observer) {
             this.observer.disconnect();
             this.observer = null;
         }
+        
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
         }
     }
+
     getThemeButtonText() {
         return this.isDark ? 'Worse' : 'Better';
     }
 }
+
 window.ThemeManager = new ThemeManager();

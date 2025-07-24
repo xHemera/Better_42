@@ -1,16 +1,21 @@
 class BackgroundManager {
     constructor() {}
+
     applyCustomBackground(url) {
         if (Better42Utils.isYouTubeVideo(url)) {
             this._applyYouTubeBackground(url);
             return;
         }
+        
         this._applyImageBackground(url);
     }
+
     _applyYouTubeBackground(url) {
         const videoId = Better42Utils.extractYouTubeId(url);
         if (!videoId) return;
+        
         const embedUrl = Better42Utils.generateYouTubeEmbedUrl(videoId);
+        
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach(el => {
             const originalContent = el.innerHTML;
@@ -25,13 +30,14 @@ class BackgroundManager {
         });
     }
 
+    _applyImageBackground(url) {
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach(el => {
-            // Nettoyer les iframes YouTube si présentes
             const contentDiv = el.querySelector('div[style*="z-index:2"]');
             if (contentDiv) {
                 el.innerHTML = contentDiv.innerHTML;
             }
+            
             const style = el.getAttribute('style') || '';
             if (style.includes('background-image: url')) {
                 const newStyle = style.replace(/background-image: url\([^)]+\)/g, `background-image: url("${url}")`);
@@ -41,6 +47,7 @@ class BackgroundManager {
             }
         });
     }
+
     applyCustomPfp(url) {
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         pfpElements.forEach(el => {
@@ -53,6 +60,7 @@ class BackgroundManager {
             }
         });
     }
+
     removeCustomizations() {
         const injectedStyles = document.querySelectorAll('style');
         injectedStyles.forEach(style => {
@@ -61,7 +69,9 @@ class BackgroundManager {
                 style.remove();
             }
         });
+        
         location.reload();
     }
 }
+
 window.BackgroundManager = new BackgroundManager();
