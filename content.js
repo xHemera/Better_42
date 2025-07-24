@@ -1,5 +1,59 @@
 console.log("Better 42 loaded");
 
+// Cache la page immédiatement pour éviter le flash
+document.documentElement.style.visibility = 'hidden';
+
+// Fonction pour charger le profil par défaut très tôt
+function earlyLoadDefaultProfile() {
+    const defaultProfileId = localStorage.getItem('default-profile-id');
+    if (!defaultProfileId) {
+        document.documentElement.style.visibility = 'visible';
+        return;
+    }
+    
+    const profileData = localStorage.getItem(`profile-data-${defaultProfileId}`);
+    if (!profileData) {
+        document.documentElement.style.visibility = 'visible';
+        return;
+    }
+    
+    const data = JSON.parse(profileData);
+    
+    // Applique le CSS directement pour le background si c'est une image/gif
+    if (data.backgroundUrl && !data.backgroundUrl.includes('youtube.com/watch') && !data.backgroundUrl.includes('youtu.be/')) {
+        const style = document.createElement('style');
+        style.textContent = `
+            .w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black {
+                background-image: url("${data.backgroundUrl}") !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Applique le CSS directement pour la photo de profil
+    if (data.profilePicUrl) {
+        const style = document.createElement('style');
+        style.textContent = `
+            .w-52.h-52.text-black.md\\:w-40.md\\:h-40.lg\\:h-28.lg\\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full {
+                background-image: url("${data.profilePicUrl}") !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Montre la page après avoir appliqué les styles
+    setTimeout(() => {
+        document.documentElement.style.visibility = 'visible';
+    }, 100);
+}
+
+// Charge le profil par défaut dès que possible
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', earlyLoadDefaultProfile);
+} else {
+    earlyLoadDefaultProfile();
+}
+
 window.addEventListener('load', function() {
     
     setTimeout(function() {
@@ -62,6 +116,15 @@ window.addEventListener('load', function() {
         let isDark = true;
         let currentProfile = null;
         
+        function getDefaultProfile() {
+            const defaultProfileId = localStorage.getItem('default-profile-id');
+            return defaultProfileId;
+        }
+        
+        function setDefaultProfile(profileId) {
+            localStorage.setItem('default-profile-id', profileId);
+        }
+        
         function loadProfilesList() {
             const selector = document.getElementById('profile-selector');
             if (!selector) return;
@@ -69,12 +132,45 @@ window.addEventListener('load', function() {
             selector.innerHTML = '<option value="">-- No Profile Selected --</option>';
             
             const profiles = JSON.parse(localStorage.getItem('profiles-list') || '[]');
+            const defaultProfileId = getDefaultProfile();
+            
             profiles.forEach(profile => {
                 const option = document.createElement('option');
                 option.value = profile.id;
-                option.textContent = `📁 ${profile.name}`;
+                option.textContent = `📁 ${profile.name}${profile.id === defaultProfileId ? ' (Default)' : ''}`;
                 selector.appendChild(option);
             });
+            
+            if (defaultProfileId) {
+                selector.value = defaultProfileId;
+            }
+        }
+        
+        function loadDefaultProfileOnStartup() {
+            const defaultProfileId = getDefaultProfile();
+            if (!defaultProfileId) return;
+            
+            const profileData = localStorage.getItem(`profile-data-${defaultProfileId}`);
+            if (!profileData) return;
+            
+            const data = JSON.parse(profileData);
+            
+            // Pour les vidéos YouTube, on doit utiliser la méthode iframe
+            if (data.backgroundUrl && (data.backgroundUrl.includes('youtube.com/watch') || data.backgroundUrl.includes('youtu.be/'))) {
+                setTimeout(() => {
+                    applyCustomBackground(data.backgroundUrl);
+                }, 500);
+            }
+            
+            currentProfile = defaultProfileId;
+            
+            // Charge les valeurs dans les inputs quand ils existent
+            setTimeout(() => {
+                const bgInput = document.getElementById('bg-url-input');
+                const pfpInput = document.getElementById('pfp-url-input');
+                if (bgInput) bgInput.value = data.backgroundUrl || '';
+                if (pfpInput) pfpInput.value = data.profilePicUrl || '';
+            }, 100);
         }
         
         function createProfile() {
@@ -103,9 +199,15 @@ window.addEventListener('load', function() {
             profiles.push({ id: profileId, name: name });
             localStorage.setItem('profiles-list', JSON.stringify(profiles));
             
+            if (profiles.length === 1) {
+                setDefaultProfile(profileId);
+                alert(`✅ Profile "${name}" created and set as default!`);
+            } else {
+                alert(`✅ Profile "${name}" created!`);
+            }
+            
             nameInput.value = '';
             loadProfilesList();
-            alert(`✅ Profile "${name}" created!`);
         }
         
         function saveCurrentProfile() {
@@ -168,23 +270,36 @@ window.addEventListener('load', function() {
             }
             
             const profiles = JSON.parse(localStorage.getItem('profiles-list') || '[]');
-            const profileName = profiles.find(p => p.id === selector.value)?.name || 'Unknown';
+            const profileToDelete = selector.value;
+            const profileName = profiles.find(p => p.id === profileToDelete)?.name || 'Unknown';
             
             if (!confirm(`🗑️ Delete profile "${profileName}"?`)) return;
             
-            const newProfiles = profiles.filter(p => p.id !== selector.value);
+            const newProfiles = profiles.filter(p => p.id !== profileToDelete);
             localStorage.setItem('profiles-list', JSON.stringify(newProfiles));
             
-            localStorage.removeItem(`profile-data-${selector.value}`);
+            localStorage.removeItem(`profile-data-${profileToDelete}`);
+            
+            if (getDefaultProfile() === profileToDelete) {
+                if (newProfiles.length > 0) {
+                    setDefaultProfile(newProfiles[0].id);
+                } else {
+                    localStorage.removeItem('default-profile-id');
+                }
+            }
             
             loadProfilesList();
             
-            if (currentProfile === selector.value) {
+            if (currentProfile === profileToDelete) {
                 const bgInput = document.getElementById('bg-url-input');
                 const pfpInput = document.getElementById('pfp-url-input');
                 if (bgInput) bgInput.value = '';
                 if (pfpInput) pfpInput.value = '';
                 currentProfile = null;
+                
+                if (newProfiles.length > 0) {
+                    loadDefaultProfileOnStartup();
+                }
             }
             
             alert(`🗑️ Profile "${profileName}" deleted!`);
@@ -272,6 +387,9 @@ window.addEventListener('load', function() {
 
         document.body.classList.add('dark-theme');
         updateLogtime();
+        
+        // Charge le profil par défaut (seulement pour les vidéos YouTube maintenant)
+        loadDefaultProfileOnStartup();
 
         btn.addEventListener('click', function() {
             if (isDark) {
@@ -294,6 +412,20 @@ window.addEventListener('load', function() {
             } else {
                 settingsPopup.classList.add('show');
                 loadProfilesList();
+                
+                // Charge toujours les valeurs du profil actuel dans les inputs
+                const bgInput = document.getElementById('bg-url-input');
+                const pfpInput = document.getElementById('pfp-url-input');
+                const defaultProfileId = getDefaultProfile();
+                
+                if (defaultProfileId) {
+                    const profileData = localStorage.getItem(`profile-data-${defaultProfileId}`);
+                    if (profileData) {
+                        const data = JSON.parse(profileData);
+                        if (bgInput) bgInput.value = data.backgroundUrl || '';
+                        if (pfpInput) pfpInput.value = data.profilePicUrl || '';
+                    }
+                }
             }
         });
 
