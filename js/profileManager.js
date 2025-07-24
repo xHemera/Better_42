@@ -1,51 +1,36 @@
-// profileManager.js - Gestion des profils utilisateur
 class ProfileManager {
     constructor() {
         this.currentProfile = null;
     }
 
-    // Obtenir le profil par défaut
     getDefaultProfile() {
         return localStorage.getItem(Better42Config.STORAGE_KEYS.DEFAULT_PROFILE);
     }
-
-    // Définir le profil par défaut
     setDefaultProfile(profileId) {
         localStorage.setItem(Better42Config.STORAGE_KEYS.DEFAULT_PROFILE, profileId);
     }
-
-    // Charger la liste des profils
     loadProfilesList() {
         const selector = document.getElementById('profile-selector');
         if (!selector) return;
-        
         selector.innerHTML = '<option value="">-- No Profile Selected --</option>';
-        
         const profiles = JSON.parse(localStorage.getItem(Better42Config.STORAGE_KEYS.PROFILES_LIST) || '[]');
         const defaultProfileId = this.getDefaultProfile();
-        
         profiles.forEach(profile => {
             const option = document.createElement('option');
             option.value = profile.id;
             option.textContent = `📁 ${profile.name}${profile.id === defaultProfileId ? ' (Default)' : ''}`;
             selector.appendChild(option);
         });
-        
         if (defaultProfileId) {
             selector.value = defaultProfileId;
         }
     }
-
-    // Charger le profil par défaut au démarrage
     loadDefaultProfileOnStartup() {
         const defaultProfileId = this.getDefaultProfile();
         if (!defaultProfileId) return;
-        
         const profileData = localStorage.getItem(`${Better42Config.STORAGE_KEYS.PROFILE_DATA_PREFIX}${defaultProfileId}`);
         if (!profileData) return;
-        
         const data = JSON.parse(profileData);
-        
         setTimeout(() => {
             if (data.backgroundUrl) {
                 window.BackgroundManager.applyCustomBackground(data.backgroundUrl);
@@ -54,9 +39,7 @@ class ProfileManager {
                 window.BackgroundManager.applyCustomPfp(data.profilePicUrl);
             }
         }, 100);
-        
         this.currentProfile = defaultProfileId;
-        
         setTimeout(() => {
             const bgInput = document.getElementById('bg-url-input');
             const pfpInput = document.getElementById('pfp-url-input');
@@ -64,8 +47,6 @@ class ProfileManager {
             if (pfpInput) pfpInput.value = data.profilePicUrl || '';
         }, 100);
     }
-
-    // Créer un nouveau profil
     createProfile() {
         const nameInput = document.getElementById('profile-name-input');
         if (!nameInput) return;
@@ -75,35 +56,27 @@ class ProfileManager {
             alert('❌ Enter a profile name!');
             return;
         }
-        
         const profiles = JSON.parse(localStorage.getItem(Better42Config.STORAGE_KEYS.PROFILES_LIST) || '[]');
-        
         if (profiles.length >= 5) {
             alert('❌ Maximum 5 profiles allowed!');
             return;
         }
-        
         if (profiles.some(p => p.name === name)) {
             alert('❌ Profile name already exists!');
             return;
         }
-        
         const profileId = Date.now().toString();
         profiles.push({ id: profileId, name: name });
         localStorage.setItem(Better42Config.STORAGE_KEYS.PROFILES_LIST, JSON.stringify(profiles));
-        
         if (profiles.length === 1) {
             this.setDefaultProfile(profileId);
             alert(`✅ Profile "${name}" created and set as default!`);
         } else {
             alert(`✅ Profile "${name}" created!`);
         }
-        
         nameInput.value = '';
         this.loadProfilesList();
     }
-
-    // Sauvegarder le profil actuel
     saveCurrentProfile() {
         const selector = document.getElementById('profile-selector');
         if (!selector || !selector.value) {
@@ -123,8 +96,6 @@ class ProfileManager {
         localStorage.setItem(`${Better42Config.STORAGE_KEYS.PROFILE_DATA_PREFIX}${selector.value}`, JSON.stringify(profileData));
         alert(`💾 Profile saved!`);
     }
-
-    // Charger un profil
     loadProfile() {
         const selector = document.getElementById('profile-selector');
         if (!selector || !selector.value) {
@@ -156,8 +127,6 @@ class ProfileManager {
         this.currentProfile = selector.value;
         alert(`📂 Profile loaded!`);
     }
-
-    // Supprimer un profil
     deleteProfile() {
         const selector = document.getElementById('profile-selector');
         if (!selector || !selector.value) {
@@ -231,5 +200,4 @@ class ProfileManager {
         }, 100);
     }
 }
-
 window.ProfileManager = new ProfileManager();

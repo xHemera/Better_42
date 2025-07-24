@@ -1,12 +1,9 @@
-// uiManager.js - Gestion de l'interface utilisateur
 class UIManager {
     constructor() {
         this.themeBtn = null;
         this.settingsBtn = null;
         this.settingsPopup = null;
     }
-
-    // Créer tous les éléments de l'interface
     createUI() {
         this.createThemeButton();
         this.createSettingsButton();
@@ -14,30 +11,22 @@ class UIManager {
         this.attachEventListeners();
         this.appendToDOM();
     }
-
-    // Créer le bouton de thème
     createThemeButton() {
         this.themeBtn = document.createElement('button');
         this.themeBtn.id = 'theme-switcher';
         this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
     }
-
-    // Créer le bouton de paramètres
     createSettingsButton() {
         this.settingsBtn = document.createElement('button');
         this.settingsBtn.id = 'settings-btn';
         this.settingsBtn.innerHTML = '⚙️';
     }
-
-    // Créer la popup de paramètres
     createSettingsPopup() {
         this.settingsPopup = document.createElement('div');
         this.settingsPopup.id = 'settings-popup';
         this.settingsPopup.innerHTML = this.getSettingsPopupHTML();
         this.settingsPopup.classList.remove('show');
     }
-
-    // Obtenir le HTML de la popup de paramètres
     getSettingsPopupHTML() {
         return `
             <div class="popup-content">
@@ -83,34 +72,23 @@ class UIManager {
             </div>
         `;
     }
-
-    // Attacher les événements
     attachEventListeners() {
-        // Événement bouton thème
         this.themeBtn.addEventListener('click', () => {
             window.ThemeManager.toggleTheme();
         });
-
-        // Événement bouton paramètres
         this.settingsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             this.toggleSettingsPopup();
         });
-
-        // Fermer popup en cliquant à l'extérieur
         this.settingsPopup.addEventListener('click', (e) => {
             if (e.target === this.settingsPopup) {
                 this.hideSettingsPopup();
             }
         });
-
-        // Événements des boutons dans la popup
         document.addEventListener('click', (e) => {
             this.handlePopupButtonClick(e);
         });
     }
-
-    // Gérer les clics des boutons dans la popup
     handlePopupButtonClick(e) {
         switch (e.target.id) {
             case 'create-profile':
@@ -142,8 +120,6 @@ class UIManager {
                 break;
         }
     }
-
-    // Appliquer l'arrière-plan
     applyBackground() {
         const bgInput = document.getElementById('bg-url-input');
         const url = bgInput ? bgInput.value.trim() : '';
@@ -151,15 +127,11 @@ class UIManager {
             window.BackgroundManager.applyCustomBackground(url);
         }
     }
-
-    // Réinitialiser l'arrière-plan
     resetBackground() {
         const bgInput = document.getElementById('bg-url-input');
         if (bgInput) bgInput.value = '';
         location.reload();
     }
-
-    // Appliquer l'image de profil
     applyProfilePicture() {
         const pfpInput = document.getElementById('pfp-url-input');
         const url = pfpInput ? pfpInput.value.trim() : '';
@@ -167,15 +139,11 @@ class UIManager {
             window.BackgroundManager.applyCustomPfp(url);
         }
     }
-
-    // Réinitialiser l'image de profil
     resetProfilePicture() {
         const pfpInput = document.getElementById('pfp-url-input');
         if (pfpInput) pfpInput.value = '';
         location.reload();
     }
-
-    // Basculer l'affichage de la popup de paramètres
     toggleSettingsPopup() {
         if (this.settingsPopup.classList.contains('show')) {
             this.hideSettingsPopup();
@@ -183,17 +151,12 @@ class UIManager {
             this.showSettingsPopup();
         }
     }
-
-    // Afficher la popup de paramètres
     showSettingsPopup() {
         this.settingsPopup.classList.add('show');
         window.ProfileManager.loadProfilesList();
-        
-        // Charger les données du profil par défaut
         const bgInput = document.getElementById('bg-url-input');
         const pfpInput = document.getElementById('pfp-url-input');
         const defaultProfileId = window.ProfileManager.getDefaultProfile();
-        
         if (defaultProfileId) {
             const profileData = localStorage.getItem(`${Better42Config.STORAGE_KEYS.PROFILE_DATA_PREFIX}${defaultProfileId}`);
             if (profileData) {
@@ -203,13 +166,9 @@ class UIManager {
             }
         }
     }
-
-    // Masquer la popup de paramètres
     hideSettingsPopup() {
         this.settingsPopup.classList.remove('show');
     }
-
-    // Ajouter les éléments au DOM
     appendToDOM() {
         document.body.appendChild(this.themeBtn);
         document.body.appendChild(this.settingsBtn);
@@ -217,14 +176,10 @@ class UIManager {
         
         document.body.classList.add('page-loaded');
     }
-
-    // Mettre à jour le texte du bouton de thème
     updateThemeButtonText() {
         if (this.themeBtn) {
             this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
         }
     }
 }
-
-// Export global
 window.UIManager = new UIManager();

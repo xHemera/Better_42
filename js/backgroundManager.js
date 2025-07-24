@@ -1,24 +1,16 @@
-// backgroundManager.js - Gestion des arrière-plans et images de profil
 class BackgroundManager {
     constructor() {}
-
-    // Appliquer un arrière-plan personnalisé
     applyCustomBackground(url) {
         if (Better42Utils.isYouTubeVideo(url)) {
             this._applyYouTubeBackground(url);
             return;
         }
-        
         this._applyImageBackground(url);
     }
-
-    // Appliquer un arrière-plan YouTube
     _applyYouTubeBackground(url) {
         const videoId = Better42Utils.extractYouTubeId(url);
         if (!videoId) return;
-        
         const embedUrl = Better42Utils.generateYouTubeEmbedUrl(videoId);
-        
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach(el => {
             const originalContent = el.innerHTML;
@@ -33,8 +25,6 @@ class BackgroundManager {
         });
     }
 
-    // Appliquer un arrière-plan image/GIF
-    _applyImageBackground(url) {
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach(el => {
             // Nettoyer les iframes YouTube si présentes
@@ -42,7 +32,6 @@ class BackgroundManager {
             if (contentDiv) {
                 el.innerHTML = contentDiv.innerHTML;
             }
-            
             const style = el.getAttribute('style') || '';
             if (style.includes('background-image: url')) {
                 const newStyle = style.replace(/background-image: url\([^)]+\)/g, `background-image: url("${url}")`);
@@ -52,8 +41,6 @@ class BackgroundManager {
             }
         });
     }
-
-    // Appliquer une image de profil personnalisée
     applyCustomPfp(url) {
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         pfpElements.forEach(el => {
@@ -66,10 +53,7 @@ class BackgroundManager {
             }
         });
     }
-
-    // Supprimer toutes les personnalisations
     removeCustomizations() {
-        // Supprimer tous les styles injectés par l'extension
         const injectedStyles = document.querySelectorAll('style');
         injectedStyles.forEach(style => {
             if (style.textContent.includes('w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black') || 
@@ -77,11 +61,7 @@ class BackgroundManager {
                 style.remove();
             }
         });
-        
-        // Simplement recharger la page pour revenir à l'état original
         location.reload();
     }
 }
-
-// Export global
 window.BackgroundManager = new BackgroundManager();
