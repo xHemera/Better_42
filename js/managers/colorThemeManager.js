@@ -115,8 +115,12 @@ class ColorThemeManager {
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.ThemeManager.updateLogtime();
-                window.ThemeManager.updateButtonColors();
-            }, 100);
+                // Forcer la mise à jour des boutons UI immédiatement
+                if (window.UIManager) {
+                    window.UIManager.lastButtonState = null; // Reset pour forcer la mise à jour
+                    window.UIManager.enforceButtonPositions();
+                }
+            }, 50);
         }
 
         this.setCurrentTheme(themeName);
@@ -510,8 +514,12 @@ class ColorThemeManager {
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.ThemeManager.updateLogtime();
-                window.ThemeManager.updateButtonColors();
-            }, 100);
+                // Forcer la mise à jour des boutons UI immédiatement
+                if (window.UIManager) {
+                    window.UIManager.lastButtonState = null; // Reset pour forcer la mise à jour
+                    window.UIManager.enforceButtonPositions();
+                }
+            }, 50);
         }
 
         localStorage.setItem('better42-color-theme', 'custom');

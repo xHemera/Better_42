@@ -1,4 +1,3 @@
-
 class ThemeManager {
     constructor() {
         this.isDark = false;
@@ -44,9 +43,9 @@ class ThemeManager {
         }
         
         this.updateLogtime();
+        this.updateButtonColors(); // Ajout de la méthode
         this.startLogtimeWatcher();
         window.ProfileManager.loadDefaultProfileOnStartup();
-        
     }
 
     activateDarkModeWithoutSaving() {
@@ -58,9 +57,9 @@ class ThemeManager {
         }
         
         this.updateLogtime();
+        this.updateButtonColors(); // Ajout de la méthode
         this.startLogtimeWatcher();
         window.ProfileManager.loadDefaultProfileOnStartup();
-        
     }
 
     deactivateDarkMode() {
@@ -128,6 +127,53 @@ class ThemeManager {
             b: parseInt(result[3], 16)
         } : null;
     }
+
+    // MÉTHODE MANQUANTE AJOUTÉE
+    updateButtonColors() {
+        // Mettre à jour les couleurs des boutons selon le thème actuel
+        const currentColor = this.getCurrentThemeColor();
+        
+        // Mettre à jour les boutons de l'interface
+        const themeBtn = document.getElementById('theme-switcher');
+        const settingsBtn = document.getElementById('settings-btn');
+        
+        if (this.isDark) {
+            if (settingsBtn) {
+                settingsBtn.style.background = `linear-gradient(135deg, rgb(${currentColor}), rgba(${currentColor}, 0.8))`;
+                settingsBtn.style.boxShadow = `0 4px 12px rgba(${currentColor}, 0.3)`;
+                settingsBtn.style.borderColor = `rgba(${currentColor}, 0.8)`;
+            }
+        }
+        
+        // Mettre à jour d'autres éléments colorés si nécessaire
+        this.updateColoredElements(currentColor);
+    }
+
+    updateColoredElements(currentColor) {
+        // Mettre à jour les éléments avec des couleurs dynamiques
+        const elementsToUpdate = [
+            '.fill-legacy-main',
+            '.stroke-legacy-main', 
+            '.text-legacy-main',
+            '.border-legacy-main'
+        ];
+        
+        elementsToUpdate.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                if (selector.includes('fill')) {
+                    el.style.fill = `rgb(${currentColor})`;
+                } else if (selector.includes('stroke')) {
+                    el.style.stroke = `rgb(${currentColor})`;
+                } else if (selector.includes('text')) {
+                    el.style.color = `rgb(${currentColor})`;
+                } else if (selector.includes('border')) {
+                    el.style.borderColor = `rgb(${currentColor})`;
+                }
+            });
+        });
+    }
+
     updateLogtime() {
         const currentColor = this.getCurrentThemeColor();
         
@@ -234,10 +280,10 @@ class ThemeManager {
         if (this.isDark && window.ColorThemeManager) {
             setTimeout(() => {
                 this.updateLogtime();
+                this.updateButtonColors(); // Ajout de la méthode
             }, 200);
         }
     }
-
 
     getDebugInfo() {
         return {

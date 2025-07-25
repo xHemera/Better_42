@@ -1,9 +1,11 @@
-
 class UIManager {
     constructor() {
         this.themeBtn = null;
         this.settingsBtn = null;
         this.settingsPopup = null;
+        this.buttonsCreated = false;
+        this.listenersAttached = false; // Flag pour les listeners globaux
+        this.lastButtonState = null; // Pour éviter les appels redondants
     }
 
     createUI() {
@@ -12,32 +14,84 @@ class UIManager {
             return;
         }
 
+        // Vérifier si les boutons existent déjà
+        const existingThemeBtn = document.getElementById('theme-switcher');
+        const existingSettingsBtn = document.getElementById('settings-btn');
+        
+        if (existingThemeBtn && existingSettingsBtn) {
+            console.log('🔄 Boutons UI déjà présents, conservation...');
+            this.themeBtn = existingThemeBtn;
+            this.settingsBtn = existingSettingsBtn;
+            this.buttonsCreated = true;
+            
+            // Juste mettre à jour le texte du bouton thème si nécessaire
+            this.updateThemeButtonText();
+            return;
+        }
+
         const pageConfig = window.PageDetector.getPageConfig();
         
-        this.createThemeButton();
-        
-        if (pageConfig.showSettings) {
-            this.createSettingsButton();
-            this.createSettingsPopup();
+        if (!this.buttonsCreated) {
+            this.createThemeButton();
+            
+            if (pageConfig.showSettings) {
+                this.createSettingsButton();
+                this.createSettingsPopup();
+            }
+            
+            this.attachEventListeners();
+            this.appendToDOM();
+            this.buttonsCreated = true;
         }
-        
-        this.attachEventListeners();
-        this.appendToDOM();
     }
 
     createThemeButton() {
+        // Ne créer que si n'existe pas déjà
+        if (document.getElementById('theme-switcher')) {
+            this.themeBtn = document.getElementById('theme-switcher');
+            return;
+        }
+        
         this.themeBtn = document.createElement('button');
         this.themeBtn.id = 'theme-switcher';
         this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
+        
+        // Force la position CSS dès la création
+        this.themeBtn.style.cssText = `
+            position: fixed !important;
+            top: 10px !important;
+            right: 180px !important;
+            z-index: 10000 !important;
+        `;
     }
 
     createSettingsButton() {
+        // Ne créer que si n'existe pas déjà
+        if (document.getElementById('settings-btn')) {
+            this.settingsBtn = document.getElementById('settings-btn');
+            return;
+        }
+        
         this.settingsBtn = document.createElement('button');
         this.settingsBtn.id = 'settings-btn';
         this.settingsBtn.innerHTML = '⚙️';
+        
+        // Force la position CSS dès la création
+        this.settingsBtn.style.cssText = `
+            position: fixed !important;
+            top: 10px !important;
+            right: 265px !important;
+            z-index: 10000 !important;
+        `;
     }
 
     createSettingsPopup() {
+        // Ne créer que si n'existe pas déjà
+        if (document.getElementById('settings-popup')) {
+            this.settingsPopup = document.getElementById('settings-popup');
+            return;
+        }
+        
         this.settingsPopup = document.createElement('div');
         this.settingsPopup.id = 'settings-popup';
         this.settingsPopup.innerHTML = this.getSettingsPopupHTML();
@@ -46,13 +100,326 @@ class UIManager {
         this.addColorThemeSection();
     }
 
+    attachEventListeners() {
+        // Éviter d'attacher plusieurs fois les mêmes événements
+        if (this.themeBtn && !this.themeBtn.hasAttribute('data-listeners-attached')) {
+            this.themeBtn.addEventListener('click', () => {
+                if (window.ThemeManager.isDark) {
+                    this.themeBtn.innerHTML = 'Better';
+                } else {
+                    this.themeBtn.innerHTML = 'Worse';
+                }
+                
+                window.ThemeManager.toggleTheme();
+            });
+            
+            // Ajouter les effets hover pour le bouton thème
+            this.themeBtn.addEventListener('mouseenter', () => {
+                this.applyHoverEffect(this.themeBtn, true);
+            });
+            
+            this.themeBtn.addEventListener('mouseleave', () => {
+                this.applyHoverEffect(this.themeBtn, false);
+            });
+            
+            this.themeBtn.setAttribute('data-listeners-attached', 'true');
+        }
+
+        if (this.settingsBtn && !this.settingsBtn.hasAttribute('data-listeners-attached')) {
+            this.settingsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleSettingsPopup();
+            });
+            
+            // Ajouter les effets hover pour le bouton settings
+            this.settingsBtn.addEventListener('mouseenter', () => {
+                this.applyHoverEffect(this.settingsBtn, true);
+            });
+            
+            this.settingsBtn.addEventListener('mouseleave', () => {
+                this.applyHoverEffect(this.settingsBtn, false);
+            });
+            
+            this.settingsBtn.setAttribute('data-listeners-attached', 'true');
+        }
+
+        if (this.settingsPopup && !this.settingsPopup.hasAttribute('data-listeners-attached')) {
+            this.settingsPopup.addEventListener('click', (e) => {
+                if (e.target === this.settingsPopup) {
+                    this.hideSettingsPopup();
+                }
+            });
+            this.settingsPopup.setAttribute('data-listeners-attached', 'true');
+        }
+
+        // Event listener global pour les boutons du popup (une seule fois)
+        // FIX: Utiliser document.body au lieu de document
+        if (!this.listenersAttached) {
+            document.addEventListener('click', (e) => {
+                this.handlePopupButtonClick(e);
+            });
+            this.listenersAttached = true;
+            
+            this.addResetButtonStyles();
+        }
+    }
+
+    // Méthode pour forcer la position des boutons
+    enforceButtonPositions() {
+        if (!this.themeBtn) return;
+        
+        // Éviter les appels redondants
+        const currentState = `${window.ThemeManager?.isDark}-${window.ColorThemeManager?.getCurrentTheme()}`;
+        if (this.lastButtonState === currentState) return;
+        this.lastButtonState = currentState;
+        
+        // Couleurs selon l'état du thème (Better = personnalisées, Worse = gris par défaut)
+        const isThemeActive = window.ThemeManager && window.ThemeManager.isDark;
+        let bgColors, borderColor;
+        
+        if (isThemeActive) {
+            // Utiliser les vraies couleurs du thème actuel
+            if (window.ColorThemeManager) {
+                const currentTheme = window.ColorThemeManager.getCurrentTheme();
+                if (currentTheme === 'custom') {
+                    const savedCustomColor = localStorage.getItem('better42-custom-color');
+                    if (savedCustomColor) {
+                        const customTheme = window.ColorThemeManager.generateCustomTheme(savedCustomColor);
+                        bgColors = `${customTheme.primary}, ${customTheme.primaryLight}`;
+                        borderColor = customTheme.primary;
+                    } else {
+                        bgColors = 'var(--better42-purple), var(--better42-purple-light)';
+                        borderColor = 'var(--better42-purple)';
+                    }
+                } else {
+                    const theme = window.ColorThemeManager.themes[currentTheme];
+                    if (theme) {
+                        bgColors = `${theme.primary}, ${theme.primaryLight}`;
+                        borderColor = theme.primary;
+                    } else {
+                        bgColors = 'var(--better42-purple), var(--better42-purple-light)';
+                        borderColor = 'var(--better42-purple)';
+                    }
+                }
+            } else {
+                bgColors = 'var(--better42-purple), var(--better42-purple-light)';
+                borderColor = 'var(--better42-purple)';
+            }
+        } else {
+            bgColors = '#6b7280, #9ca3af';
+            borderColor = '#6b7280';
+        }
+        
+        this.themeBtn.style.cssText = `
+            position: fixed !important;
+            top: 10px !important;
+            right: 180px !important;
+            z-index: 10000 !important;
+            background: linear-gradient(135deg, ${bgColors}) !important;
+            color: white !important;
+            border: 2px solid ${borderColor} !important;
+            padding: 10px 16px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
+            transition: all 0.3s ease !important;
+        `;
+        
+        if (this.settingsBtn) {
+            this.settingsBtn.style.cssText = `
+                position: fixed !important;
+                top: 10px !important;
+                right: 265px !important;
+                z-index: 10000 !important;
+                background: linear-gradient(135deg, ${bgColors}) !important;
+                color: white !important;
+                border: 2px solid ${borderColor} !important;
+                padding: 10px 16px !important;
+                border-radius: 8px !important;
+                cursor: pointer !important;
+                font-size: 14px !important;
+                font-weight: 600 !important;
+                box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
+                transition: all 0.3s ease !important;
+                display: ${window.ThemeManager && window.ThemeManager.isDark ? 'block' : 'none'} !important;
+            `;
+        }
+    }
+
+    applyHoverEffect(button, isHover) {
+        const isThemeActive = window.ThemeManager && window.ThemeManager.isDark;
+        let bgColors, borderColor;
+        
+        if (isHover) {
+            // Couleurs hover (plus claires)
+            if (isThemeActive) {
+                if (window.ColorThemeManager) {
+                    const currentTheme = window.ColorThemeManager.getCurrentTheme();
+                    if (currentTheme === 'custom') {
+                        const savedCustomColor = localStorage.getItem('better42-custom-color');
+                        if (savedCustomColor) {
+                            const customTheme = window.ColorThemeManager.generateCustomTheme(savedCustomColor);
+                            bgColors = `${customTheme.primaryLight}, ${customTheme.primaryLighter}`;
+                            borderColor = customTheme.primaryLight;
+                        } else {
+                            bgColors = 'var(--better42-purple-light), var(--better42-purple-lighter)';
+                            borderColor = 'var(--better42-purple-light)';
+                        }
+                    } else {
+                        const theme = window.ColorThemeManager.themes[currentTheme];
+                        if (theme) {
+                            bgColors = `${theme.primaryLight}, ${theme.primaryLighter}`;
+                            borderColor = theme.primaryLight;
+                        } else {
+                            bgColors = 'var(--better42-purple-light), var(--better42-purple-lighter)';
+                            borderColor = 'var(--better42-purple-light)';
+                        }
+                    }
+                } else {
+                    bgColors = 'var(--better42-purple-light), var(--better42-purple-lighter)';
+                    borderColor = 'var(--better42-purple-light)';
+                }
+            } else {
+                bgColors = '#9ca3af, #d1d5db'; // Gris plus clair pour hover
+                borderColor = '#9ca3af';
+            }
+            
+            button.style.transform = 'translateY(-2px)';
+            button.style.boxShadow = '0 6px 20px rgba(68, 68, 68, 0.4) !important';
+        } else {
+            // Couleurs normales (même logique que enforceButtonPositions)
+            if (isThemeActive) {
+                if (window.ColorThemeManager) {
+                    const currentTheme = window.ColorThemeManager.getCurrentTheme();
+                    if (currentTheme === 'custom') {
+                        const savedCustomColor = localStorage.getItem('better42-custom-color');
+                        if (savedCustomColor) {
+                            const customTheme = window.ColorThemeManager.generateCustomTheme(savedCustomColor);
+                            bgColors = `${customTheme.primary}, ${customTheme.primaryLight}`;
+                            borderColor = customTheme.primary;
+                        } else {
+                            bgColors = 'var(--better42-purple), var(--better42-purple-light)';
+                            borderColor = 'var(--better42-purple)';
+                        }
+                    } else {
+                        const theme = window.ColorThemeManager.themes[currentTheme];
+                        if (theme) {
+                            bgColors = `${theme.primary}, ${theme.primaryLight}`;
+                            borderColor = theme.primary;
+                        } else {
+                            bgColors = 'var(--better42-purple), var(--better42-purple-light)';
+                            borderColor = 'var(--better42-purple)';
+                        }
+                    }
+                } else {
+                    bgColors = 'var(--better42-purple), var(--better42-purple-light)';
+                    borderColor = 'var(--better42-purple)';
+                }
+            } else {
+                bgColors = '#6b7280, #9ca3af';
+                borderColor = '#6b7280';
+            }
+            
+            button.style.transform = 'none';
+            button.style.boxShadow = '0 4px 12px rgba(68, 68, 68, 0.3) !important';
+        }
+        
+        // Appliquer le background et la bordure
+        button.style.background = `linear-gradient(135deg, ${bgColors}) !important`;
+        button.style.borderColor = `${borderColor} !important`;
+    }
+
+    updateThemeButtonText() {
+        if (this.themeBtn) {
+            this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
+            
+            // Force la position à chaque mise à jour
+            this.enforceButtonPositions();
+        }
+    }
+
+    appendToDOM() {
+        // Vérifier si les éléments existent déjà avant de les ajouter
+        if (this.themeBtn && !document.getElementById('theme-switcher')) {
+            document.body.appendChild(this.themeBtn);
+        }
+        
+        const pageConfig = window.PageDetector.getPageConfig();
+        if (pageConfig.showSettings) {
+            if (this.settingsBtn && !document.getElementById('settings-btn')) {
+                document.body.appendChild(this.settingsBtn);
+            }
+            if (this.settingsPopup && !document.getElementById('settings-popup')) {
+                document.body.appendChild(this.settingsPopup);
+            }
+        }
+        
+        // Force les positions après l'ajout au DOM
+        setTimeout(() => {
+            this.enforceButtonPositions();
+        }, 100);
+        
+        document.body.classList.add('page-loaded');
+    }
+
+    // Méthode pour réinitialiser l'UI si nécessaire
+    refreshUI() {
+        console.log('🔄 Refresh UI...');
+        
+        // Mettre à jour le texte du bouton thème
+        this.updateThemeButtonText();
+        
+        // Force les positions
+        this.enforceButtonPositions();
+        
+        // Mettre à jour la visibilité du bouton settings selon le thème
+        if (this.settingsBtn) {
+            const shouldShow = window.ThemeManager && window.ThemeManager.isDark;
+            this.settingsBtn.style.display = shouldShow ? 'block' : 'none';
+        }
+    }
+
+    // Observer les changements de page pour maintenir les boutons
+    observePageChanges() {
+        const observer = new MutationObserver(() => {
+            // Vérifier si les boutons ont été supprimés ou déplacés
+            const themeBtn = document.getElementById('theme-switcher');
+            const settingsBtn = document.getElementById('settings-btn');
+            
+            if (!themeBtn || !settingsBtn) {
+                console.log('🔧 Boutons manquants, recréation...');
+                this.createUI();
+            } else {
+                // S'assurer que les positions sont correctes
+                this.enforceButtonPositions();
+            }
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
     addColorThemeSection() {
+        if (!this.settingsPopup) return;
+        
         const popupContent = this.settingsPopup.querySelector('.popup-content');
+        if (!popupContent) return;
+        
         const popupFooter = popupContent.querySelector('.popup-footer');
         
-        const colorSection = window.ColorThemeManager.createUI();
-        
-        popupContent.insertBefore(colorSection, popupFooter);
+        if (window.ColorThemeManager && window.ColorThemeManager.createUI) {
+            const colorSection = window.ColorThemeManager.createUI();
+            
+            if (popupFooter) {
+                popupContent.insertBefore(colorSection, popupFooter);
+            } else {
+                popupContent.appendChild(colorSection);
+            }
+        }
     }
 
     getSettingsPopupHTML() {
@@ -109,43 +476,11 @@ class UIManager {
         `;
     }
 
-    attachEventListeners() {
-        if (this.themeBtn) {
-            this.themeBtn.addEventListener('click', () => {
-                if (window.ThemeManager.isDark) {
-                    this.themeBtn.innerHTML = 'Better';
-                } else {
-                    this.themeBtn.innerHTML = 'Worse';
-                }
-                
-                window.ThemeManager.toggleTheme();
-            });
-        }
-
-        if (this.settingsBtn) {
-            this.settingsBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleSettingsPopup();
-            });
-        }
-
-        if (this.settingsPopup) {
-            this.settingsPopup.addEventListener('click', (e) => {
-                if (e.target === this.settingsPopup) {
-                    this.hideSettingsPopup();
-                }
-            });
-        }
-
-        document.addEventListener('click', (e) => {
-            this.handlePopupButtonClick(e);
-        });
-
-        this.addResetButtonStyles();
-    }
-
     addResetButtonStyles() {
+        if (document.getElementById('ui-manager-styles')) return;
+        
         const style = document.createElement('style');
+        style.id = 'ui-manager-styles';
         style.textContent = `
             .profile-row {
                 display: flex !important;
@@ -203,7 +538,7 @@ class UIManager {
                 flex-shrink: 0 !important;
             }
 
-            #apply-bg {
+            #apply-bg, #apply-pfp {
                 background: linear-gradient(135deg, #059669, #10b981) !important;
                 color: white !important;
                 border: none !important;
@@ -215,12 +550,12 @@ class UIManager {
                 transition: all 0.3s ease !important;
             }
 
-            #apply-bg:hover {
+            #apply-bg:hover, #apply-pfp:hover {
                 background: linear-gradient(135deg, #10b981, #34d399) !important;
                 transform: translateY(-1px) !important;
             }
 
-            #reset-bg {
+            #reset-bg, #reset-pfp {
                 background: linear-gradient(135deg, #dc2626, #ef4444) !important;
                 color: white !important;
                 border: none !important;
@@ -232,41 +567,7 @@ class UIManager {
                 transition: all 0.3s ease !important;
             }
 
-            #reset-bg:hover {
-                background: linear-gradient(135deg, #ef4444, #f87171) !important;
-                transform: translateY(-1px) !important;
-            }
-
-            #apply-pfp {
-                background: linear-gradient(135deg, #059669, #10b981) !important;
-                color: white !important;
-                border: none !important;
-                padding: 8px 16px !important;
-                border-radius: 6px !important;
-                cursor: pointer !important;
-                font-weight: 600 !important;
-                font-size: 12px !important;
-                transition: all 0.3s ease !important;
-            }
-
-            #apply-pfp:hover {
-                background: linear-gradient(135deg, #10b981, #34d399) !important;
-                transform: translateY(-1px) !important;
-            }
-
-            #reset-pfp {
-                background: linear-gradient(135deg, #dc2626, #ef4444) !important;
-                color: white !important;
-                border: none !important;
-                padding: 8px 16px !important;
-                border-radius: 6px !important;
-                cursor: pointer !important;
-                font-weight: 600 !important;
-                font-size: 12px !important;
-                transition: all 0.3s ease !important;
-            }
-
-            #reset-pfp:hover {
+            #reset-bg:hover, #reset-pfp:hover {
                 background: linear-gradient(135deg, #ef4444, #f87171) !important;
                 transform: translateY(-1px) !important;
             }
@@ -335,11 +636,13 @@ class UIManager {
     }
 
     resetAllThemes() {
-        if (window.ColorThemeManager.resetToDefaults()) {
-            this.hideSettingsPopup();
-            setTimeout(() => {
-                this.showSettingsPopup();
-            }, 500);
+        if (window.ColorThemeManager && window.ColorThemeManager.resetToDefaults) {
+            if (window.ColorThemeManager.resetToDefaults()) {
+                this.hideSettingsPopup();
+                setTimeout(() => {
+                    this.showSettingsPopup();
+                }, 500);
+            }
         }
     }
 
@@ -400,32 +703,15 @@ class UIManager {
             }
         }
 
-        console.log('Theme Statistics:', window.ColorThemeManager.getThemeStats());
+        if (window.ColorThemeManager && window.ColorThemeManager.getThemeStats) {
+            console.log('Theme Statistics:', window.ColorThemeManager.getThemeStats());
+        }
     }
 
     hideSettingsPopup() {
         if (!this.settingsPopup) return;
         
         this.settingsPopup.classList.remove('show');
-    }
-
-    appendToDOM() {
-        document.body.appendChild(this.themeBtn);
-        
-        const pageConfig = window.PageDetector.getPageConfig();
-        if (pageConfig.showSettings && this.settingsBtn && this.settingsPopup) {
-            document.body.appendChild(this.settingsBtn);
-            document.body.appendChild(this.settingsPopup);
-        }
-        
-        
-        document.body.classList.add('page-loaded');
-    }
-
-    updateThemeButtonText() {
-        if (this.themeBtn) {
-            this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
-        }
     }
 }
 

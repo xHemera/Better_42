@@ -1,13 +1,13 @@
 /* -----=====BOUTONS PRINCIPAUX=====----- */
 
-/* BOUTON WORSE/BETTER */
+/* BOUTON WORSE/BETTER - POSITION ABSOLUE FORCÉE */
 #theme-switcher {
     position: fixed !important;
     top: 10px !important;
     right: 180px !important;
-    background: linear-gradient(135deg, var(--better42-gray), var(--better42-gray-light)) !important;
+    background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
     color: white !important;
-    border: 2px solid var(--better42-gray-light) !important;
+    border: 2px solid var(--better42-purple) !important;
     padding: 10px 16px !important;
     border-radius: 8px !important;
     cursor: pointer !important;
@@ -16,28 +16,24 @@
     font-weight: 600 !important;
     box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
     transition: all 0.3s ease !important;
+    /* Force la position même si d'autres styles tentent de la modifier */
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 !important;
 }
 
 #theme-switcher:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(68, 68, 68, 0.4) !important;
-    background: linear-gradient(135deg, var(--better42-gray-light), var(--better42-gray-lighter)) !important;
-}
-
-/* BUTTON VIOLET QUAND DARK MODE ACTIF */
-/* body.dark-theme #theme-switcher {
-    background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
-    border-color: var(--better42-purple-light) !important;
-    box-shadow: 0 4px 12px var(--better42-purple-alpha) !important;
-}
-
-body.dark-theme #theme-switcher:hover {
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
-    border-color: var(--better42-purple-lighter) !important;
-    box-shadow: 0 6px 20px var(--better42-purple-alpha) !important;
-} */
+    /* Maintenir la position lors du hover */
+    position: fixed !important;
+    top: 10px !important;
+    right: 180px !important;
+}
 
-/* BOUTON SETTINGS*/
+/* BOUTON SETTINGS - POSITION ABSOLUE FORCÉE */
 #settings-btn {
     position: fixed !important;
     top: 10px !important;
@@ -54,6 +50,11 @@ body.dark-theme #theme-switcher:hover {
     box-shadow: 0 4px 12px var(--better42-purple-alpha) !important;
     transition: all 0.3s ease !important;
     display: none !important;
+    /* Force la position même si d'autres styles tentent de la modifier */
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 !important;
 }
 
 #settings-btn:hover {
@@ -61,9 +62,103 @@ body.dark-theme #theme-switcher:hover {
     box-shadow: 0 6px 20px var(--better42-purple-alpha) !important;
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
     border-color: var(--better42-purple-lighter) !important;
+    /* Maintenir la position lors du hover */
+    position: fixed !important;
+    top: 10px !important;
+    right: 265px !important;
 }
 
 /* SETTINGS BUTTON VISIBLE ONLY WHEN DARK MODE IS ACTIVE */
 body.dark-theme #settings-btn {
     display: block !important;
+}
+
+/* Protection contre les changements de position par d'autres scripts */
+#theme-switcher[style*="position"],
+#settings-btn[style*="position"] {
+    position: fixed !important;
+}
+
+#theme-switcher[style*="top"],
+#settings-btn[style*="top"] {
+    top: 10px !important;
+}
+
+#theme-switcher[style*="right"] {
+    right: 180px !important;
+}
+
+#settings-btn[style*="right"] {
+    right: 265px !important;
+}
+
+/* Force les positions même avec des styles inline */
+body #theme-switcher,
+body.dark-theme #theme-switcher,
+html #theme-switcher {
+    position: fixed !important;
+    top: 10px !important;
+    right: 180px !important;
+    z-index: 10000 !important;
+}
+
+body #settings-btn,
+body.dark-theme #settings-btn,
+html #settings-btn {
+    position: fixed !important;
+    top: 10px !important;
+    right: 265px !important;
+    z-index: 10000 !important;
+}
+
+/* Règles spécifiques pour meta.intra.42.fr */
+body #theme-switcher[style],
+html body #theme-switcher[style],
+html body div #theme-switcher[style] {
+    position: fixed !important;
+    top: 10px !important;
+    right: 180px !important;
+    z-index: 10000 !important;
+}
+
+body #settings-btn[style],
+html body #settings-btn[style],
+html body div #settings-btn[style] {
+    position: fixed !important;
+    top: 10px !important;
+    right: 265px !important;
+    z-index: 10000 !important;
+}
+
+/* Version responsive pour mobiles */
+@media (max-width: 768px) {
+    #theme-switcher {
+        top: 5px !important;
+        right: 10px !important;
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+    
+    #settings-btn {
+        top: 5px !important;
+        right: 90px !important;
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #theme-switcher {
+        top: 5px !important;
+        right: 5px !important;
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+    }
+    
+    #settings-btn {
+        top: 5px !important;
+        right: 80px !important;
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+    }
 }

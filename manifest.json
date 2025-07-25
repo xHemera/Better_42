@@ -6,12 +6,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://profile-v3.intra.42.fr/*",
-        "https://meta.intra.42.fr/*",
-        "https://shop.intra.42.fr/*",
-        "https://companies.intra.42.fr/*",
-        "https://elearning.intra.42.fr/*",
-        "https://projects.intra.42.fr/*"
+        "https://profile-v3.intra.42.fr/*"
       ],
       "css": [
         "assets/css/variables.css",
