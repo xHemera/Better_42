@@ -63,6 +63,10 @@ class ThemeManager {
     }
 
     deactivateDarkMode() {
+        document.body.classList.remove('dark-theme');
+        this.isDark = false;
+        this.restoreLogtime();
+        this.stopLogtimeWatcher();
         localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         localStorage.setItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE, 'true');
         window.BackgroundManager.removeCustomizations();

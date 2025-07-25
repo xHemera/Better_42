@@ -585,6 +585,12 @@ class ColorThemeManager {
     }
 
     init() {
+        // Ne pas appliquer les thèmes de couleur en mode normal
+        if (!window.ThemeManager || !window.ThemeManager.isDark) {
+            this.startLogtimeObserver();
+            return;
+        }
+        
         const currentTheme = this.getCurrentTheme();
         
         if (currentTheme === 'custom') {
@@ -627,6 +633,11 @@ class ColorThemeManager {
             
             if (needsUpdate) {
                 setTimeout(() => {
+                    // Ne pas changer les couleurs si on n'est pas en mode sombre
+                    if (!window.ThemeManager || !window.ThemeManager.isDark) {
+                        return;
+                    }
+                    
                     const currentTheme = this.getCurrentTheme();
                     if (currentTheme === 'custom') {
                         const savedCustomColor = localStorage.getItem('better42-custom-color');
@@ -673,6 +684,11 @@ class ColorThemeManager {
         
         delays.forEach(delay => {
             setTimeout(() => {
+                // Ne pas changer les couleurs si on n'est pas en mode sombre
+                if (!window.ThemeManager || !window.ThemeManager.isDark) {
+                    return;
+                }
+                
                 const currentTheme = this.getCurrentTheme();
                 let theme;
                 

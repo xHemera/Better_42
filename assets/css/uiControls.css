@@ -1,3 +1,6 @@
+
+
+
 /* -----=====BOUTONS PRINCIPAUX=====----- */
 
 /* BOUTON WORSE/BETTER - POSITION ABSOLUE FORCÉE */
@@ -14,7 +17,7 @@
     z-index: 10000 !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
+    box-shadow: 0 4px 12px var(--better42-purple-light) !important;
     transition: all 0.3s ease !important;
     /* Force la position même si d'autres styles tentent de la modifier */
     left: auto !important;
@@ -25,7 +28,7 @@
 
 #theme-switcher:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(68, 68, 68, 0.4) !important;
+    box-shadow: 0 6px 20px var(--better42-purple) !important;
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
     /* Maintenir la position lors du hover */
     position: fixed !important;
@@ -47,7 +50,7 @@
     z-index: 10000 !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 12px var(--better42-purple-alpha) !important;
+    box-shadow: 0 4px 12px var(--better42-purple-light) !important;
     transition: all 0.3s ease !important;
     display: none !important;
     /* Force la position même si d'autres styles tentent de la modifier */
@@ -59,7 +62,7 @@
 
 #settings-btn:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px var(--better42-purple-alpha) !important;
+    box-shadow: 0 6px 20px var(--better42-purple) !important;
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
     border-color: var(--better42-purple-lighter) !important;
     /* Maintenir la position lors du hover */
