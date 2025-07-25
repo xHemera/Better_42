@@ -657,6 +657,7 @@ class ColorThemeManager {
     }
     
     forceInitialLogtimeCheck() {
+        const delays = [500, 1000, 2000, 3000];
         
         delays.forEach(delay => {
             setTimeout(() => {

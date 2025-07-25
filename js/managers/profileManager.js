@@ -91,6 +91,17 @@ class ProfileManager {
     }
 
     loadDefaultProfileOnStartup() {
+        if (!window.PageDetector) {
+            console.log('ProfileManager: PageDetector not available');
+            return;
+        }
+
+        const pageConfig = window.PageDetector.getPageConfig();
+        if (!pageConfig.showCustomization) {
+            console.log('ProfileManager: Customization disabled for this page type');
+            return;
+        }
+
         if (!this.shouldApplyCustomizations()) {
             console.log('ProfileManager: Skipping customizations (not own profile)');
             return;

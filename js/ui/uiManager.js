@@ -7,9 +7,20 @@ class UIManager {
     }
 
     createUI() {
+        if (!window.PageDetector) {
+            console.error('PageDetector not available');
+            return;
+        }
+
+        const pageConfig = window.PageDetector.getPageConfig();
+        
         this.createThemeButton();
-        this.createSettingsButton();
-        this.createSettingsPopup();
+        
+        if (pageConfig.showSettings) {
+            this.createSettingsButton();
+            this.createSettingsPopup();
+        }
+        
         this.attachEventListeners();
         this.appendToDOM();
     }
@@ -99,26 +110,32 @@ class UIManager {
     }
 
     attachEventListeners() {
-        this.themeBtn.addEventListener('click', () => {
-            if (window.ThemeManager.isDark) {
-                this.themeBtn.innerHTML = 'Better';
-            } else {
-                this.themeBtn.innerHTML = 'Worse';
-            }
-            
-            window.ThemeManager.toggleTheme();
-        });
+        if (this.themeBtn) {
+            this.themeBtn.addEventListener('click', () => {
+                if (window.ThemeManager.isDark) {
+                    this.themeBtn.innerHTML = 'Better';
+                } else {
+                    this.themeBtn.innerHTML = 'Worse';
+                }
+                
+                window.ThemeManager.toggleTheme();
+            });
+        }
 
-        this.settingsBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleSettingsPopup();
-        });
+        if (this.settingsBtn) {
+            this.settingsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleSettingsPopup();
+            });
+        }
 
-        this.settingsPopup.addEventListener('click', (e) => {
-            if (e.target === this.settingsPopup) {
-                this.hideSettingsPopup();
-            }
-        });
+        if (this.settingsPopup) {
+            this.settingsPopup.addEventListener('click', (e) => {
+                if (e.target === this.settingsPopup) {
+                    this.hideSettingsPopup();
+                }
+            });
+        }
 
         document.addEventListener('click', (e) => {
             this.handlePopupButtonClick(e);
@@ -355,6 +372,8 @@ class UIManager {
     }
 
     toggleSettingsPopup() {
+        if (!this.settingsPopup) return;
+        
         if (this.settingsPopup.classList.contains('show')) {
             this.hideSettingsPopup();
         } else {
@@ -363,6 +382,8 @@ class UIManager {
     }
 
     showSettingsPopup() {
+        if (!this.settingsPopup) return;
+        
         this.settingsPopup.classList.add('show');
         window.ProfileManager.loadProfilesList();
         
@@ -383,13 +404,16 @@ class UIManager {
     }
 
     hideSettingsPopup() {
+        if (!this.settingsPopup) return;
+        
         this.settingsPopup.classList.remove('show');
     }
 
     appendToDOM() {
         document.body.appendChild(this.themeBtn);
         
-        if (window.location.hostname === 'profile-v3.intra.42.fr') {
+        const pageConfig = window.PageDetector.getPageConfig();
+        if (pageConfig.showSettings && this.settingsBtn && this.settingsPopup) {
             document.body.appendChild(this.settingsBtn);
             document.body.appendChild(this.settingsPopup);
         }

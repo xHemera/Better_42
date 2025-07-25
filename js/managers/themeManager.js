@@ -42,6 +42,13 @@ class ThemeManager {
         } else {
             this.activateDarkMode();
         }
+        
+        // Notifier le ClusterMapManager du changement de thème
+        if (window.ClusterMapManager) {
+            setTimeout(() => {
+                window.ClusterMapManager.onThemeChange();
+            }, 100);
+        }
     }
 
     getCurrentThemeColor() {

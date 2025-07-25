@@ -24,7 +24,12 @@ class Better42App {
                 console.error('ProfileDetector not loaded');
                 return;
             }
+            if (!window.PageDetector) {
+                console.error('PageDetector not loaded');
+                return;
+            }
             
+            window.PageDetector.init();
             window.ProfileDetector.init();
             
             window.ColorThemeManager.init();
@@ -49,6 +54,10 @@ class Better42App {
             }
             
             window.UIManager.createUI();
+            
+            if (window.ClusterMapManager) {
+                window.ClusterMapManager.init();
+            }
             
             setTimeout(() => {
                 if (window.ProfileManager && window.ProfileManager.loadDefaultProfileOnStartup) {

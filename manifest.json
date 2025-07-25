@@ -5,7 +5,14 @@
   "description": "Google extensions for the intranet 42 with advanced theme system and theme sharing",
   "content_scripts": [
     {
-      "matches": ["https://profile-v3.intra.42.fr/*"],
+      "matches": [
+        "https://profile-v3.intra.42.fr/*",
+        "https://meta.intra.42.fr/*",
+        "https://shop.intra.42.fr/*",
+        "https://companies.intra.42.fr/*",
+        "https://elearning.intra.42.fr/*",
+        "https://projects.intra.42.fr/*"
+      ],
       "css": [
         "assets/css/variables.css",
         "assets/css/theme.css",
@@ -28,11 +35,13 @@
         "js/sync/themeSyncAPI.js",
         "js/core/config.js",
         "js/detection/urlHelper.js",
+        "js/detection/pageDetector.js",
         "js/detection/profileDetector.js",
         "js/managers/colorThemeManager.js",
         "js/managers/profileManager.js",
         "js/managers/backgroundManager.js",
         "js/managers/themeManager.js",
+        "js/managers/clusterMapManager.js",
         "js/ui/uiManager.js",
         "main.js"
       ]
