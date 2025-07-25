@@ -105,8 +105,20 @@ class ThemeUI {
         style.id = 'theme-ui-styles';
         style.textContent = `
             .theme-section {
-                max-height: 400px !important;
+                max-height: 60vh !important;
                 overflow-y: auto !important;
+                background: rgba(255, 255, 255, 0.02) !important;
+                border-radius: 12px !important;
+                padding: 20px !important;
+                border: 1px solid rgba(255, 255, 255, 0.05) !important;
+                backdrop-filter: blur(5px) !important;
+            }
+
+            @media (max-width: 768px) {
+                .theme-section {
+                    padding: 15px !important;
+                    max-height: 70vh !important;
+                }
             }
 
             .theme-category {
@@ -123,10 +135,47 @@ class ThemeUI {
             }
 
             .predefined-themes-grid {
-                display: grid !important;
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
-                gap: 8px !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 12px !important;
                 margin-bottom: 15px !important;
+                justify-content: center !important;
+            }
+
+            .predefined-themes-grid .theme-btn {
+                flex: 0 1 auto !important;
+                min-width: 120px !important;
+            }
+
+            @media (max-width: 1024px) {
+                .predefined-themes-grid {
+                    gap: 10px !important;
+                }
+                .predefined-themes-grid .theme-btn {
+                    min-width: 110px !important;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .predefined-themes-grid {
+                    gap: 8px !important;
+                }
+                .predefined-themes-grid .theme-btn {
+                    min-width: 100px !important;
+                    flex: 1 1 calc(50% - 4px) !important;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .predefined-themes-grid {
+                    gap: 6px !important;
+                }
+                .predefined-themes-grid .theme-btn {
+                    min-width: 90px !important;
+                    flex: 1 1 calc(50% - 3px) !important;
+                    font-size: 11px !important;
+                    padding: 12px 8px !important;
+                }
             }
 
             .custom-themes-container {
@@ -134,11 +183,50 @@ class ThemeUI {
             }
 
             .custom-themes-grid {
-                display: grid !important;
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
-                gap: 10px !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 12px !important;
                 margin-bottom: 15px !important;
                 min-height: 40px !important;
+                justify-content: center !important;
+            }
+
+            .custom-theme-item {
+                flex: 0 1 auto !important;
+                min-width: 140px !important;
+            }
+
+            @media (max-width: 1024px) {
+                .custom-themes-grid {
+                    gap: 10px !important;
+                }
+                .custom-theme-item {
+                    min-width: 130px !important;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .custom-themes-grid {
+                    gap: 8px !important;
+                }
+                .custom-theme-item {
+                    min-width: 120px !important;
+                    flex: 1 1 calc(50% - 4px) !important;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .custom-themes-grid {
+                    gap: 6px !important;
+                }
+                .custom-theme-item {
+                    min-width: 100px !important;
+                    flex: 1 1 calc(50% - 3px) !important;
+                }
+                .custom-theme-item .theme-btn {
+                    font-size: 11px !important;
+                    padding: 12px 8px !important;
+                }
             }
 
             .no-custom-themes {
@@ -152,45 +240,63 @@ class ThemeUI {
             }
 
             .theme-btn {
-                padding: 12px 16px !important;
+                padding: 14px 16px !important;
                 border: 2px solid transparent !important;
-                border-radius: 8px !important;
+                border-radius: 12px !important;
                 cursor: pointer !important;
                 color: white !important;
                 font-weight: 600 !important;
                 font-size: 13px !important;
-                transition: all 0.3s ease !important;
-                text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.6) !important;
                 position: relative !important;
                 overflow: hidden !important;
+                backdrop-filter: blur(10px) !important;
+            }
+
+            .theme-btn::before {
+                content: '' !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: -100% !important;
+                width: 100% !important;
+                height: 100% !important;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+                transition: left 0.6s !important;
+            }
+
+            .theme-btn:hover::before {
+                left: 100% !important;
             }
 
             .theme-btn:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+                transform: translateY(-3px) scale(1.02) !important;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+                border-color: rgba(255, 255, 255, 0.3) !important;
             }
 
             .theme-btn.active {
                 border-color: rgba(255, 255, 255, 0.8) !important;
                 transform: scale(1.05) !important;
-                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3) !important;
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 0 8px 25px rgba(0, 0, 0, 0.5) !important;
             }
 
             .theme-btn.active::after {
                 content: '✓' !important;
                 position: absolute !important;
-                top: 4px !important;
-                right: 6px !important;
-                background: rgba(255, 255, 255, 0.9) !important;
+                top: 6px !important;
+                right: 8px !important;
+                background: rgba(255, 255, 255, 0.95) !important;
                 color: #000 !important;
                 border-radius: 50% !important;
-                width: 18px !important;
-                height: 18px !important;
+                width: 20px !important;
+                height: 20px !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 font-size: 12px !important;
                 font-weight: bold !important;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
             }
 
             .custom-theme-item {
@@ -224,53 +330,64 @@ class ThemeUI {
 
             .custom-theme-controls {
                 display: flex !important;
-                gap: 8px !important;
+                gap: 10px !important;
                 justify-content: center !important;
                 flex-wrap: wrap !important;
+                margin-top: 10px !important;
+            }
+
+            @media (max-width: 480px) {
+                .custom-theme-controls {
+                    flex-direction: column !important;
+                    gap: 8px !important;
+                }
             }
 
             .theme-control-btn {
-                padding: 8px 12px !important;
-                border: 2px solid #555 !important;
-                border-radius: 6px !important;
+                padding: 10px 16px !important;
+                border: 2px solid var(--better42-purple-alpha) !important;
+                border-radius: 8px !important;
                 cursor: pointer !important;
                 color: white !important;
                 font-weight: 600 !important;
                 font-size: 12px !important;
-                transition: all 0.3s ease !important;
-                background: rgba(0, 0, 0, 0.3) !important;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                background: var(--better42-purple-alpha-light) !important;
+                backdrop-filter: blur(10px) !important;
+                min-width: 100px !important;
             }
 
             .theme-control-btn:hover {
-                transform: translateY(-1px) !important;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+                transform: translateY(-2px) scale(1.02) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
             }
 
             .create-btn {
-                border-color: #059669 !important;
-                background: linear-gradient(135deg, #047857, #059669) !important;
+                border-color: var(--better42-purple) !important;
+                background: linear-gradient(135deg, var(--better42-purple-dark), var(--better42-purple)) !important;
             }
 
             .create-btn:hover {
-                background: linear-gradient(135deg, #059669, #10b981) !important;
+                background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
             }
 
             .import-btn {
-                border-color: #1e40af !important;
-                background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
+                border-color: var(--better42-purple-light) !important;
+                background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
             }
 
             .import-btn:hover {
-                background: linear-gradient(135deg, #1e40af, #3b82f6) !important;
+                background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
             }
 
             .export-btn {
-                border-color: #d97706 !important;
-                background: linear-gradient(135deg, #c2410c, #d97706) !important;
+                border-color: var(--better42-purple-lighter) !important;
+                background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
             }
 
             .export-btn:hover {
-                background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+                background: linear-gradient(135deg, var(--better42-purple-lighter), var(--better42-purple-light)) !important;
+                opacity: 0.9 !important;
             }
 
             /* Scrollbar pour la section thèmes */

@@ -170,10 +170,8 @@ class UIManager {
                 outline: none !important;
             }
             .profile-actions button:hover {
-                background: linear-gradient(135deg, #818cf8, #a5b4fc) !important;
-                color: #222 !important;
-                transform: translateY(-1px) scale(1.04);
-                box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+                transform: translateY(-1px) scale(1.02) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
             }
 
             .input-row {
@@ -192,6 +190,76 @@ class UIManager {
                 display: flex !important;
                 gap: 5px !important;
                 flex-shrink: 0 !important;
+            }
+
+            /* Boutons pour fond d'écran */
+            #apply-bg {
+                background: linear-gradient(135deg, #059669, #10b981) !important;
+                color: white !important;
+                border: none !important;
+                padding: 8px 16px !important;
+                border-radius: 6px !important;
+                cursor: pointer !important;
+                font-weight: 600 !important;
+                font-size: 12px !important;
+                transition: all 0.3s ease !important;
+            }
+
+            #apply-bg:hover {
+                background: linear-gradient(135deg, #10b981, #34d399) !important;
+                transform: translateY(-1px) !important;
+            }
+
+            #reset-bg {
+                background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+                color: white !important;
+                border: none !important;
+                padding: 8px 16px !important;
+                border-radius: 6px !important;
+                cursor: pointer !important;
+                font-weight: 600 !important;
+                font-size: 12px !important;
+                transition: all 0.3s ease !important;
+            }
+
+            #reset-bg:hover {
+                background: linear-gradient(135deg, #ef4444, #f87171) !important;
+                transform: translateY(-1px) !important;
+            }
+
+            /* Boutons pour photo de profil */
+            #apply-pfp {
+                background: linear-gradient(135deg, #059669, #10b981) !important;
+                color: white !important;
+                border: none !important;
+                padding: 8px 16px !important;
+                border-radius: 6px !important;
+                cursor: pointer !important;
+                font-weight: 600 !important;
+                font-size: 12px !important;
+                transition: all 0.3s ease !important;
+            }
+
+            #apply-pfp:hover {
+                background: linear-gradient(135deg, #10b981, #34d399) !important;
+                transform: translateY(-1px) !important;
+            }
+
+            #reset-pfp {
+                background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+                color: white !important;
+                border: none !important;
+                padding: 8px 16px !important;
+                border-radius: 6px !important;
+                cursor: pointer !important;
+                font-weight: 600 !important;
+                font-size: 12px !important;
+                transition: all 0.3s ease !important;
+            }
+
+            #reset-pfp:hover {
+                background: linear-gradient(135deg, #ef4444, #f87171) !important;
+                transform: translateY(-1px) !important;
             }
 
             .popup-footer {

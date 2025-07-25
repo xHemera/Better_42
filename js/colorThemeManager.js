@@ -4,7 +4,7 @@ class ColorThemeManager {
     constructor() {
         this.themes = {
             violet: {
-                name: '💜 Violet',
+                name: 'Violet',
                 primary: '#5c058f',
                 primaryLight: '#7d1aaa',
                 primaryLighter: '#9d2acc',
@@ -14,7 +14,7 @@ class ColorThemeManager {
                 primaryAlphaLight: 'rgba(92, 5, 143, 0.1)'
             },
             blanc: {
-                name: '🤍 Blanc',
+                name: 'Blanc',
                 primary: '#e5e5e5',
                 primaryLight: '#f0f0f0',
                 primaryLighter: '#f8f8f8',
@@ -24,7 +24,7 @@ class ColorThemeManager {
                 primaryAlphaLight: 'rgba(229, 229, 229, 0.1)'
             },
             bleu: {
-                name: '💙 Bleu',
+                name: 'Bleu',
                 primary: '#1e40af',
                 primaryLight: '#3b82f6',
                 primaryLighter: '#60a5fa',
@@ -34,7 +34,7 @@ class ColorThemeManager {
                 primaryAlphaLight: 'rgba(30, 64, 175, 0.1)'
             },
             rose: {
-                name: '💗 Rose',
+                name: 'Rose',
                 primary: '#be185d',
                 primaryLight: '#ec4899',
                 primaryLighter: '#f472b6',
@@ -44,7 +44,7 @@ class ColorThemeManager {
                 primaryAlphaLight: 'rgba(190, 24, 93, 0.1)'
             },
             vert: {
-                name: '💚 Vert',
+                name: 'Vert',
                 primary: '#059669',
                 primaryLight: '#10b981',
                 primaryLighter: '#34d399',
@@ -54,7 +54,7 @@ class ColorThemeManager {
                 primaryAlphaLight: 'rgba(5, 150, 105, 0.1)'
             },
             orange: {
-                name: '🧡 Orange',
+                name: 'Orange',
                 primary: '#ea580c',
                 primaryLight: '#f97316',
                 primaryLighter: '#fb923c',
@@ -64,7 +64,7 @@ class ColorThemeManager {
                 primaryAlphaLight: 'rgba(234, 88, 12, 0.1)'
             },
             rouge: {
-                name: '❤️ Rouge',
+                name: 'Rouge',
                 primary: '#dc2626',
                 primaryLight: '#ef4444',
                 primaryLighter: '#f87171',
@@ -74,7 +74,7 @@ class ColorThemeManager {
                 primaryAlphaLight: 'rgba(220, 38, 38, 0.1)'
             },
             cyan: {
-                name: '💎 Cyan',
+                name:  'Cyan',
                 primary: '#0891b2',
                 primaryLight: '#06b6d4',
                 primaryLighter: '#22d3ee',
@@ -258,41 +258,117 @@ class ColorThemeManager {
         const style = document.createElement('style');
         style.textContent = `
             .color-theme-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr 1fr 1fr !important;
-                gap: 8px !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 12px !important;
                 margin-top: 15px !important;
+                justify-content: center !important;
             }
 
             .color-theme-btn {
-                padding: 8px 12px !important;
-                border: none !important;
-                border-radius: 8px !important;
+                flex: 0 1 auto !important;
+                min-width: 120px !important;
+            }
+
+            @media (max-width: 1024px) {
+                .color-theme-grid {
+                    gap: 10px !important;
+                }
+                .color-theme-btn {
+                    min-width: 110px !important;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .color-theme-grid {
+                    gap: 8px !important;
+                }
+                .color-theme-btn {
+                    min-width: 100px !important;
+                    flex: 1 1 calc(50% - 4px) !important;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .color-theme-grid {
+                    gap: 6px !important;
+                }
+                .color-theme-btn {
+                    min-width: 90px !important;
+                    flex: 1 1 calc(50% - 3px) !important;
+                    font-size: 11px !important;
+                    padding: 12px 8px !important;
+                }
+            }
+
+            .color-theme-btn:not(.responsive-override) {
+                padding: 14px 16px !important;
+                border: 2px solid transparent !important;
+                border-radius: 12px !important;
                 cursor: pointer !important;
                 color: white !important;
                 font-weight: 600 !important;
-                font-size: 12px !important;
-                transition: all 0.3s ease !important;
-                text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+                font-size: 13px !important;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.6) !important;
                 text-align: center !important;
+                position: relative !important;
+                overflow: hidden !important;
+                backdrop-filter: blur(10px) !important;
+            }
+
+            .color-theme-btn::before {
+                content: '' !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: -100% !important;
+                width: 100% !important;
+                height: 100% !important;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+                transition: left 0.6s !important;
+            }
+
+            .color-theme-btn:hover::before {
+                left: 100% !important;
             }
 
             .color-theme-btn:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+                transform: translateY(-3px) scale(1.02) !important;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+                border-color: rgba(255, 255, 255, 0.3) !important;
             }
 
             .color-theme-btn.active {
-                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5) !important;
+                border-color: rgba(255, 255, 255, 0.8) !important;
                 transform: scale(1.05) !important;
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 0 8px 25px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            .color-theme-btn.active::after {
+                content: '✓' !important;
+                position: absolute !important;
+                top: 6px !important;
+                right: 8px !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                color: #000 !important;
+                border-radius: 50% !important;
+                width: 20px !important;
+                height: 20px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 12px !important;
+                font-weight: bold !important;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
             }
 
             .custom-color-section {
                 margin-top: 20px !important;
                 padding: 15px !important;
-                background: rgba(255, 255, 255, 0.05) !important;
+                background: rgba(255, 255, 255, 0.03) !important;
                 border-radius: 10px !important;
-                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                backdrop-filter: blur(5px) !important;
             }
 
             .custom-color-section h5 {
@@ -308,6 +384,19 @@ class ColorThemeManager {
                 gap: 10px !important;
                 align-items: center !important;
                 justify-content: center !important;
+                flex-wrap: wrap !important;
+            }
+
+            @media (max-width: 480px) {
+                .custom-color-row {
+                    flex-direction: column !important;
+                    gap: 8px !important;
+                }
+                
+                .custom-color-row > * {
+                    width: 100% !important;
+                    max-width: 200px !important;
+                }
             }
 
             #custom-color-picker {
@@ -464,7 +553,7 @@ class ColorThemeManager {
         const evenDarker = this.darkenColor(baseColor, 40);
 
         return {
-            name: '✨ Custom',
+            name: 'Custom',
             primary: baseColor,
             primaryLight: lighter,
             primaryLighter: evenLighter,
