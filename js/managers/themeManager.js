@@ -1,4 +1,3 @@
-// js/themeManager.js - Version synchronisée avec ColorThemeManager
 
 class ThemeManager {
     constructor() {
@@ -46,19 +45,15 @@ class ThemeManager {
     }
 
     getCurrentThemeColor() {
-        // Utilisation du nouveau ColorThemeManager pour obtenir la couleur
         if (window.ColorThemeManager) {
             return window.ColorThemeManager.getCurrentThemeRgb();
         }
         
-        // Fallback vers l'ancien système si ColorThemeManager n'est pas disponible
         return '92, 5, 143';
     }
-
     updateLogtime() {
         const currentColor = this.getCurrentThemeColor();
         
-        // Mettre à jour tous les éléments avec l'ancienne couleur teal
         const tealElements = document.querySelectorAll('[style*="rgba(0, 186, 188,"]');
         tealElements.forEach(el => {
             const style = el.getAttribute('style');
@@ -73,16 +68,15 @@ class ThemeManager {
             }
         });
 
-        // Mettre à jour les éléments qui ont déjà été convertis mais avec une ancienne couleur
         const oldThemePatterns = [
-            /rgba\(92, 5, 143, ([\d\.]+)\)/g,    // Ancien purple
-            /rgba\(30, 64, 175, ([\d\.]+)\)/g,   // Ancien blue
-            /rgba\(190, 24, 93, ([\d\.]+)\)/g,   // Ancien pink
-            /rgba\(5, 150, 105, ([\d\.]+)\)/g,   // Ancien green
-            /rgba\(229, 229, 229, ([\d\.]+)\)/g, // Ancien white
-            /rgba\(234, 88, 12, ([\d\.]+)\)/g,   // Ancien orange
-            /rgba\(220, 38, 38, ([\d\.]+)\)/g,   // Ancien red
-            /rgba\(8, 145, 178, ([\d\.]+)\)/g    // Ancien cyan
+            /rgba\(92, 5, 143, ([\d\.]+)\)/g,
+            /rgba\(30, 64, 175, ([\d\.]+)\)/g,
+            /rgba\(190, 24, 93, ([\d\.]+)\)/g,
+            /rgba\(5, 150, 105, ([\d\.]+)\)/g,
+            /rgba\(229, 229, 229, ([\d\.]+)\)/g,
+            /rgba\(234, 88, 12, ([\d\.]+)\)/g,
+            /rgba\(220, 38, 38, ([\d\.]+)\)/g,
+            /rgba\(8, 145, 178, ([\d\.]+)\)/g
         ];
 
         oldThemePatterns.forEach(pattern => {
@@ -123,7 +117,6 @@ class ThemeManager {
         
         this.observer = new MutationObserver((mutations) => {
             if (this.isDark) {
-                // Délai court pour éviter les conflits avec ColorThemeManager
                 setTimeout(() => {
                     this.updateLogtime();
                 }, 50);
@@ -141,7 +134,7 @@ class ThemeManager {
             if (this.isDark) {
                 this.updateLogtime();
             }
-        }, 2000); // Intervalle réduit pour éviter les conflits
+        }, 2000);
     }
 
     stopLogtimeWatcher() {
@@ -160,17 +153,14 @@ class ThemeManager {
         return this.isDark ? 'Worse' : 'Better';
     }
 
-    // Nouvelle méthode pour synchroniser avec ColorThemeManager
     syncWithColorThemeManager() {
         if (this.isDark && window.ColorThemeManager) {
-            // Forcer une mise à jour après changement de thème couleur
             setTimeout(() => {
                 this.updateLogtime();
             }, 200);
         }
     }
 
-    // Méthode pour obtenir des informations de debug
     getDebugInfo() {
         return {
             isDark: this.isDark,

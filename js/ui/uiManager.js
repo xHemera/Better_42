@@ -1,4 +1,3 @@
-// js/uiManager.js - Version mise à jour pour la nouvelle architecture
 
 class UIManager {
     constructor() {
@@ -33,7 +32,6 @@ class UIManager {
         this.settingsPopup.innerHTML = this.getSettingsPopupHTML();
         this.settingsPopup.classList.remove('show');
         
-        // Ajouter la section des couleurs après la création du popup
         this.addColorThemeSection();
     }
 
@@ -41,10 +39,8 @@ class UIManager {
         const popupContent = this.settingsPopup.querySelector('.popup-content');
         const popupFooter = popupContent.querySelector('.popup-footer');
         
-        // Créer la section des couleurs avec la nouvelle architecture
         const colorSection = window.ColorThemeManager.createUI();
         
-        // L'insérer juste avant le footer
         popupContent.insertBefore(colorSection, popupFooter);
     }
 
@@ -93,7 +89,6 @@ class UIManager {
                     </div>
                 </div>
                 
-                <!-- La section couleur sera ajoutée ici dynamiquement -->
                 
                 <div class="popup-footer">
                     <button id="close-popup">✖️ Fermer</button>
@@ -129,7 +124,6 @@ class UIManager {
             this.handlePopupButtonClick(e);
         });
 
-        // Ajouter les styles pour le bouton de reset des thèmes
         this.addResetButtonStyles();
     }
 
@@ -192,7 +186,6 @@ class UIManager {
                 flex-shrink: 0 !important;
             }
 
-            /* Boutons pour fond d'écran */
             #apply-bg {
                 background: linear-gradient(135deg, #059669, #10b981) !important;
                 color: white !important;
@@ -227,7 +220,6 @@ class UIManager {
                 transform: translateY(-1px) !important;
             }
 
-            /* Boutons pour photo de profil */
             #apply-pfp {
                 background: linear-gradient(135deg, #059669, #10b981) !important;
                 color: white !important;
@@ -327,7 +319,6 @@ class UIManager {
 
     resetAllThemes() {
         if (window.ColorThemeManager.resetToDefaults()) {
-            // Fermer et rouvrir le popup pour rafraîchir l'UI
             this.hideSettingsPopup();
             setTimeout(() => {
                 this.showSettingsPopup();
@@ -388,7 +379,6 @@ class UIManager {
             }
         }
 
-        // Afficher les statistiques des thèmes dans la console (debug)
         console.log('Theme Statistics:', window.ColorThemeManager.getThemeStats());
     }
 
@@ -398,8 +388,11 @@ class UIManager {
 
     appendToDOM() {
         document.body.appendChild(this.themeBtn);
-        document.body.appendChild(this.settingsBtn);
-        document.body.appendChild(this.settingsPopup);
+        
+        if (window.location.hostname === 'profile-v3.intra.42.fr') {
+            document.body.appendChild(this.settingsBtn);
+            document.body.appendChild(this.settingsPopup);
+        }
         
         document.body.classList.add('page-loaded');
     }

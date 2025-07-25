@@ -1,12 +1,12 @@
 /* -----=====SCROLLBAR=====----- */
 
-/* SCROLLBAR POUR FIREFOX */
+/* SCROLLBAR FOR FIREFOX */
 body.dark-theme * {
     scrollbar-width: thin !important;
     scrollbar-color: var(--better42-bg-secondary) var(--better42-bg-dark) !important;
 }
 
-/* SCROLLBAR POUR WEBKIT (CHROME, SAFARI, EDGE) */
+/* SCROLLBAR FOR WEBKIT (CHROME, SAFARI, EDGE) */
 body.dark-theme *::-webkit-scrollbar {
     width: 8px !important;
     height: 8px !important;

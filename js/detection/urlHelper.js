@@ -1,4 +1,3 @@
-// js/urlHelper.js - Utilitaires pour la gestion des URLs et profils
 
 class URLHelper {
     constructor() {
@@ -6,11 +5,10 @@ class URLHelper {
         this.observers = [];
     }
 
-    // Obtenir le nom d'utilisateur depuis l'URL
     getUserFromURL(url = window.location.href) {
         const patterns = [
-            /\/users\/([^\/\?\#]+)/,  // Standard: /users/username
-            /profile-v3\.intra\.42\.fr\/users\/([^\/\?\#]+)/, // Spécifique à 42
+            /\/users\/([^\/\?\#]+)/,
+            /profile-v3\.intra\.42\.fr\/users\/([^\/\?\#]+)/
         ];
 
         for (const pattern of patterns) {
@@ -23,23 +21,20 @@ class URLHelper {
         return null;
     }
 
-    // Vérifier si l'URL correspond à un profil utilisateur
     isUserProfileURL(url = window.location.href) {
         return this.getUserFromURL(url) !== null;
     }
 
-    // Vérifier si on est sur la page d'accueil/dashboard
     isHomePage(url = window.location.href) {
         const homePatterns = [
-            /^https?:\/\/[^\/]+\/?$/,  // Racine du site
-            /\/dashboard/,             // Dashboard
-            /\/home/,                  // Home
+            /^https?:\/\/[^\/]+\/?$/,
+            /\/dashboard/,
+            /\/home/
         ];
 
         return homePatterns.some(pattern => pattern.test(url));
     }
 
-    // Obtenir le type de page actuelle
     getPageType(url = window.location.href) {
         if (this.isUserProfileURL(url)) {
             return 'user_profile';
@@ -56,11 +51,9 @@ class URLHelper {
         return 'other';
     }
 
-    // Surveiller les changements d'URL
     onURLChange(callback) {
         this.observers.push(callback);
         
-        // Observer les changements de l'historique
         const originalPushState = history.pushState;
         const originalReplaceState = history.replaceState;
         
@@ -78,7 +71,6 @@ class URLHelper {
             this.notifyURLChange();
         });
 
-        // Observer les changements DOM pour les SPA
         const observer = new MutationObserver(() => {
             if (window.location.href !== this.currentURL) {
                 this.notifyURLChange();
@@ -98,7 +90,6 @@ class URLHelper {
         };
     }
 
-    // Notifier les observateurs des changements d'URL
     notifyURLChange() {
         const oldURL = this.currentURL;
         const newURL = window.location.href;
@@ -118,7 +109,6 @@ class URLHelper {
         }
     }
 
-    // Obtenir des informations sur l'URL actuelle
     getCurrentPageInfo() {
         const url = window.location.href;
         return {
@@ -130,20 +120,17 @@ class URLHelper {
         };
     }
 
-    // Normaliser un nom d'utilisateur
     normalizeUsername(username) {
         if (!username) return null;
         return username.toLowerCase().trim();
     }
 
-    // Vérifier si deux noms d'utilisateur sont identiques
     isSameUser(user1, user2) {
         const norm1 = this.normalizeUsername(user1);
         const norm2 = this.normalizeUsername(user2);
         return norm1 && norm2 && norm1 === norm2;
     }
 
-    // Extraire l'utilisateur depuis différents éléments DOM
     extractUserFromDOM() {
         const selectors = [
             '[data-user-login]',
@@ -158,7 +145,6 @@ class URLHelper {
         for (const selector of selectors) {
             const elements = document.querySelectorAll(selector);
             for (const element of elements) {
-                // Essayer les attributs data
                 const dataUser = element.getAttribute('data-user-login') || 
                                 element.getAttribute('data-login') || 
                                 element.getAttribute('data-username');
@@ -166,7 +152,6 @@ class URLHelper {
                     return this.normalizeUsername(dataUser);
                 }
 
-                // Essayer le contenu textuel
                 const textContent = element.textContent.trim();
                 if (textContent && this.looksLikeUsername(textContent)) {
                     return this.normalizeUsername(textContent);
@@ -177,15 +162,12 @@ class URLHelper {
         return null;
     }
 
-    // Vérifier si un texte ressemble à un nom d'utilisateur 42
     looksLikeUsername(text) {
-        // Les usernames 42 sont généralement des lettres minuscules avec des chiffres
         const normalized = text.toLowerCase().trim();
         return /^[a-z][a-z0-9-_]{0,15}$/.test(normalized) && 
                !['profile', 'user', 'account', 'dashboard', 'home', 'projects'].includes(normalized);
     }
 
-    // Debug: obtenir toutes les informations
     getDebugInfo() {
         return {
             currentURL: this.currentURL,

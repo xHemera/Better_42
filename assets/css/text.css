@@ -1,6 +1,6 @@
 /* -----=====TEXT COLOR=====----- */
 
-/* PETITS TEXTES EN GRIS CLAIR */
+/* LITTLE TEXTE */
 body.dark-theme .bg-slate-50.w-4.h-4.flex.justify-center.text-center.leading-5 {
     color: var(--better42-text-light) !important;
 }

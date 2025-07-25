@@ -1,11 +1,9 @@
-// js/themes/generator.js - Générateur de CSS pour les thèmes
 
 class ThemeCSSGenerator {
     constructor() {
         this.styleElementId = 'dynamic-color-theme';
     }
 
-    // Générer le CSS complet pour un thème
     generateThemeCSS(themeColors) {
         return `
             ${this.generateCSSVariables(themeColors)}
@@ -18,7 +16,6 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Variables CSS root
     generateCSSVariables(colors) {
         return `
             :root {
@@ -33,7 +30,6 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Styles des boutons
     generateButtonStyles(colors) {
         return `
             /* ===== BOUTONS ===== */
@@ -82,7 +78,6 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Styles des événements
     generateEventStyles(colors) {
         return `
             /* ===== ÉVÉNEMENTS ===== */
@@ -96,7 +91,6 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Styles des stats utilisateur et barres de progression
     generateUserStatsStyles(colors) {
         return `
             /* ===== STATS UTILISATEUR ===== */
@@ -149,7 +143,6 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Styles de la barre supérieure
     generateTopbarStyles(colors) {
         return `
             /* ===== BARRE SUPÉRIEURE ===== */
@@ -184,7 +177,6 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Styles du popup de paramètres
     generatePopupStyles(colors) {
         return `
             /* ===== POPUP PARAMÈTRES ===== */
@@ -225,7 +217,6 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Styles divers
     generateMiscStyles(colors) {
         return `
             /* ===== DIVERS ===== */
@@ -239,22 +230,18 @@ class ThemeCSSGenerator {
         `;
     }
 
-    // Appliquer le CSS généré
     applyCSSToDOM(css) {
-        // Supprimer l'ancien style
         const oldStyleElement = document.getElementById(this.styleElementId);
         if (oldStyleElement) {
             oldStyleElement.remove();
         }
 
-        // Créer et ajouter le nouveau style
         const styleElement = document.createElement('style');
         styleElement.id = this.styleElementId;
         styleElement.textContent = css;
         document.head.appendChild(styleElement);
     }
 
-    // Supprimer tous les styles de thème
     removeThemeCSS() {
         const styleElement = document.getElementById(this.styleElementId);
         if (styleElement) {

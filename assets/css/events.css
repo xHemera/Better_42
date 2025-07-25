@@ -8,7 +8,7 @@ body.dark-theme .text-xs.border-white.border {
 
 /* ASSOC EVENT */
 body.dark-theme [style*="background-color: rgb(162, 179, 229)"] {
-    background-color: rgba(92, 5, 143, 0.5) !important;
+    background-color: var(--better42-purple-alpha) !important;
 }
 
 body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(162, 179, 229)"] {

@@ -18,12 +18,10 @@ body.dark-theme .grid.grid-cols-1.lg\:grid-cols-2.\\32 xl\:grid-cols-3 {
     background-color: var(--better42-bg-dark) !important;
 }
 
-/* TOUS LES ÉLÉMENTS AVEC BG-ZINC-50 */
 body.dark-theme [class*="bg-zinc-50"] {
     background-color: var(--better42-bg-dark) !important;
 }
 
-/* DERNIÈRE LIGNE DU FOOTER */
 body.dark-theme .justify-center.flex.flex-col.gap-4.text-sm.text-gray-500 {
     background-color: var(--better42-bg-dark) !important;
     margin-bottom: 0 !important;

@@ -35,14 +35,14 @@
     box-shadow: none !important;
 }
 
-/* Cache les boutons pendant le chargement */
+/* LOAD BUTTON AFTER PAGE LOAD */
 #theme-switcher,
 #settings-btn {
     opacity: 0 !important;
     transition: opacity 0.3s ease !important;
 }
 
-/* Les affiche quand la page est chargée */
+/* LOAD THE BUTTONS */
 body.page-loaded #theme-switcher,
 body.page-loaded #settings-btn {
     opacity: 1 !important;

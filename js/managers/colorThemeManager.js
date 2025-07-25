@@ -1,7 +1,6 @@
-// js/colorThemeManager.js
-
 class ColorThemeManager {
     constructor() {
+        this.logtimeObserver = null;
         this.themes = {
             violet: {
                 name: 'Violet',
@@ -101,22 +100,18 @@ class ColorThemeManager {
         const theme = this.themes[themeName];
         if (!theme) return;
 
-        // Supprimer l'ancien style de thème
         const oldStyleElement = document.getElementById('dynamic-color-theme');
         if (oldStyleElement) {
             oldStyleElement.remove();
         }
 
-        // Créer le nouveau style
         const styleElement = document.createElement('style');
         styleElement.id = 'dynamic-color-theme';
         styleElement.textContent = this.generateThemeCSS(theme);
         document.head.appendChild(styleElement);
 
-        // Forcer la mise à jour du logtime avec la nouvelle couleur
         this.updateLogtimeColors(theme);
 
-        // Notifier le ThemeManager pour qu'il mette à jour ses couleurs aussi
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.ThemeManager.updateLogtime();
@@ -127,30 +122,22 @@ class ColorThemeManager {
     }
 
     updateLogtimeColors(theme) {
-        // Mise à jour immédiate des éléments logtime existants
-        const logtimeElements = document.querySelectorAll('[style*="rgba(0, 186, 188,"], [style*="rgba(92, 5, 143,"]');
+        const primaryRgb = theme.primary.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).join(', ');
+        const allLogtimeCases = document.querySelectorAll('.bg-slate-50.w-4.h-4[style*="background-color"]');
         
-        logtimeElements.forEach(el => {
+        allLogtimeCases.forEach(el => {
             const style = el.getAttribute('style');
-            if (style) {
-                // Remplacer les anciennes couleurs par la nouvelle couleur du thème
+            if (style && style.includes('background-color')) {
                 let newStyle = style
-                    .replace(/rgba\(0, 186, 188, ([0-9.]+)\)/g, `rgba(${theme.primary.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).join(', ')}, $1)`)
-                    .replace(/rgba\(92, 5, 143, ([0-9.]+)\)/g, `rgba(${theme.primary.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).join(', ')}, $1)`);
+                    .replace(/background-color: rgb\(0, 186, 188\)/g, `background-color: rgb(${primaryRgb})`)
+                    .replace(/rgba\(0, 186, 188, ([0-9.]+)\)/g, `rgba(${primaryRgb}, $1)`)
+                    .replace(/background-color: rgb\([0-9, ]+\)/g, `background-color: rgb(${primaryRgb})`)
+                    .replace(/background-color: rgba\([0-9, ]+, ([0-9.]+)\)/g, `background-color: rgba(${primaryRgb}, $1)`);
                 
                 el.setAttribute('style', newStyle);
             }
         });
-
-        // Mise à jour des couleurs de fond rgb(162, 179, 229) pour les événements
-        const eventElements = document.querySelectorAll('[style*="background-color: rgb(162, 179, 229)"]');
-        eventElements.forEach(el => {
-            const style = el.getAttribute('style');
-            if (style) {
-                const newStyle = style.replace(/background-color: rgb\(162, 179, 229\)/g, `background-color: ${theme.primaryAlpha.replace('0.3', '0.5')}`);
-                el.setAttribute('style', newStyle);
-            }
-        });
+        
     }
 
     generateThemeCSS(theme) {
@@ -225,6 +212,11 @@ class ColorThemeManager {
         const savedTheme = this.getCurrentTheme();
         if (savedTheme && this.themes[savedTheme]) {
             this.applyTheme(savedTheme);
+        } else {
+            const defaultTheme = this.themes['violet'];
+            if (defaultTheme) {
+                this.updateLogtimeColors(defaultTheme);
+            }
         }
     }
 
@@ -254,7 +246,6 @@ class ColorThemeManager {
             </div>
         `;
 
-        // Ajouter les styles pour la grille de couleurs
         const style = document.createElement('style');
         style.textContent = `
             .color-theme-grid {
@@ -450,7 +441,6 @@ class ColorThemeManager {
     attachColorSelectorEvents(colorSection) {
         const colorButtons = colorSection.querySelectorAll('.color-theme-btn');
         
-        // Marquer le thème actuel comme actif
         const currentTheme = this.getCurrentTheme();
         colorButtons.forEach(btn => {
             if (btn.dataset.theme === currentTheme) {
@@ -458,95 +448,76 @@ class ColorThemeManager {
             }
             
             btn.addEventListener('click', (e) => {
-                // Retirer la classe active de tous les boutons
                 colorButtons.forEach(b => b.classList.remove('active'));
                 
-                // Ajouter la classe active au bouton cliqué
                 e.target.classList.add('active');
                 
-                // Appliquer le thème
                 const themeName = e.target.dataset.theme;
                 this.applyTheme(themeName);
             });
         });
 
-        // Gérer le color picker personnalisé
         const colorPicker = colorSection.querySelector('#custom-color-picker');
         const applyBtn = colorSection.querySelector('#apply-custom-color');
         const saveBtn = colorSection.querySelector('#save-custom-color');
 
-        // Charger la couleur custom sauvegardée
         const savedCustomColor = localStorage.getItem('better42-custom-color');
         if (savedCustomColor) {
             colorPicker.value = savedCustomColor;
         }
 
-        // Appliquer la couleur custom
         applyBtn.addEventListener('click', () => {
             const selectedColor = colorPicker.value;
             this.applyCustomColor(selectedColor);
             
-            // Désactiver tous les boutons de thème
             colorButtons.forEach(b => b.classList.remove('active'));
         });
 
-        // Sauvegarder la couleur custom
         saveBtn.addEventListener('click', () => {
             const selectedColor = colorPicker.value;
             localStorage.setItem('better42-custom-color', selectedColor);
             this.applyCustomColor(selectedColor);
             
-            // Désactiver tous les boutons de thème
             colorButtons.forEach(b => b.classList.remove('active'));
             
             alert('💾 Couleur personnalisée sauvegardée !');
         });
 
-        // Prévisualisation en temps réel
         colorPicker.addEventListener('input', (e) => {
             this.applyCustomColor(e.target.value);
             colorButtons.forEach(b => b.classList.remove('active'));
         });
     }
 
-    // Appliquer une couleur personnalisée
     applyCustomColor(hexColor) {
-        // Générer un thème complet à partir de la couleur de base
         const customTheme = this.generateCustomTheme(hexColor);
         
-        // Supprimer l'ancien style de thème
         const oldStyleElement = document.getElementById('dynamic-color-theme');
         if (oldStyleElement) {
             oldStyleElement.remove();
         }
 
-        // Créer le nouveau style
         const styleElement = document.createElement('style');
         styleElement.id = 'dynamic-color-theme';
         styleElement.textContent = this.generateThemeCSS(customTheme);
         document.head.appendChild(styleElement);
 
-        // Forcer la mise à jour du logtime avec la nouvelle couleur
         this.updateLogtimeColors(customTheme);
 
-        // Notifier le ThemeManager
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.ThemeManager.updateLogtime();
             }, 100);
         }
 
-        // Marquer comme couleur custom
         localStorage.setItem('better42-color-theme', 'custom');
         this.currentTheme = 'custom';
     }
 
-    // Générer un thème complet à partir d'une couleur
     generateCustomTheme(baseColor) {
         const rgb = this.hexToRgb(baseColor);
         if (!rgb) return this.themes.violet;
 
-        // Générer des variations de la couleur
         const lighter = this.lightenColor(baseColor, 20);
         const evenLighter = this.lightenColor(baseColor, 40);
         const darker = this.darkenColor(baseColor, 20);
@@ -564,7 +535,6 @@ class ColorThemeManager {
         };
     }
 
-    // Éclaircir une couleur
     lightenColor(hex, percent) {
         const rgb = this.hexToRgb(hex);
         if (!rgb) return hex;
@@ -577,7 +547,6 @@ class ColorThemeManager {
         return this.rgbToHex(r, g, b);
     }
 
-    // Assombrir une couleur
     darkenColor(hex, percent) {
         const rgb = this.hexToRgb(hex);
         if (!rgb) return hex;
@@ -590,12 +559,10 @@ class ColorThemeManager {
         return this.rgbToHex(r, g, b);
     }
 
-    // Convertir RGB en Hex
     rgbToHex(r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
     }
 
-    // Convertir Hex en RGB
     hexToRgb(hex) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -605,35 +572,125 @@ class ColorThemeManager {
         } : null;
     }
 
-    // Méthode d'initialisation
     init() {
         const currentTheme = this.getCurrentTheme();
         
-        // Si c'est une couleur custom, charger la couleur sauvegardée
         if (currentTheme === 'custom') {
             const savedCustomColor = localStorage.getItem('better42-custom-color');
             if (savedCustomColor) {
                 this.applyCustomColor(savedCustomColor);
-                return;
+            }
+        } else {
+            this.loadSavedTheme();
+        }
+        
+        this.startLogtimeObserver();
+        
+        this.forceInitialLogtimeCheck();
+    }
+    
+    startLogtimeObserver() {
+        if (this.logtimeObserver) {
+            this.logtimeObserver.disconnect();
+        }
+        
+        this.logtimeObserver = new MutationObserver((mutations) => {
+            let needsUpdate = false;
+            
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            if (this.hasLogtimeColors(node)) {
+                                needsUpdate = true;
+                            }
+                        }
+                    });
+                } else if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    if (this.hasLogtimeColors(mutation.target)) {
+                        needsUpdate = true;
+                    }
+                }
+            });
+            
+            if (needsUpdate) {
+                setTimeout(() => {
+                    const currentTheme = this.getCurrentTheme();
+                    if (currentTheme === 'custom') {
+                        const savedCustomColor = localStorage.getItem('better42-custom-color');
+                        if (savedCustomColor) {
+                            const customTheme = this.generateCustomTheme(savedCustomColor);
+                            this.updateLogtimeColors(customTheme);
+                        }
+                    } else if (this.themes[currentTheme]) {
+                        this.updateLogtimeColors(this.themes[currentTheme]);
+                    } else {
+                        this.updateLogtimeColors(this.themes['violet']);
+                    }
+                }, 100);
+            }
+        });
+        
+        this.logtimeObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style']
+        });
+    }
+    
+    hasLogtimeColors(element) {
+        if (!element.getAttribute) return false;
+        
+        const style = element.getAttribute('style');
+        if (!style) return false;
+        
+        if (style.includes('rgb(0, 186, 188)') || style.includes('rgba(0, 186, 188,')) {
+            if (element.classList.contains('bg-slate-50') && 
+                element.classList.contains('w-4') && 
+                element.classList.contains('h-4')) {
+                return true;
             }
         }
         
-        // Sinon charger le thème normal
-        this.loadSavedTheme();
+        return false;
+    }
+    
+    forceInitialLogtimeCheck() {
+        
+        delays.forEach(delay => {
+            setTimeout(() => {
+                const currentTheme = this.getCurrentTheme();
+                let theme;
+                
+                if (currentTheme === 'custom') {
+                    const savedCustomColor = localStorage.getItem('better42-custom-color');
+                    if (savedCustomColor) {
+                        theme = this.generateCustomTheme(savedCustomColor);
+                    }
+                } else if (this.themes[currentTheme]) {
+                    theme = this.themes[currentTheme];
+                } else {
+                    theme = this.themes['violet'];
+                }
+                
+                if (theme) {
+                    this.updateLogtimeColors(theme);
+                    console.log(`🔄 Vérification logtime forcée à ${delay}ms`);
+                }
+            }, delay);
+        });
     }
 
-    // Méthode pour créer l'UI du sélecteur de couleurs
     createUI() {
         const colorSection = this.createColorSelector();
         this.attachColorSelectorEvents(colorSection);
         return colorSection;
     }
 
-    // Méthode pour obtenir la couleur RGB actuelle
     getCurrentThemeRgb() {
         const currentTheme = this.getCurrentTheme();
         
-        // Si c'est une couleur custom
         if (currentTheme === 'custom') {
             const savedCustomColor = localStorage.getItem('better42-custom-color');
             if (savedCustomColor) {
@@ -644,11 +701,9 @@ class ColorThemeManager {
             }
         }
         
-        // Sinon utiliser le thème prédéfini
         const theme = this.themes[currentTheme];
         if (!theme) return '92, 5, 143';
         
-        // Convertir hex en RGB
         const hex = theme.primary.replace('#', '');
         const r = parseInt(hex.substr(0, 2), 16);
         const g = parseInt(hex.substr(2, 2), 16);
@@ -657,22 +712,17 @@ class ColorThemeManager {
         return `${r}, ${g}, ${b}`;
     }
 
-    // Méthode pour réinitialiser aux paramètres par défaut
     resetToDefaults() {
-        // Supprimer le thème sauvegardé
         localStorage.removeItem('better42-color-theme');
         
-        // Réappliquer le thème par défaut
         this.currentTheme = 'violet';
         this.applyTheme('violet');
         
-        // Notifier le succès
         alert('🎨 Couleurs remises par défaut (Violet) !');
         
         return true;
     }
 
-    // Méthode pour obtenir les statistiques des thèmes
     getThemeStats() {
         return {
             currentTheme: this.getCurrentTheme(),

@@ -1,12 +1,10 @@
-// js/themes/ui.js - Interface utilisateur pour les thèmes
 
 class ThemeUI {
     constructor() {
         this.storage = window.ThemeStorage;
-        this.manager = null; // Sera assigné plus tard
+        this.manager = null;
     }
 
-    // Créer la section complète des thèmes
     createThemeSection() {
         const section = document.createElement('div');
         section.className = 'settings-section theme-section';

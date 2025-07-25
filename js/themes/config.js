@@ -1,4 +1,4 @@
-// js/themes/config.js - Configuration centralisée des thèmes
+// config.js - Configuration centralisée des thèmes
 
 const THEME_CONFIG = {
     // Clés de stockage

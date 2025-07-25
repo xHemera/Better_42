@@ -1,6 +1,6 @@
 /* -----=====BOUTONS PRINCIPAUX=====----- */
 
-/* BOUTON WORSE/BETTER - Gris par défaut, violet quand dark actif */
+/* BOUTON WORSE/BETTER */
 #theme-switcher {
     position: fixed !important;
     top: 15px !important;
@@ -24,7 +24,7 @@
     background: linear-gradient(135deg, var(--better42-gray-light), var(--better42-gray-lighter)) !important;
 }
 
-/* Bouton violet quand dark mode actif */
+/* BUTTON VIOLET QUAND DARK MODE ACTIF */
 body.dark-theme #theme-switcher {
     background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
     box-shadow: 0 4px 12px rgba(92, 5, 143, 0.3) !important;
@@ -35,7 +35,7 @@ body.dark-theme #theme-switcher:hover {
     box-shadow: 0 6px 20px rgba(92, 5, 143, 0.4) !important;
 }
 
-/* BOUTON ENGRENAGE - Visible seulement en dark mode */
+/* BOUTON SETTINGS*/
 #settings-btn {
     position: fixed !important;
     top: 15px !important;
@@ -60,7 +60,7 @@ body.dark-theme #theme-switcher:hover {
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
 }
 
-/* Engrenage visible seulement quand dark mode actif */
+/* SETTINGS BUTTON VISIBLE ONLY WHEN DARK MODE IS ACTIVE */
 body.dark-theme #settings-btn {
     display: block !important;
 }

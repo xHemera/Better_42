@@ -1,4 +1,4 @@
-/* -----=====SECTIONS DE PARAMÈTRES=====----- */
+/* -----====SETTINGS SECTION=====----- */
 
 .settings-section {
     background: rgba(255, 255, 255, 0.05) !important;
@@ -45,7 +45,7 @@
     background: rgba(0, 0, 0, 0.5) !important;
 }
 
-/* -----=====BOUTONS DES SECTIONS=====----- */
+/* -----=====BUTTONS SECTION=====----- */
 
 .profile-controls {
     display: flex !important;
