@@ -7,11 +7,19 @@ class ThemeManager {
     }
 
     init() {
+        const userModePreference = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
         const forceWorseMode = localStorage.getItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
         
         if (forceWorseMode === 'true') {
             localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
+        }
+        
+        if (userModePreference === 'worse') {
             this.isDark = false;
+            return;
+        } else if (userModePreference === 'better') {
+            this.isDark = true;
+            this.activateDarkModeWithoutSaving();
             return;
         }
         
@@ -19,19 +27,44 @@ class ThemeManager {
         this.isDark = !!hasDefaultProfile; 
         
         if (this.isDark) {
-            this.activateDarkMode();
+            localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'better');
+            this.activateDarkModeWithoutSaving();
+        } else {
+            localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         }
     }
 
     activateDarkMode() {
         document.body.classList.add('dark-theme');
         this.isDark = true;
+        localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'better');
+        
+        if (window.ColorThemeManager) {
+            window.ColorThemeManager.init();
+        }
+        
         this.updateLogtime();
         this.startLogtimeWatcher();
         window.ProfileManager.loadDefaultProfileOnStartup();
+        
+    }
+
+    activateDarkModeWithoutSaving() {
+        document.body.classList.add('dark-theme');
+        this.isDark = true;
+        
+        if (window.ColorThemeManager) {
+            window.ColorThemeManager.init();
+        }
+        
+        this.updateLogtime();
+        this.startLogtimeWatcher();
+        window.ProfileManager.loadDefaultProfileOnStartup();
+        
     }
 
     deactivateDarkMode() {
+        localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         localStorage.setItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE, 'true');
         window.BackgroundManager.removeCustomizations();
     }
@@ -52,11 +85,48 @@ class ThemeManager {
     }
 
     getCurrentThemeColor() {
-        if (window.ColorThemeManager) {
-            return window.ColorThemeManager.getCurrentThemeRgb();
+        // Récupérer directement depuis le localStorage pour éviter les problèmes de timing
+        const currentTheme = localStorage.getItem('better42-color-theme') || 'violet';
+        
+        if (currentTheme === 'custom') {
+            const savedCustomColor = localStorage.getItem('better42-custom-color');
+            if (savedCustomColor) {
+                const rgb = this.hexToRgb(savedCustomColor);
+                if (rgb) {
+                    return `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+                }
+            }
         }
         
-        return '92, 5, 143';
+        // Couleurs des thèmes prédéfinis
+        const themes = {
+            violet: '#5c058f',
+            blanc: '#e5e5e5',
+            bleu: '#1e40af',
+            rose: '#be185d',
+            vert: '#059669',
+            orange: '#ea580c',
+            rouge: '#dc2626',
+            cyan: '#0891b2'
+        };
+        
+        const themeColor = themes[currentTheme] || themes.violet;
+        const rgb = this.hexToRgb(themeColor);
+        
+        if (rgb) {
+            return `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+        }
+        
+        return '92, 5, 143'; // Fallback violet
+    }
+
+    hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
     }
     updateLogtime() {
         const currentColor = this.getCurrentThemeColor();
@@ -167,6 +237,7 @@ class ThemeManager {
             }, 200);
         }
     }
+
 
     getDebugInfo() {
         return {

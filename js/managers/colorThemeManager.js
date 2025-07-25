@@ -115,6 +115,7 @@ class ColorThemeManager {
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.ThemeManager.updateLogtime();
+                window.ThemeManager.updateButtonColors();
             }, 100);
         }
 
@@ -198,11 +199,13 @@ class ColorThemeManager {
 
             body.dark-theme #settings-btn {
                 background: linear-gradient(135deg, ${theme.primary}, ${theme.primaryLight}) !important;
+                border-color: ${theme.primaryLight} !important;
                 box-shadow: 0 4px 12px ${theme.primaryAlpha} !important;
             }
 
             body.dark-theme #settings-btn:hover {
                 background: linear-gradient(135deg, ${theme.primaryLight}, ${theme.primaryLighter}) !important;
+                border-color: ${theme.primaryLighter} !important;
                 box-shadow: 0 6px 20px ${theme.primaryAlpha} !important;
             }
         `;
@@ -507,6 +510,7 @@ class ColorThemeManager {
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.ThemeManager.updateLogtime();
+                window.ThemeManager.updateButtonColors();
             }, 100);
         }
 

@@ -1,9 +1,9 @@
 class ClusterMapManager {
     constructor() {
-        this.currentZoom = 1.5;
+        this.currentZoom = 1;
         this.minZoom = 1;
         this.maxZoom = 4;
-        this.zoomStep = 0.5;
+        this.zoomStep = 0.3;
         this.svgElement = null;
         this.controlsAdded = false;
         this.isDragging = false;
@@ -52,7 +52,7 @@ class ClusterMapManager {
         }
         
         this.controlsAdded = false;
-        this.currentZoom = 1.5;
+        this.currentZoom = 1;
         this.translateX = 0;
         this.translateY = 0;
         
@@ -145,7 +145,7 @@ class ClusterMapManager {
     }
 
     resetZoom() {
-        this.currentZoom = 1.5;
+        this.currentZoom = 1;
         this.translateX = 0;
         this.translateY = 0;
         this.applyZoom();
@@ -206,11 +206,14 @@ class ClusterMapManager {
 
     handleWheelZoom(e) {
         e.preventDefault();
+        e.stopPropagation();
         
-        if (e.deltaY < 0) {
-            this.zoomIn();
-        } else {
-            this.zoomOut();
+        const zoomAmount = e.deltaY > 0 ? -this.zoomStep : this.zoomStep;
+        const newZoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.currentZoom + zoomAmount));
+        
+        if (newZoom !== this.currentZoom) {
+            this.currentZoom = newZoom;
+            this.applyZoom();
         }
     }
 
@@ -346,7 +349,7 @@ class ClusterMapManager {
             }
 
             .map-container svg {
-                transition: transform 0.3s ease;
+                transition: transform 0.1s ease;
                 cursor: grab;
                 user-select: none;
                 -webkit-user-select: none;

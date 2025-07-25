@@ -15,7 +15,8 @@ const BETTER42_CONFIG = {
         DEFAULT_PROFILE: 'default-profile-id',
         PROFILES_LIST: 'profiles-list',
         PROFILE_DATA_PREFIX: 'profile-data-',
-        FORCE_WORSE_MODE: 'better42-force-worse-mode'
+        FORCE_WORSE_MODE: 'better42-force-worse-mode',
+        USER_MODE_PREFERENCE: 'better42-user-mode-preference'
     }
 };
 

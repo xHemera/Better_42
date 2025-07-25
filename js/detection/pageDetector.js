@@ -102,35 +102,35 @@ class PageDetector {
                 applyThemes: true
             },
             'meta': {
-                showUI: false,
+                showUI: true,
                 showSettings: false,
                 showProfiles: false,
                 showCustomization: false,
                 applyThemes: true
             },
             'shop': {
-                showUI: false,
+                showUI: true,
                 showSettings: false,
                 showProfiles: false,
                 showCustomization: false,
                 applyThemes: true
             },
             'companies': {
-                showUI: false,
+                showUI: true,
                 showSettings: false,
                 showProfiles: false,
                 showCustomization: false,
                 applyThemes: true
             },
             'elearning': {
-                showUI: false,
+                showUI: true,
                 showSettings: false,
                 showProfiles: false,
                 showCustomization: false,
                 applyThemes: true
             },
             'projects': {
-                showUI: false,
+                showUI: true,
                 showSettings: false,
                 showProfiles: false,
                 showCustomization: false,

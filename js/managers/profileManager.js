@@ -310,9 +310,14 @@ class ProfileManager {
     }
 
     earlyLoadDefaultProfile() {
+        const userModePreference = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
         const forceWorseMode = localStorage.getItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
         
         if (forceWorseMode === 'true') {
+            localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
+        }
+        
+        if (userModePreference === 'worse') {
             document.documentElement.style.visibility = 'visible';
             return;
         }

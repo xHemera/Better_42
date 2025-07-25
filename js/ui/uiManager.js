@@ -418,6 +418,7 @@ class UIManager {
             document.body.appendChild(this.settingsPopup);
         }
         
+        
         document.body.classList.add('page-loaded');
     }
 

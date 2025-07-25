@@ -3,11 +3,11 @@
 /* BOUTON WORSE/BETTER */
 #theme-switcher {
     position: fixed !important;
-    top: 15px !important;
-    right: 190px !important;
+    top: 10px !important;
+    right: 180px !important;
     background: linear-gradient(135deg, var(--better42-gray), var(--better42-gray-light)) !important;
     color: white !important;
-    border: none !important;
+    border: 2px solid var(--better42-gray-light) !important;
     padding: 10px 16px !important;
     border-radius: 8px !important;
     cursor: pointer !important;
@@ -25,39 +25,42 @@
 }
 
 /* BUTTON VIOLET QUAND DARK MODE ACTIF */
-body.dark-theme #theme-switcher {
+/* body.dark-theme #theme-switcher {
     background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
-    box-shadow: 0 4px 12px rgba(92, 5, 143, 0.3) !important;
+    border-color: var(--better42-purple-light) !important;
+    box-shadow: 0 4px 12px var(--better42-purple-alpha) !important;
 }
 
 body.dark-theme #theme-switcher:hover {
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
-    box-shadow: 0 6px 20px rgba(92, 5, 143, 0.4) !important;
-}
+    border-color: var(--better42-purple-lighter) !important;
+    box-shadow: 0 6px 20px var(--better42-purple-alpha) !important;
+} */
 
 /* BOUTON SETTINGS*/
 #settings-btn {
     position: fixed !important;
-    top: 15px !important;
-    right: 280px !important;
+    top: 10px !important;
+    right: 265px !important;
     background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
     color: white !important;
-    border: none !important;
+    border: 2px solid var(--better42-purple-light) !important;
     padding: 10px 12px !important;
     border-radius: 8px !important;
     cursor: pointer !important;
     z-index: 10000 !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 12px rgba(92, 5, 143, 0.3) !important;
+    box-shadow: 0 4px 12px var(--better42-purple-alpha) !important;
     transition: all 0.3s ease !important;
     display: none !important;
 }
 
 #settings-btn:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(92, 5, 143, 0.4) !important;
+    box-shadow: 0 6px 20px var(--better42-purple-alpha) !important;
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
+    border-color: var(--better42-purple-lighter) !important;
 }
 
 /* SETTINGS BUTTON VISIBLE ONLY WHEN DARK MODE IS ACTIVE */
