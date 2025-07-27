@@ -88,7 +88,9 @@ class ColorThemeManager {
     }
 
     getCurrentTheme() {
-        return localStorage.getItem('better42-color-theme') || 'violet';
+        const theme = localStorage.getItem('better42-color-theme') || 'violet';
+        console.log('🎨 getCurrentTheme:', theme);
+        return theme;
     }
 
     setCurrentTheme(themeName) {
@@ -97,8 +99,12 @@ class ColorThemeManager {
     }
 
     applyTheme(themeName) {
+        console.log('🎨 applyTheme called with:', themeName);
         const theme = this.themes[themeName];
-        if (!theme) return;
+        if (!theme) {
+            console.log('❌ Theme not found:', themeName);
+            return;
+        }
 
         const oldStyleElement = document.getElementById('dynamic-color-theme');
         if (oldStyleElement) {
@@ -128,6 +134,7 @@ class ColorThemeManager {
         }
 
         this.setCurrentTheme(themeName);
+        console.log('✅ Theme applied:', themeName);
     }
 
     updateLogtimeColors(theme) {
@@ -224,6 +231,7 @@ class ColorThemeManager {
         if (savedTheme && this.themes[savedTheme]) {
             this.applyTheme(savedTheme);
         } else {
+            // Si pas de thème sauvegardé valide, appliquer violet mais ne pas le sauvegarder
             const defaultTheme = this.themes['violet'];
             if (defaultTheme) {
                 this.updateLogtimeColors(defaultTheme);

@@ -32,7 +32,9 @@ class Better42App {
             window.PageDetector.init();
             window.ProfileDetector.init();
             
-            window.ColorThemeManager.init();
+            // Initialiser ColorThemeManager mais sans appliquer les thèmes tout de suite
+            // Les thèmes seront appliqués après que ThemeManager soit initialisé
+            window.ColorThemeManager.startLogtimeObserver();
             
             window.ProfileManager.earlyLoadDefaultProfile();
             
@@ -51,6 +53,11 @@ class Better42App {
         try {
             if (window.ThemeManager && window.ThemeManager.init) {
                 window.ThemeManager.init();
+            }
+            
+            // Maintenant appliquer les thèmes de couleurs après que ThemeManager soit initialisé
+            if (window.ColorThemeManager) {
+                window.ColorThemeManager.init();
             }
             
             window.UIManager.createUI();
@@ -148,10 +155,27 @@ class Better42App {
                     window.UIManager.refreshUI();
                 }
                 
+                // Re-appliquer complètement les thèmes de couleurs sur toutes les pages SEULEMENT en mode dark
+                if (window.ColorThemeManager && window.ThemeManager && window.ThemeManager.isDark) {
+                    setTimeout(() => {
+                        // Forcer la ré-application du thème actuel sans passer par init()
+                        const currentTheme = window.ColorThemeManager.getCurrentTheme();
+                        if (currentTheme === 'custom') {
+                            const savedCustomColor = localStorage.getItem('better42-custom-color');
+                            if (savedCustomColor) {
+                                window.ColorThemeManager.applyCustomColor(savedCustomColor);
+                            }
+                        } else if (window.ColorThemeManager.themes[currentTheme]) {
+                            window.ColorThemeManager.applyTheme(currentTheme);
+                        }
+                    }, 100);
+                }
+                
                 // Re-appliquer les thèmes si nécessaire
                 if (window.ThemeManager && window.ThemeManager.isDark) {
                     setTimeout(() => {
                         window.ThemeManager.updateLogtime();
+                        window.ThemeManager.updateButtonColors();
                     }, 200);
                 }
                 
@@ -183,9 +207,23 @@ class Better42App {
             window.UIManager.createUI();
         }
         
+        // Forcer la ré-application complète des thèmes de couleurs SEULEMENT en mode dark
+        if (window.ColorThemeManager && window.ThemeManager && window.ThemeManager.isDark) {
+            const currentTheme = window.ColorThemeManager.getCurrentTheme();
+            if (currentTheme === 'custom') {
+                const savedCustomColor = localStorage.getItem('better42-custom-color');
+                if (savedCustomColor) {
+                    window.ColorThemeManager.applyCustomColor(savedCustomColor);
+                }
+            } else if (window.ColorThemeManager.themes[currentTheme]) {
+                window.ColorThemeManager.applyTheme(currentTheme);
+            }
+        }
+        
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.ThemeManager.updateLogtime();
+                window.ThemeManager.updateButtonColors();
             }, 100);
         }
         
