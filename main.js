@@ -80,7 +80,6 @@ class Better42App {
             }, 300);
             
             this.initialized = true;
-            console.log('Better 42 App initialized successfully');
         } catch (error) {
             console.error('Error during initialization:', error);
             document.documentElement.style.visibility = 'visible';
@@ -96,7 +95,6 @@ class Better42App {
                 const oldURL = lastURL;
                 lastURL = window.location.href;
                 
-                console.log('🔄 Changement de page détecté:', oldURL, '→', lastURL);
                 this.handlePageChange();
             }
         });
@@ -108,7 +106,6 @@ class Better42App {
         
         // Observer pour les événements de navigation
         window.addEventListener('popstate', () => {
-            console.log('🔄 Popstate détecté');
             this.handlePageChange();
         });
         
@@ -119,7 +116,6 @@ class Better42App {
         history.pushState = function() {
             originalPushState.apply(history, arguments);
             setTimeout(() => {
-                console.log('🔄 PushState détecté');
                 better42App.handlePageChange();
             }, 100);
         };
@@ -127,7 +123,6 @@ class Better42App {
         history.replaceState = function() {
             originalReplaceState.apply(history, arguments);
             setTimeout(() => {
-                console.log('🔄 ReplaceState détecté');
                 better42App.handlePageChange();
             }, 100);
         };
@@ -137,7 +132,6 @@ class Better42App {
     }
 
     handlePageChange() {
-        console.log('🔧 Gestion du changement de page...');
         
         // Délai pour laisser le temps à la nouvelle page de se charger
         setTimeout(() => {
@@ -161,7 +155,6 @@ class Better42App {
                     }, 300);
                 }
                 
-                console.log('✅ Changement de page géré');
                 
             } catch (error) {
                 console.error('❌ Erreur lors du changement de page:', error);
@@ -171,7 +164,6 @@ class Better42App {
 
     // Méthode pour forcer la réinitialisation si nécessaire
     forceReinit() {
-        console.log('🔄 Force réinitialisation...');
         
         if (window.UIManager) {
             window.UIManager.createUI();

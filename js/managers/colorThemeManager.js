@@ -478,7 +478,6 @@ class ColorThemeManager {
         }
 
         applyBtn.addEventListener('click', () => {
-            console.log('🔴 Bouton Appliquer cliqué (temporaire)');
             const selectedColor = colorPicker.value;
             
             // Appliquer temporairement SANS sauvegarder
@@ -497,7 +496,6 @@ class ColorThemeManager {
                 
                 // Mettre à jour logtime avec couleur temporaire
                 if (window.LogtimeStatsManager) {
-                    console.log('🔴 Mise à jour logtime temporaire:', tempColor);
                     document.querySelectorAll('.monthly-stats-btn').forEach(btn => {
                         btn.style.background = `rgba(${tempColor}, 0.1)`;
                         btn.style.borderColor = `rgba(${tempColor}, 0.3)`;
@@ -512,7 +510,6 @@ class ColorThemeManager {
                 
                 // Mettre à jour boutons UI temporairement
                 if (window.ThemeManager && window.ThemeManager.updateButtonColors) {
-                    console.log('🔴 Mise à jour boutons UI temporaire:', tempColor);
                     window.ThemeManager.updateButtonColors();
                 }
                 
@@ -533,7 +530,6 @@ class ColorThemeManager {
         });
 
         saveBtn.addEventListener('click', () => {
-            console.log('🟢 Bouton Sauver cliqué');
             const selectedColor = colorPicker.value;
             localStorage.setItem('better42-custom-color', selectedColor);
             this.applyCustomColor(selectedColor);
@@ -542,17 +538,14 @@ class ColorThemeManager {
             
             // Forcer la mise à jour des boutons logtime ET boutons UI
             if (window.LogtimeStatsManager) {
-                console.log('🟢 LogtimeStatsManager trouvé, mise à jour couleurs...');
                 setTimeout(() => {
                     window.LogtimeStatsManager.updateButtonColors();
                 }, 150);
             } else {
-                console.log('🟢 LogtimeStatsManager non trouvé !');
             }
             
             // Mettre à jour les boutons engrenage/better/worse
             if (window.ThemeManager && window.ThemeManager.updateButtonColors) {
-                console.log('🟢 ThemeManager trouvé, mise à jour boutons UI...');
                 setTimeout(() => {
                     window.ThemeManager.updateButtonColors();
                 }, 150);
@@ -782,7 +775,6 @@ class ColorThemeManager {
                 
                 if (theme) {
                     this.updateLogtimeColors(theme);
-                    console.log(`🔄 Vérification logtime forcée à ${delay}ms`);
                 }
             }, delay);
         });

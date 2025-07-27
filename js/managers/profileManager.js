@@ -8,7 +8,6 @@ class ProfileManager {
         const wasOwnProfile = this.isOwnProfile;
         this.isOwnProfile = isOwnProfile;
         
-        console.log('ProfileManager: Profile change detected', { wasOwnProfile, isOwnProfile });
         
         if (wasOwnProfile && !isOwnProfile) {
             this.removeCustomizations();
@@ -86,24 +85,20 @@ class ProfileManager {
                 localStorage.setItem(publicDataKey, JSON.stringify(emptyPublicData));
             }
             
-            console.log('✅ Profil Public créé automatiquement');
         }
     }
 
     loadDefaultProfileOnStartup() {
         if (!window.PageDetector) {
-            console.log('ProfileManager: PageDetector not available');
             return;
         }
 
         const pageConfig = window.PageDetector.getPageConfig();
         if (!pageConfig.showCustomization) {
-            console.log('ProfileManager: Customization disabled for this page type');
             return;
         }
 
         if (!this.shouldApplyCustomizations()) {
-            console.log('ProfileManager: Skipping customizations (not own profile)');
             return;
         }
 
@@ -200,7 +195,6 @@ class ProfileManager {
         try {
             const currentUser = window.ProfileDetector?.getCurrentUser();
             if (!currentUser) {
-                console.log('⚠️ Impossible de synchroniser : nom d\'utilisateur non trouvé');
                 return;
             }
             
@@ -216,12 +210,9 @@ class ProfileManager {
                 }
                 
                 if (success) {
-                    console.log('🌐 Profil Public synchronisé avec Firebase');
                 } else {
-                    console.log('⚠️ Échec de la synchronisation du profil Public');
                 }
             } else {
-                console.log('⚠️ ThemeSync non disponible pour la synchronisation');
             }
         } catch (error) {
             console.error('❌ Erreur synchronisation profil Public:', error);
@@ -324,7 +315,6 @@ class ProfileManager {
         
         setTimeout(() => {
             if (!this.shouldApplyCustomizations()) {
-                console.log('ProfileManager: Skipping early customizations (not own profile)');
                 document.documentElement.style.visibility = 'visible';
                 return;
             }
@@ -380,7 +370,6 @@ class ProfileManager {
     }
 
     removeCustomizations() {
-        console.log('ProfileManager: Removing customizations');
         
         const injectedStyles = document.querySelectorAll('style');
         injectedStyles.forEach(style => {

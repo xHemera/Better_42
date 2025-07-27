@@ -56,7 +56,6 @@ class ClusterMapManager {
         this.translateX = 0;
         this.translateY = 0;
         
-        console.log('🗑️ Cluster map zoom controls removed (Worse mode)');
     }
 
     // Méthode pour réagir aux changements de thème
@@ -93,7 +92,6 @@ class ClusterMapManager {
         // Appliquer le zoom initial
         this.applyZoom();
         
-        console.log('✅ Cluster map zoom controls added (Better mode only)');
     }
 
     addZoomControls(container) {

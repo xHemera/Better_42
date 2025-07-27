@@ -1,11 +1,7 @@
-console.log('🔍 Test Firebase loading...');
 
 setTimeout(() => {
-  console.log('1. Firebase global:', typeof firebase);
   
   if (typeof firebase !== 'undefined') {
-    console.log('✅ Firebase est chargé !');
-    console.log('2. Firebase object:', firebase);
     
     try {
       const firebaseConfig = {
@@ -18,23 +14,18 @@ setTimeout(() => {
       };
       
       const app = firebase.initializeApp(firebaseConfig);
-      console.log('✅ Firebase app initialisé:', app);
       
       const db = firebase.firestore();
-      console.log('✅ Firestore connecté:', db);
       
       window.testFirebaseWorking = true;
       
     } catch (error) {
-      console.error('❌ Erreur init Firebase:', error);
     }
     
   } else {
-    console.error('❌ Firebase pas chargé !');
   }
 }, 500);
 
 window.testFirebase = function() {
-  console.log('🧪 Test function called');
   return typeof firebase;
 };

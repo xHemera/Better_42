@@ -17,16 +17,10 @@ class ProfileDetector {
         this.setupURLWatcher();
         
         this.initialized = true;
-        console.log('ProfileDetector initialized:', {
-            currentUser: this.currentUserLogin,
-            viewedUser: this.viewedUserLogin,
-            isOwnProfile: this.isOwnProfile
-        });
         
         if (!this.isOwnProfile && this.viewedUserLogin) {
             setTimeout(() => {
                 if (window.ThemeSync && window.ThemeSync.isReady()) {
-                    console.log(`🔄 Chargement initial du profil Better 42 pour ${this.viewedUserLogin}`);
                     window.ThemeSync.autoLoadThemeForUser(this.viewedUserLogin);
                 }
             }, 1000);
@@ -85,7 +79,6 @@ class ProfileDetector {
                         const username = this.extractUsernameFromJWT(jwt);
                         if (username) {
                             this.currentUserLogin = username;
-                            console.log('✅ Utilisateur détecté depuis JWT:', username);
                             return;
                         }
                     }
@@ -94,16 +87,14 @@ class ProfileDetector {
                 const usernameMatch = content.match(/"preferred_username"\s*:\s*"([^"]+)"/);
                 if (usernameMatch) {
                     this.currentUserLogin = usernameMatch[1];
-                    console.log('✅ Utilisateur détecté depuis preferred_username:', usernameMatch[1]);
                     return;
                 }
             }
             
-            if (window.console && window.console.log) {
+            if (window.console) {
             }
             
         } catch (error) {
-            console.log('Erreur détection JWT:', error);
         }
     }
     
@@ -211,18 +202,12 @@ class ProfileDetector {
     }
 
     notifyProfileChange() {
-        console.log('Profile changed:', {
-            currentUser: this.currentUserLogin,
-            viewedUser: this.viewedUserLogin,
-            isOwnProfile: this.isOwnProfile
-        });
 
         if (window.ProfileManager && window.ProfileManager.onProfileChange) {
             window.ProfileManager.onProfileChange(this.isOwnProfile);
         }
         
         if (!this.isOwnProfile && this.viewedUserLogin && window.ThemeSync) {
-            console.log(`🔄 Tentative de chargement du profil Better 42 pour ${this.viewedUserLogin}`);
             window.ThemeSync.autoLoadThemeForUser(this.viewedUserLogin);
         }
 

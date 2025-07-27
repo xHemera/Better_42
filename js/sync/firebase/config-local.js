@@ -14,7 +14,6 @@ const initFirebase = async () => {
     const auth = firebase.auth();
     
     await auth.signInAnonymously();
-    console.log('🔥 Firebase initialisé avec succès (local)');
     window.firebaseApp = app;
     window.firebaseDB = db;
     window.firebaseAuth = auth;
@@ -22,7 +21,6 @@ const initFirebase = async () => {
     document.dispatchEvent(new CustomEvent('firebaseReady'));
     
   } catch (error) {
-    console.error('❌ Erreur initialisation Firebase:', error);
     window.firebaseReady = false;
   }
 };

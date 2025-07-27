@@ -19,7 +19,6 @@ class UIManager {
         const existingSettingsBtn = document.getElementById('settings-btn');
         
         if (existingThemeBtn && existingSettingsBtn) {
-            console.log('🔄 Boutons UI déjà présents, conservation...');
             this.themeBtn = existingThemeBtn;
             this.settingsBtn = existingSettingsBtn;
             this.buttonsCreated = true;
@@ -366,7 +365,6 @@ class UIManager {
 
     // Méthode pour réinitialiser l'UI si nécessaire
     refreshUI() {
-        console.log('🔄 Refresh UI...');
         
         // Mettre à jour le texte du bouton thème
         this.updateThemeButtonText();
@@ -389,7 +387,6 @@ class UIManager {
             const settingsBtn = document.getElementById('settings-btn');
             
             if (!themeBtn || !settingsBtn) {
-                console.log('🔧 Boutons manquants, recréation...');
                 this.createUI();
             } else {
                 // S'assurer que les positions sont correctes
@@ -704,7 +701,6 @@ class UIManager {
         }
 
         if (window.ColorThemeManager && window.ColorThemeManager.getThemeStats) {
-            console.log('Theme Statistics:', window.ColorThemeManager.getThemeStats());
         }
     }
 

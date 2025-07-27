@@ -6,7 +6,6 @@ class PageDetector {
     init() {
         if (this.isInitialized) return;
         this.isInitialized = true;
-        console.log('PageDetector initialized for profile-v3.intra.42.fr');
     }
 
     isSupported() {

@@ -1,4 +1,3 @@
-console.log('🔄 Chargement logtimeStatsManager.js - Version Simple...');
 
 class LogtimeStatsManager {
     constructor() {
@@ -7,7 +6,6 @@ class LogtimeStatsManager {
     }
 
     init() {
-        console.log('📊 Initialisation LogtimeStatsManager...');
         this.initialized = true;
         this.addStatsButtons();
         this.setupObserver();
@@ -105,11 +103,9 @@ class LogtimeStatsManager {
         if (!this.initialized) return;
         
         const newColor = this.getCurrentThemeColor();
-        console.log('🎨 Mise à jour couleurs logtime boutons:', newColor);
         
         // Mettre à jour les boutons mensuels
         const monthlyBtns = document.querySelectorAll('.monthly-stats-btn');
-        console.log(`📅 ${monthlyBtns.length} boutons mensuels trouvés`);
         monthlyBtns.forEach(btn => {
             btn.style.background = `rgba(${newColor}, 0.1)`;
             btn.style.borderColor = `rgba(${newColor}, 0.3)`;
@@ -118,7 +114,6 @@ class LogtimeStatsManager {
 
         // Mettre à jour les boutons hebdomadaires  
         const weeklyBtns = document.querySelectorAll('.weekly-stats-btn');
-        console.log(`📊 ${weeklyBtns.length} boutons hebdomadaires trouvés`);
         weeklyBtns.forEach(btn => {
             btn.style.background = `rgba(${newColor}, 0.15)`;
             btn.style.borderColor = `rgba(${newColor}, 0.3)`;
@@ -190,15 +185,12 @@ class LogtimeStatsManager {
     }
 
     getCurrentThemeColor() {
-        console.log('🔍 getCurrentThemeColor appelé');
         
         // Vérifier d'abord si on est en mode custom
         const currentTheme = localStorage.getItem('better42-color-theme') || 'violet';
-        console.log('🔍 Thème actuel:', currentTheme);
         
         if (currentTheme === 'custom') {
             const savedCustomColor = localStorage.getItem('better42-custom-color');
-            console.log('🔍 Couleur custom sauvée:', savedCustomColor);
             
             if (savedCustomColor) {
                 // Convertir hex vers RGB
@@ -207,7 +199,6 @@ class LogtimeStatsManager {
                 const g = parseInt(hex.substring(2, 4), 16);
                 const b = parseInt(hex.substring(4, 6), 16);
                 const rgbColor = `${r}, ${g}, ${b}`;
-                console.log('🔍 Couleur RGB calculée:', rgbColor);
                 return rgbColor;
             }
         }
@@ -215,7 +206,6 @@ class LogtimeStatsManager {
         // Utiliser ThemeManager si disponible pour les couleurs prédéfinies
         if (window.ThemeManager && window.ThemeManager.getCurrentThemeColor) {
             const color = window.ThemeManager.getCurrentThemeColor();
-            console.log('🔍 Couleur depuis ThemeManager:', color);
             return color;
         }
         
@@ -231,21 +221,17 @@ class LogtimeStatsManager {
         };
         
         const fallbackColor = themeColors[currentTheme] || '124, 58, 237';
-        console.log('🔍 Couleur fallback:', fallbackColor);
         return fallbackColor;
     }
 
     addStatsButtons() {
-        console.log('🔍 Recherche des tables de logtime...');
         
         const tables = document.querySelectorAll('table');
-        console.log(`📅 ${tables.length} tables trouvées`);
         
         tables.forEach(table => {
             const monthHeader = table.querySelector('thead tr th[colspan="7"]');
             if (!monthHeader) return;
             
-            console.log('📊 Ajout des boutons de stats...');
             
             this.addMonthlyStatsButton(table, monthHeader);
             this.addWeeklyStatsButtons(table);
@@ -279,7 +265,6 @@ class LogtimeStatsManager {
             </div>
         `;
         
-        console.log(`📅 Bouton mensuel ajouté: ${formattedTime}`);
     }
 
     addWeeklyStatsButtons(table) {
@@ -312,12 +297,10 @@ class LogtimeStatsManager {
             row.appendChild(statsCell);
         });
         
-        console.log(`📊 ${rows.length} boutons hebdomadaires ajoutés`);
     }
 
     refresh() {
         if (this.initialized) {
-            console.log('🔄 Refresh des stats logtime...');
             this.addStatsButtons();
         }
     }
@@ -326,4 +309,3 @@ class LogtimeStatsManager {
 const logtimeStatsManager = new LogtimeStatsManager();
 window.LogtimeStatsManager = logtimeStatsManager;
 
-console.log('✅ LogtimeStatsManager simple créé et exposé sur window');
