@@ -38,6 +38,7 @@
         "js/managers/themeManager.js",
         "js/managers/clusterMapManager.js",
         "js/managers/logtimeStatsManager.js",
+        "js/managers/timeRemainingManager.js",
         "js/ui/uiManager.js",
         "main.js"
       ]

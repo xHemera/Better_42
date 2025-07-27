@@ -69,6 +69,13 @@ class Better42App {
                 }
             }, 100);
             
+            // Initialiser TimeRemainingManager
+            setTimeout(() => {
+                if (window.TimeRemainingManager) {
+                    window.TimeRemainingManager.init();
+                }
+            }, 150);
+            
             setTimeout(() => {
                 if (window.ProfileManager && window.ProfileManager.loadDefaultProfileOnStartup) {
                     window.ProfileManager.loadDefaultProfileOnStartup();
@@ -153,6 +160,13 @@ class Better42App {
                     setTimeout(() => {
                         window.LogtimeStatsManager.refresh();
                     }, 300);
+                }
+                
+                // Rafraîchir TimeRemainingManager sur changement de page
+                if (window.TimeRemainingManager) {
+                    setTimeout(() => {
+                        window.TimeRemainingManager.refresh();
+                    }, 400);
                 }
                 
                 
