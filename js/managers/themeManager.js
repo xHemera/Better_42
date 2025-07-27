@@ -45,6 +45,13 @@ class ThemeManager {
         this.updateLogtime();
         this.updateButtonColors(); // Ajout de la méthode
         this.startLogtimeWatcher();
+        
+        if (window.LogtimeStatsManager) {
+            setTimeout(() => {
+                window.LogtimeStatsManager.init();
+            }, 500);
+        }
+        
         window.ProfileManager.loadDefaultProfileOnStartup();
     }
 
@@ -59,6 +66,13 @@ class ThemeManager {
         this.updateLogtime();
         this.updateButtonColors(); // Ajout de la méthode
         this.startLogtimeWatcher();
+        
+        if (window.LogtimeStatsManager) {
+            setTimeout(() => {
+                window.LogtimeStatsManager.init();
+            }, 500);
+        }
+        
         window.ProfileManager.loadDefaultProfileOnStartup();
     }
 
@@ -67,6 +81,11 @@ class ThemeManager {
         this.isDark = false;
         this.restoreLogtime();
         this.stopLogtimeWatcher();
+        
+        if (window.LogtimeStatsManager) {
+            window.LogtimeStatsManager.destroy();
+        }
+        
         localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         localStorage.setItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE, 'true');
         window.BackgroundManager.removeCustomizations();
@@ -285,6 +304,10 @@ class ThemeManager {
             setTimeout(() => {
                 this.updateLogtime();
                 this.updateButtonColors(); // Ajout de la méthode
+                
+                if (window.LogtimeStatsManager) {
+                    window.LogtimeStatsManager.refresh();
+                }
             }, 200);
         }
     }

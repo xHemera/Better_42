@@ -120,6 +120,10 @@ class ColorThemeManager {
                     window.UIManager.lastButtonState = null; // Reset pour forcer la mise à jour
                     window.UIManager.enforceButtonPositions();
                 }
+                // Mettre à jour les totaux du logtime
+                if (window.LogtimeStatsManager) {
+                    window.LogtimeStatsManager.refresh();
+                }
             }, 50);
         }
 
@@ -474,26 +478,90 @@ class ColorThemeManager {
         }
 
         applyBtn.addEventListener('click', () => {
+            console.log('🔴 Bouton Appliquer cliqué (temporaire)');
             const selectedColor = colorPicker.value;
+            
+            // Appliquer temporairement SANS sauvegarder
             this.applyCustomColor(selectedColor);
             
             colorButtons.forEach(b => b.classList.remove('active'));
+            
+            // Forcer la mise à jour avec la couleur temporaire
+            setTimeout(() => {
+                // Calculer la couleur RGB à partir du hex
+                const hex = selectedColor.replace('#', '');
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+                const tempColor = `${r}, ${g}, ${b}`;
+                
+                // Mettre à jour logtime avec couleur temporaire
+                if (window.LogtimeStatsManager) {
+                    console.log('🔴 Mise à jour logtime temporaire:', tempColor);
+                    document.querySelectorAll('.monthly-stats-btn').forEach(btn => {
+                        btn.style.background = `rgba(${tempColor}, 0.1)`;
+                        btn.style.borderColor = `rgba(${tempColor}, 0.3)`;
+                        btn.style.color = `rgb(${tempColor})`;
+                    });
+                    document.querySelectorAll('.weekly-stats-btn').forEach(btn => {
+                        btn.style.background = `rgba(${tempColor}, 0.15)`;
+                        btn.style.borderColor = `rgba(${tempColor}, 0.3)`;
+                        btn.style.color = `rgb(${tempColor})`;
+                    });
+                }
+                
+                // Mettre à jour boutons UI temporairement
+                if (window.ThemeManager && window.ThemeManager.updateButtonColors) {
+                    console.log('🔴 Mise à jour boutons UI temporaire:', tempColor);
+                    window.ThemeManager.updateButtonColors();
+                }
+                
+                // Mettre à jour directement le bouton Worse/Better
+                const themeBtn = document.getElementById('theme-switcher');
+                const settingsBtn = document.getElementById('settings-btn');
+                if (themeBtn) {
+                    themeBtn.style.background = `linear-gradient(135deg, rgb(${tempColor}), rgba(${tempColor}, 0.8))`;
+                    themeBtn.style.borderColor = `rgba(${tempColor}, 0.8)`;
+                    themeBtn.style.boxShadow = `0 4px 12px rgba(${tempColor}, 0.3)`;
+                }
+                if (settingsBtn) {
+                    settingsBtn.style.background = `linear-gradient(135deg, rgb(${tempColor}), rgba(${tempColor}, 0.8))`;
+                    settingsBtn.style.borderColor = `rgba(${tempColor}, 0.8)`;
+                    settingsBtn.style.boxShadow = `0 4px 12px rgba(${tempColor}, 0.3)`;
+                }
+            }, 150);
         });
 
         saveBtn.addEventListener('click', () => {
+            console.log('🟢 Bouton Sauver cliqué');
             const selectedColor = colorPicker.value;
             localStorage.setItem('better42-custom-color', selectedColor);
             this.applyCustomColor(selectedColor);
             
             colorButtons.forEach(b => b.classList.remove('active'));
             
+            // Forcer la mise à jour des boutons logtime ET boutons UI
+            if (window.LogtimeStatsManager) {
+                console.log('🟢 LogtimeStatsManager trouvé, mise à jour couleurs...');
+                setTimeout(() => {
+                    window.LogtimeStatsManager.updateButtonColors();
+                }, 150);
+            } else {
+                console.log('🟢 LogtimeStatsManager non trouvé !');
+            }
+            
+            // Mettre à jour les boutons engrenage/better/worse
+            if (window.ThemeManager && window.ThemeManager.updateButtonColors) {
+                console.log('🟢 ThemeManager trouvé, mise à jour boutons UI...');
+                setTimeout(() => {
+                    window.ThemeManager.updateButtonColors();
+                }, 150);
+            }
+            
             alert('💾 Couleur personnalisée sauvegardée !');
         });
 
-        colorPicker.addEventListener('input', (e) => {
-            this.applyCustomColor(e.target.value);
-            colorButtons.forEach(b => b.classList.remove('active'));
-        });
+        // Supprimé: mise à jour en temps réel pour éviter les bugs/crashes
     }
 
     applyCustomColor(hexColor) {
@@ -519,8 +587,17 @@ class ColorThemeManager {
                     window.UIManager.lastButtonState = null; // Reset pour forcer la mise à jour
                     window.UIManager.enforceButtonPositions();
                 }
+                // Mettre à jour les totaux du logtime
+                if (window.LogtimeStatsManager) {
+                    window.LogtimeStatsManager.refresh();
+                }
             }, 50);
         }
+
+        // Déclencher l'événement de changement de couleur
+        document.dispatchEvent(new CustomEvent('better42-color-changed', {
+            detail: { color: hexColor }
+        }));
 
         localStorage.setItem('better42-color-theme', 'custom');
         this.currentTheme = 'custom';

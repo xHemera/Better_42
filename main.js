@@ -62,6 +62,13 @@ class Better42App {
                 window.ClusterMapManager.init();
             }
             
+            // Initialiser LogtimeStatsManager
+            setTimeout(() => {
+                if (window.LogtimeStatsManager) {
+                    window.LogtimeStatsManager.init();
+                }
+            }, 100);
+            
             setTimeout(() => {
                 if (window.ProfileManager && window.ProfileManager.loadDefaultProfileOnStartup) {
                     window.ProfileManager.loadDefaultProfileOnStartup();
@@ -147,6 +154,13 @@ class Better42App {
                     }, 200);
                 }
                 
+                // Mettre à jour les totaux du logtime
+                if (window.LogtimeStatsManager) {
+                    setTimeout(() => {
+                        window.LogtimeStatsManager.refresh();
+                    }, 300);
+                }
+                
                 console.log('✅ Changement de page géré');
                 
             } catch (error) {
@@ -168,6 +182,12 @@ class Better42App {
                 window.ThemeManager.updateLogtime();
             }, 100);
         }
+        
+        if (window.LogtimeStatsManager) {
+            setTimeout(() => {
+                window.LogtimeStatsManager.refresh();
+            }, 150);
+        }
     }
 }
 
@@ -176,3 +196,4 @@ better42App.earlyInit();
 
 // Exposer l'instance globalement pour le debug
 window.Better42App = better42App;
+
