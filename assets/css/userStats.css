@@ -41,9 +41,12 @@ body.dark-theme svg circle[class*="stroke-[hsla(180"] {
 }
 
 /* LOGTIME GRAPH WEEKS */
-body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer,
-body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer:hover {
+body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer {
     background-color: var(--better42-purple) !important;
+}
+
+body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer:hover {
+    background-color: var(--better42-purple-dark) !important;
 }
 
 /* MAIL && PHONE USER */

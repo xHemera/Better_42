@@ -304,6 +304,46 @@ class LogtimeStatsManager {
             this.addStatsButtons();
         }
     }
+
+    destroy() {
+        this.initialized = false;
+        
+        // Déconnecter l'observer
+        if (this.observer) {
+            this.observer.disconnect();
+            this.observer = null;
+        }
+        
+        // Supprimer TOUS les boutons de stats (mensuel et hebdomadaire)
+        document.querySelectorAll('.monthly-stats-btn, .weekly-stats-btn').forEach(btn => {
+            btn.remove();
+        });
+        
+        // Restaurer les headers de mois originaux
+        document.querySelectorAll('table thead tr th[colspan="7"]').forEach(header => {
+            const div = header.querySelector('div');
+            if (div && div.querySelector('span')) {
+                const monthText = div.querySelector('span').textContent;
+                header.innerHTML = monthText;
+            }
+        });
+        
+        // Supprimer toutes les colonnes ajoutées pour les stats hebdomadaires
+        document.querySelectorAll('table tbody tr').forEach(row => {
+            const cells = row.querySelectorAll('td');
+            // Supprimer la dernière cellule si elle contient un bouton de stats
+            if (cells.length > 7) { // Plus de 7 cellules = une cellule de stats ajoutée
+                const lastCell = cells[cells.length - 1];
+                if (lastCell.querySelector('.weekly-stats-btn')) {
+                    lastCell.remove();
+                }
+            }
+        });
+        
+        // Nettoyer les event listeners
+        document.removeEventListener('better42-color-changed', this.updateButtonColors);
+        window.removeEventListener('storage', this.updateButtonColors);
+    }
 }
 
 const logtimeStatsManager = new LogtimeStatsManager();

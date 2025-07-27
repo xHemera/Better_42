@@ -62,9 +62,9 @@ class Better42App {
                 window.ClusterMapManager.init();
             }
             
-            // Initialiser LogtimeStatsManager
+            // Initialiser LogtimeStatsManager seulement si on est en mode better
             setTimeout(() => {
-                if (window.LogtimeStatsManager) {
+                if (window.LogtimeStatsManager && window.ThemeManager && window.ThemeManager.isDark) {
                     window.LogtimeStatsManager.init();
                 }
             }, 100);
@@ -148,8 +148,8 @@ class Better42App {
                     }, 200);
                 }
                 
-                // Mettre à jour les totaux du logtime
-                if (window.LogtimeStatsManager) {
+                // Mettre à jour les totaux du logtime seulement si on est en mode better
+                if (window.LogtimeStatsManager && window.ThemeManager && window.ThemeManager.isDark) {
                     setTimeout(() => {
                         window.LogtimeStatsManager.refresh();
                     }, 300);
@@ -175,7 +175,7 @@ class Better42App {
             }, 100);
         }
         
-        if (window.LogtimeStatsManager) {
+        if (window.LogtimeStatsManager && window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
                 window.LogtimeStatsManager.refresh();
             }, 150);

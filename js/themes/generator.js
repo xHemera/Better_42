@@ -128,9 +128,12 @@ class ThemeCSSGenerator {
                 background-color: ${colors.primaryDark} !important;
             }
 
-            body.dark-theme .mx-2\\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer,
-            body.dark-theme .mx-2\\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer:hover {
+            body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer {
                 background-color: ${colors.primary} !important;
+            }
+
+            body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer:hover {
+                background-color: ${colors.primaryDark} !important;
             }
 
             body.dark-theme [style*="color: rgb(181, 22, 63);"] {

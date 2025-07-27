@@ -79,8 +79,16 @@ class ThemeManager {
     deactivateDarkMode() {
         document.body.classList.remove('dark-theme');
         this.isDark = false;
+        
+        // Restaurer le logtime
         this.restoreLogtime();
         this.stopLogtimeWatcher();
+        
+        // Restaurer les éléments SVG stroke-legacy-main et fill-legacy-main
+        this.restoreLegacyElements();
+        
+        // Nettoyer les couleurs des boutons
+        this.restoreButtonColors();
         
         if (window.LogtimeStatsManager) {
             window.LogtimeStatsManager.destroy();
@@ -240,22 +248,86 @@ class ThemeManager {
     }
 
     restoreLogtime() {
-        const currentColor = this.getCurrentThemeColor();
-        const elements = document.querySelectorAll(`[style*="rgba(${currentColor.replace(/,/g, ',\\s*')},"]`);
+        // Restaurer tous les éléments avec des couleurs custom vers la couleur teal originale
+        const allColoredElements = document.querySelectorAll('[style*="rgba("]');
         
-        elements.forEach(el => {
+        allColoredElements.forEach(el => {
             const style = el.getAttribute('style');
-            const colorRegex = new RegExp(`rgba\\(${currentColor.replace(/,/g, ',\\s*')}, ([\\d\\.]+)\\)`);
-            const match = style.match(colorRegex);
-            if (match) {
-                const opacity = match[1];
-                const newStyle = style.replace(
-                    colorRegex, 
-                    `rgba(0, 186, 188, ${opacity})`
-                );
+            if (!style) return;
+            
+            // Patterns pour toutes les couleurs de thème personnalisées
+            const customColorPatterns = [
+                /rgba\(92, 5, 143, ([\d\.]+)\)/g,      // violet
+                /rgba\(30, 64, 175, ([\d\.]+)\)/g,      // bleu
+                /rgba\(190, 24, 93, ([\d\.]+)\)/g,      // rose
+                /rgba\(5, 150, 105, ([\d\.]+)\)/g,      // vert
+                /rgba\(229, 229, 229, ([\d\.]+)\)/g,    // blanc
+                /rgba\(234, 88, 12, ([\d\.]+)\)/g,      // orange
+                /rgba\(220, 38, 38, ([\d\.]+)\)/g,      // rouge
+                /rgba\(8, 145, 178, ([\d\.]+)\)/g,      // cyan
+                // Patterns pour couleurs custom (n'importe quels RGB sauf teal)
+                /rgba\((?!0, 186, 188)(\d{1,3}, \d{1,3}, \d{1,3}), ([\d\.]+)\)/g
+            ];
+            
+            let newStyle = style;
+            let hasChanged = false;
+            
+            customColorPatterns.forEach(pattern => {
+                if (pattern.test(newStyle)) {
+                    newStyle = newStyle.replace(pattern, 'rgba(0, 186, 188, $1)');
+                    hasChanged = true;
+                }
+            });
+            
+            if (hasChanged) {
                 el.setAttribute('style', newStyle);
             }
         });
+    }
+
+    restoreLegacyElements() {
+        // Restaurer stroke-legacy-main vers la couleur teal originale
+        const strokeElements = document.querySelectorAll('.stroke-legacy-main');
+        strokeElements.forEach(el => {
+            el.style.stroke = '';
+            // Retirer le style inline pour revenir au CSS original
+        });
+        
+        // Restaurer fill-legacy-main vers la couleur teal originale  
+        const fillElements = document.querySelectorAll('.fill-legacy-main');
+        fillElements.forEach(el => {
+            el.style.fill = '';
+            el.style.color = '';
+        });
+        
+        // Restaurer text-legacy-main
+        const textElements = document.querySelectorAll('.text-legacy-main');
+        textElements.forEach(el => {
+            el.style.color = '';
+        });
+        
+        // Restaurer border-legacy-main
+        const borderElements = document.querySelectorAll('.border-legacy-main');
+        borderElements.forEach(el => {
+            el.style.borderColor = '';
+        });
+    }
+
+    restoreButtonColors() {
+        // Restaurer les couleurs des boutons de l'interface
+        const settingsBtn = document.getElementById('settings-btn');
+        if (settingsBtn) {
+            settingsBtn.style.background = '';
+            settingsBtn.style.boxShadow = '';
+            settingsBtn.style.borderColor = '';
+        }
+        
+        const themeBtn = document.getElementById('theme-switcher');
+        if (themeBtn) {
+            themeBtn.style.background = '';
+            themeBtn.style.boxShadow = '';
+            themeBtn.style.borderColor = '';
+        }
     }
 
     startLogtimeWatcher() {
