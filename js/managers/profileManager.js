@@ -98,7 +98,15 @@ class ProfileManager {
             return;
         }
 
+        // ✅ Vérifications avant d'appliquer
         if (!this.shouldApplyCustomizations()) {
+            console.log('⚠️ Ne pas charger le profil (pas son profil)');
+            return;
+        }
+        
+        // ✅ Vérifier qu'on est en mode Better
+        if (!window.ThemeManager || !window.ThemeManager.isDark) {
+            console.log('⚠️ Mode Worse actif, ne pas charger le profil');
             return;
         }
 
@@ -304,16 +312,23 @@ class ProfileManager {
         const userModePreference = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
         const forceWorseMode = localStorage.getItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
         
-        if (forceWorseMode === 'true') {
-            localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
-        }
-        
-        if (userModePreference === 'worse') {
+        // Si on est en mode worse ou force worse, NE JAMAIS charger d'images perso
+        if (forceWorseMode === 'true' || userModePreference === 'worse') {
+            if (forceWorseMode === 'true') {
+                localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
+            }
             document.documentElement.style.visibility = 'visible';
             return;
         }
         
         setTimeout(() => {
+            // Double vérification pour éviter les race conditions
+            const currentMode = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
+            if (currentMode === 'worse') {
+                document.documentElement.style.visibility = 'visible';
+                return;
+            }
+            
             if (!this.shouldApplyCustomizations()) {
                 document.documentElement.style.visibility = 'visible';
                 return;
@@ -362,47 +377,72 @@ class ProfileManager {
     }
 
     applyOwnProfileCustomizations() {
-        if (!this.shouldApplyCustomizations()) return;
+        // ✅ Vérifier qu'on doit appliquer les personnalisations
+        if (!this.shouldApplyCustomizations()) {
+            console.log('⚠️ Ne pas appliquer les personnalisations (pas son profil)');
+            return;
+        }
+        
+        // ✅ Vérifier qu'on est en mode Better
+        if (!window.ThemeManager || !window.ThemeManager.isDark) {
+            console.log('⚠️ Mode Worse actif, ne pas appliquer les personnalisations');
+            return;
+        }
         
         document.body.classList.add('dark-theme');
-        
         this.loadDefaultProfileOnStartup();
     }
 
     removeCustomizations() {
+        console.log('🧹 ProfileManager.removeCustomizations() appelée');
         
-        const injectedStyles = document.querySelectorAll('style');
-        injectedStyles.forEach(style => {
-            if (style.textContent.includes('background-image: url') || 
-                style.textContent.includes(Better42Config.SELECTORS.BACKGROUND) ||
-                style.textContent.includes(Better42Config.SELECTORS.PROFILE_PIC)) {
-                style.remove();
-            }
-        });
-
+        // ✅ 1. Vérifier qu'on est bien en mode "Worse" avant de supprimer
+        if (window.ThemeManager && window.ThemeManager.isDark) {
+            console.log('⚠️ Mode Better actif, ne pas supprimer les personnalisations');
+            return;
+        }
+        
+        // ✅ 2. Utiliser BackgroundManager pour nettoyer proprement
+        if (window.BackgroundManager) {
+            window.BackgroundManager.removeAllCustomizations();
+        }
+        
+        // ✅ 3. Supprimer la classe dark-theme seulement si vraiment en mode Worse
         if (!this.shouldApplyCustomizations()) {
             document.body.classList.remove('dark-theme');
         }
-
-        this.resetBackgroundElements();
-        this.resetProfilePicElements();
+        
+        console.log('✅ ProfileManager personnalisations supprimées');
     }
 
     resetBackgroundElements() {
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach(el => {
-            const style = el.getAttribute('style') || '';
-            const newStyle = style.replace(/background-image:[^;]*;?/g, '');
-            if (newStyle !== style) {
-                el.setAttribute('style', newStyle);
-            }
-            
+            // Supprimer les iframes YouTube personnalisées
             const iframes = el.querySelectorAll('iframe[src*="youtube"]');
             iframes.forEach(iframe => iframe.remove());
             
+            // Restaurer le contenu original si il y a eu du wrapping pour YouTube
             const contentDiv = el.querySelector('div[style*="z-index:2"]');
             if (contentDiv) {
                 el.innerHTML = contentDiv.innerHTML;
+            }
+            
+            // Supprimer TOUS les styles inline de background-image pour laisser le CSS par défaut
+            el.style.removeProperty('background-image');
+            el.style.removeProperty('background-size');
+            el.style.removeProperty('background-position');
+            el.style.removeProperty('background-repeat');
+            
+            // Nettoyer l'attribut style s'il contient des background-image
+            const style = el.getAttribute('style') || '';
+            if (style.includes('background-image:')) {
+                const newStyle = style.replace(/background-image:[^;]*;?/g, '').trim();
+                if (newStyle === '') {
+                    el.removeAttribute('style');
+                } else {
+                    el.setAttribute('style', newStyle);
+                }
             }
         });
     }
@@ -410,11 +450,43 @@ class ProfileManager {
     resetProfilePicElements() {
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         pfpElements.forEach(el => {
+            // Supprimer TOUS les styles inline de background-image pour laisser le CSS par défaut
+            el.style.removeProperty('background-image');
+            el.style.removeProperty('background-size');
+            el.style.removeProperty('background-position');
+            el.style.removeProperty('background-repeat');
+            
+            // Nettoyer l'attribut style s'il contient des background-image
             const style = el.getAttribute('style') || '';
-            const newStyle = style.replace(/background-image:[^;]*;?/g, '');
-            if (newStyle !== style) {
-                el.setAttribute('style', newStyle);
+            if (style.includes('background-image:')) {
+                const newStyle = style.replace(/background-image:[^;]*;?/g, '').trim();
+                if (newStyle === '') {
+                    el.removeAttribute('style');
+                } else {
+                    el.setAttribute('style', newStyle);
+                }
             }
+        });
+    }
+
+    forceDefaultStyles() {
+        // Forcer la réapplication des styles CSS par défaut en déclenchant un reflow
+        const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
+        const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
+        
+        [...bgElements, ...pfpElements].forEach(el => {
+            // Forcer un reflow pour que les styles CSS par défaut se réappliquent
+            const display = el.style.display;
+            el.style.display = 'none';
+            el.offsetHeight; // Force reflow
+            el.style.display = display || '';
+            
+            // S'assurer qu'aucun style inline de background ne reste
+            el.style.removeProperty('background');
+            el.style.removeProperty('background-image');
+            el.style.removeProperty('background-size');
+            el.style.removeProperty('background-position');
+            el.style.removeProperty('background-repeat');
         });
     }
 }

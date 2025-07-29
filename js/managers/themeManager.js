@@ -52,7 +52,10 @@ class ThemeManager {
             }, 500);
         }
         
-        window.ProfileManager.loadDefaultProfileOnStartup();
+        // Restaurer les images du profil par défaut
+        setTimeout(() => {
+            window.ProfileManager.loadDefaultProfileOnStartup();
+        }, 200);
     }
 
     activateDarkModeWithoutSaving() {
@@ -73,30 +76,51 @@ class ThemeManager {
             }, 500);
         }
         
-        window.ProfileManager.loadDefaultProfileOnStartup();
+        // Restaurer les images du profil par défaut
+        setTimeout(() => {
+            window.ProfileManager.loadDefaultProfileOnStartup();
+        }, 200);
     }
 
     deactivateDarkMode() {
+        console.log('🌙 Désactivation du mode sombre...');
+        
         document.body.classList.remove('dark-theme');
         this.isDark = false;
         
-        // Restaurer le logtime
+        // ✅ 1. Nettoyer les personnalisations d'images PROPREMENT
+        if (window.BackgroundManager) {
+            window.BackgroundManager.removeAllCustomizations(); // ✅ Nouvelle méthode sans reload
+        }
+        
+        // ✅ 2. Restaurer le logtime
         this.restoreLogtime();
         this.stopLogtimeWatcher();
         
-        // Restaurer les éléments SVG stroke-legacy-main et fill-legacy-main
+        // ✅ 3. Restaurer les éléments SVG stroke-legacy-main et fill-legacy-main
         this.restoreLegacyElements();
         
-        // Nettoyer les couleurs des boutons
+        // ✅ 4. Nettoyer les couleurs des boutons
         this.restoreButtonColors();
         
+        // ✅ 5. Détruire LogtimeStatsManager
         if (window.LogtimeStatsManager) {
             window.LogtimeStatsManager.destroy();
         }
         
+        // ✅ 6. Détruire TimeRemainingManager
+        if (window.TimeRemainingManager) {
+            window.TimeRemainingManager.destroy();
+        }
+        
+        // ✅ 7. Sauvegarder les préférences
         localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         localStorage.setItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE, 'true');
-        window.BackgroundManager.removeCustomizations();
+        
+        // ✅ 8. Ne plus appeler removeCustomizations() qui fait un reload
+        // window.BackgroundManager.removeCustomizations(); // ❌ SUPPRIMÉ
+        
+        console.log('✅ Mode sombre désactivé proprement');
     }
 
     toggleTheme() {
@@ -392,6 +416,119 @@ class ThemeManager {
             intervalActive: !!this.intervalId,
             colorThemeManagerAvailable: !!window.ColorThemeManager
         };
+    }
+
+    forceCleanupForWorseMode() {
+        // 1. Supprimer IMMÉDIATEMENT toutes les variables CSS violettes
+        const rootStyle = document.documentElement.style;
+        rootStyle.removeProperty('--better42-purple');
+        rootStyle.removeProperty('--better42-purple-light');
+        rootStyle.removeProperty('--better42-purple-lighter');
+        
+        // 2. Supprimer TOUS les styles injectés par Better42
+        const allStyles = document.querySelectorAll('style');
+        allStyles.forEach(style => {
+            const content = style.textContent;
+            if (content.includes('--better42-') || 
+                content.includes('background-image: url') || 
+                content.includes('w-full.xl') ||
+                content.includes('w-52.h-52') ||
+                content.includes('Better42Config') ||
+                content.includes('rgba(92, 5, 143') ||
+                content.includes('!important')) {
+                style.remove();
+            }
+        });
+
+        // 3. Nettoyer tous les éléments directement ET restaurer les images par défaut
+        const bgSelector = '.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black, .w-full.xl\\:h-72.bg-center.bg-cover';
+        const pfpSelector = '.w-52.h-52.text-black.md\\:w-40.md\\:h-40.lg\\:h-28.lg\\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full';
+        
+        document.querySelectorAll(`${bgSelector}, ${pfpSelector}`).forEach(el => {
+            // Nettoyer complètement l'élément
+            el.removeAttribute('style');
+            
+            // Supprimer les iframes YouTube
+            el.querySelectorAll('iframe').forEach(iframe => iframe.remove());
+            
+            // Restaurer le contenu original
+            const wrappedContent = el.querySelector('div[style*="z-index:2"]');
+            if (wrappedContent) {
+                el.innerHTML = wrappedContent.innerHTML;
+            }
+            
+            // FORCER la réapplication des styles CSS par défaut
+            const originalDisplay = el.style.display;
+            el.style.display = 'none';
+            el.offsetHeight; // Force reflow
+            el.style.display = originalDisplay;
+            
+            // Forcer les classes à se réappliquer
+            const classes = el.className;
+            el.className = '';
+            el.offsetHeight; // Force reflow
+            el.className = classes;
+        });
+
+        // 4. INJECTER un CSS override ultra-fort pour écraser le CSS statique
+        const overrideStyle = document.createElement('style');
+        overrideStyle.id = 'better42-worse-mode-override';
+        overrideStyle.textContent = `
+            /* OVERRIDE TOTAL pour mode worse - priorité maximale */
+            html body #theme-switcher,
+            html body #theme-switcher:hover,
+            html body #theme-switcher[style],
+            body.dark-theme #theme-switcher,
+            body #theme-switcher[style*="background"] {
+                background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
+                border: 2px solid #6b7280 !important;
+                box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
+                transition: none !important;
+            }
+            
+            html body #settings-btn,
+            html body #settings-btn:hover,
+            html body #settings-btn[style],
+            body.dark-theme #settings-btn,
+            body #settings-btn[style*="background"] {
+                display: none !important;
+            }
+            
+            /* Redéfinir les variables CSS pour qu'elles soient grises */
+            :root {
+                --better42-purple: #6b7280 !important;
+                --better42-purple-light: #9ca3af !important;
+                --better42-purple-lighter: #d1d5db !important;
+            }
+        `;
+        document.head.appendChild(overrideStyle);
+        
+        // 5. Forcer aussi les styles inline en backup
+        const themeBtn = document.getElementById('theme-switcher');
+        const settingsBtn = document.getElementById('settings-btn');
+        
+        if (themeBtn) {
+            themeBtn.style.cssText = `
+                position: fixed !important;
+                top: 10px !important;
+                right: 180px !important;
+                z-index: 10000 !important;
+                background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
+                color: white !important;
+                border: 2px solid #6b7280 !important;
+                padding: 10px 16px !important;
+                border-radius: 8px !important;
+                cursor: pointer !important;
+                font-size: 14px !important;
+                font-weight: 600 !important;
+                box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
+                transition: none !important;
+            `;
+        }
+        
+        if (settingsBtn) {
+            settingsBtn.style.display = 'none !important';
+        }
     }
 }
 

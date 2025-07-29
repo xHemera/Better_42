@@ -58,9 +58,8 @@ class TimeRemainingManager {
         // Observer les clicks sur le bouton thème
         document.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'theme-switcher') {
-                setTimeout(() => {
-                    this.handleThemeChange();
-                }, 200);
+                // Suppression immédiate pour le passage en mode worse
+                this.handleThemeChange();
             }
         });
 
@@ -153,6 +152,8 @@ class TimeRemainingManager {
     removeButton() {
         const button = document.querySelector('.time-remaining-btn');
         if (button) {
+            // Supprimer la transition pour une disparition instantanée
+            button.style.transition = 'none !important';
             button.remove();
         }
     }
@@ -248,7 +249,7 @@ class TimeRemainingManager {
         
         const themeColor = this.getCurrentThemeColor();
         const remainingText = timeData.remaining > 0 ? 
-            `${timeData.remaining} days${timeData.remaining > 1 ? 's' : ''} left${timeData.remaining > 1 ? 's' : ''}` : 
+            `${timeData.remaining} day${timeData.remaining > 1 ? 's' : ''} left` : 
             'Terminé !';
 
         remainingButton.innerHTML = remainingText;
@@ -262,7 +263,7 @@ class TimeRemainingManager {
             bottom: 3px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
-            transition: all 0.3s ease !important;
+            transition: color 0.2s ease, background 0.2s ease !important;
             min-width: 150px !important;
             text-align: center !important;
             z-index: 1000 !important;
@@ -272,13 +273,13 @@ class TimeRemainingManager {
         // Effets hover
         remainingButton.addEventListener('mouseenter', () => {
             remainingButton.style.background = `rgba(${themeColor}, 0.2) !important`;
-            remainingButton.style.transform = 'translateY(-2px) !important';
+            remainingButton.style.transform = 'translateX(-50%) translateY(-2px) !important';
             remainingButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2) !important';
         });
 
         remainingButton.addEventListener('mouseleave', () => {
             remainingButton.style.background = `rgba(${themeColor}, 0.1) !important`;
-            remainingButton.style.transform = 'none !important';
+            remainingButton.style.transform = 'translateX(-50%) !important';
             remainingButton.style.boxShadow = 'none !important';
         });
 

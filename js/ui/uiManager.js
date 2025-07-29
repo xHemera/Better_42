@@ -105,11 +105,19 @@ class UIManager {
             this.themeBtn.addEventListener('click', () => {
                 if (window.ThemeManager.isDark) {
                     this.themeBtn.innerHTML = 'Better';
+                    // Appliquer immédiatement les couleurs grises
+                    this.themeBtn.style.background = 'linear-gradient(135deg, #6b7280, #9ca3af) !important';
+                    this.themeBtn.style.borderColor = '#6b7280 !important';
                 } else {
                     this.themeBtn.innerHTML = 'Worse';
                 }
                 
                 window.ThemeManager.toggleTheme();
+                
+                // Forcer la mise à jour des couleurs après le toggle
+                setTimeout(() => {
+                    this.enforceButtonPositions();
+                }, 0);
             });
             
             // Ajouter les effets hover pour le bouton thème
@@ -205,6 +213,7 @@ class UIManager {
                 borderColor = 'var(--better42-purple)';
             }
         } else {
+            // Mode "worse" - couleurs grises immédiatement
             bgColors = '#6b7280, #9ca3af';
             borderColor = '#6b7280';
         }
@@ -654,7 +663,11 @@ class UIManager {
     resetBackground() {
         const bgInput = document.getElementById('bg-url-input');
         if (bgInput) bgInput.value = '';
-        location.reload();
+        
+        // Supprimer les personnalisations d'arrière-plan sans recharger la page
+        if (window.ProfileManager) {
+            window.ProfileManager.resetBackgroundElements();
+        }
     }
 
     applyProfilePicture() {
@@ -668,7 +681,11 @@ class UIManager {
     resetProfilePicture() {
         const pfpInput = document.getElementById('pfp-url-input');
         if (pfpInput) pfpInput.value = '';
-        location.reload();
+        
+        // Supprimer les personnalisations de photo de profil sans recharger la page
+        if (window.ProfileManager) {
+            window.ProfileManager.resetProfilePicElements();
+        }
     }
 
     toggleSettingsPopup() {

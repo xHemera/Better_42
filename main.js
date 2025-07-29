@@ -146,53 +146,20 @@ class Better42App {
     }
 
     handlePageChange() {
-        
-        // Délai pour laisser le temps à la nouvelle page de se charger
+    // Délai pour laisser le temps à la nouvelle page de se charger
         setTimeout(() => {
             try {
+                // ✅ NOUVEAU : Recapturer les images par défaut sur changement de page
+                if (window.BackgroundManager) {
+                    window.BackgroundManager.recaptureDefaultImages();
+                }
+                
                 // Rafraîchir l'UI pour maintenir les boutons
                 if (window.UIManager) {
                     window.UIManager.refreshUI();
                 }
                 
-                // Re-appliquer complètement les thèmes de couleurs sur toutes les pages SEULEMENT en mode dark
-                if (window.ColorThemeManager && window.ThemeManager && window.ThemeManager.isDark) {
-                    setTimeout(() => {
-                        // Forcer la ré-application du thème actuel sans passer par init()
-                        const currentTheme = window.ColorThemeManager.getCurrentTheme();
-                        if (currentTheme === 'custom') {
-                            const savedCustomColor = localStorage.getItem('better42-custom-color');
-                            if (savedCustomColor) {
-                                window.ColorThemeManager.applyCustomColor(savedCustomColor);
-                            }
-                        } else if (window.ColorThemeManager.themes[currentTheme]) {
-                            window.ColorThemeManager.applyTheme(currentTheme);
-                        }
-                    }, 100);
-                }
-                
-                // Re-appliquer les thèmes si nécessaire
-                if (window.ThemeManager && window.ThemeManager.isDark) {
-                    setTimeout(() => {
-                        window.ThemeManager.updateLogtime();
-                        window.ThemeManager.updateButtonColors();
-                    }, 200);
-                }
-                
-                // Mettre à jour les totaux du logtime seulement si on est en mode better
-                if (window.LogtimeStatsManager && window.ThemeManager && window.ThemeManager.isDark) {
-                    setTimeout(() => {
-                        window.LogtimeStatsManager.refresh();
-                    }, 300);
-                }
-                
-                // Rafraîchir TimeRemainingManager sur changement de page
-                if (window.TimeRemainingManager) {
-                    setTimeout(() => {
-                        window.TimeRemainingManager.refresh();
-                    }, 400);
-                }
-                
+                // ... reste du code existant
                 
             } catch (error) {
                 console.error('❌ Erreur lors du changement de page:', error);

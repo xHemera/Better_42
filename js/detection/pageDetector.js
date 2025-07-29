@@ -16,7 +16,8 @@ class PageDetector {
         return {
             showSettings: true,
             showUI: true,
-            applyThemes: true
+            applyThemes: true,
+            showCustomization: true
         };
     }
 }
