@@ -9,8 +9,17 @@ class UIManager {
     }
 
     createUI() {
+        console.log('[Better42] UIManager.createUI() called');
+        
         if (!window.PageDetector) {
             console.error('PageDetector not available');
+            return;
+        }
+
+        console.log('[Better42] PageDetector.isSupported():', window.PageDetector.isSupported());
+        
+        if (!window.PageDetector.isSupported()) {
+            console.log('[Better42] Page not supported, UI creation skipped');
             return;
         }
 
@@ -29,8 +38,10 @@ class UIManager {
         }
 
         const pageConfig = window.PageDetector.getPageConfig();
+        console.log('[Better42] Page config:', pageConfig);
         
         if (!this.buttonsCreated) {
+            console.log('[Better42] Creating UI buttons...');
             this.createThemeButton();
             
             if (pageConfig.showSettings) {
@@ -41,6 +52,7 @@ class UIManager {
             this.attachEventListeners();
             this.appendToDOM();
             this.buttonsCreated = true;
+            console.log('[Better42] UI buttons created and added to DOM');
         }
     }
 
@@ -222,7 +234,7 @@ class UIManager {
             position: fixed !important;
             top: 10px !important;
             right: 180px !important;
-            z-index: 10000 !important;
+            z-index: 99999 !important;
             background: linear-gradient(135deg, ${bgColors}) !important;
             color: white !important;
             border: 2px solid ${borderColor} !important;
@@ -233,6 +245,8 @@ class UIManager {
             font-weight: 600 !important;
             box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
             transition: none !important;
+            display: block !important;
+            visibility: visible !important;
         `;
         
         if (this.settingsBtn) {
@@ -240,7 +254,7 @@ class UIManager {
                 position: fixed !important;
                 top: 10px !important;
                 right: 265px !important;
-                z-index: 10000 !important;
+                z-index: 99999 !important;
                 background: linear-gradient(135deg, ${bgColors}) !important;
                 color: white !important;
                 border: 2px solid ${borderColor} !important;
@@ -251,7 +265,8 @@ class UIManager {
                 font-weight: 600 !important;
                 box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
                 transition: none !important;
-                display: ${window.ThemeManager && window.ThemeManager.isDark ? 'block' : 'none'} !important;
+                display: block !important;
+                visibility: visible !important;
             `;
         }
     }
@@ -349,15 +364,23 @@ class UIManager {
     }
 
     appendToDOM() {
+        console.log('[Better42] appendToDOM called');
+        console.log('[Better42] themeBtn exists:', !!this.themeBtn);
+        console.log('[Better42] settingsBtn exists:', !!this.settingsBtn);
+        
         // Vérifier si les éléments existent déjà avant de les ajouter
         if (this.themeBtn && !document.getElementById('theme-switcher')) {
             document.body.appendChild(this.themeBtn);
+            console.log('[Better42] Theme button added to DOM');
+            console.log('[Better42] Theme button style:', this.themeBtn.style.cssText);
         }
         
         const pageConfig = window.PageDetector.getPageConfig();
         if (pageConfig.showSettings) {
             if (this.settingsBtn && !document.getElementById('settings-btn')) {
                 document.body.appendChild(this.settingsBtn);
+                console.log('[Better42] Settings button added to DOM');
+                console.log('[Better42] Settings button style:', this.settingsBtn.style.cssText);
             }
             if (this.settingsPopup && !document.getElementById('settings-popup')) {
                 document.body.appendChild(this.settingsPopup);

@@ -1,0 +1,83 @@
+/* ========== PROJECTS.INTRA.42.FR STYLES ========== */
+
+/* -----=====TEST SIMPLE=====----- */
+body {
+    background-color: #ff0000 !important; /* Test rouge pour voir si ça marche */
+}
+
+/* -----=====LEFT SIDEBAR=====----- */
+.page-sidebar {
+    background-color: #000000 !important;
+}
+
+.main-left-navbar {
+    background-color: #1a1a1a !important;
+}
+
+/* -----=====NAVBAR TOP=====----- */
+.main-navbar {
+    background-color: #2d3748 !important;
+}
+
+/* -----=====FORCE BUTTONS VISIBLE=====----- */
+button#theme-switcher,
+div#theme-switcher,
+*#theme-switcher {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    top: 100px !important;
+    right: 50px !important;
+    z-index: 999999 !important;
+    background: #ff0000 !important;
+    color: white !important;
+    border: 2px solid #ff0000 !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    width: 100px !important;
+    height: 50px !important;
+    font-size: 16px !important;
+    transform: none !important;
+    clip: auto !important;
+    clip-path: none !important;
+}
+
+button#settings-btn,
+div#settings-btn,
+*#settings-btn {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    top: 160px !important;
+    right: 50px !important;
+    z-index: 999999 !important;
+    background: #ff0000 !important;
+    color: white !important;
+    border: 2px solid #ff0000 !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    width: 100px !important;
+    height: 50px !important;
+    font-size: 16px !important;
+    transform: none !important;
+    clip: auto !important;
+    clip-path: none !important;
+}
+
+.py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg {
+    stroke: #8b5cf6 !important; /* Test couleur violette fixe */
+}
+
+.py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg path {
+    stroke: #8b5cf6 !important; /* Test couleur violette fixe */
+}
+
+.py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40 svg {
+    stroke: #9ca3af !important;
+}
+
+.py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40 svg path {
+    stroke: #9ca3af !important;
+}

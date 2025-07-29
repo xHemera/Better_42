@@ -8,6 +8,19 @@ body.dark-theme .w-full.h-full.outline-none {
     background-color: var(--better42-bg-secondary) !important;
 }
 
+/* -----=====LEFT SIDEBAR DARK=====----- */
+body.dark-theme .bg-\[\#4E5566\] {
+    background-color: var(--better42-bg-secondary) !important;
+}
+
+body.dark-theme .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg {
+    stroke: var(--better42-purple) !important;
+}
+
+body.dark-theme .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg path {
+    stroke: var(--better42-purple) !important;
+}
+
 /* -----=====TOP USER PART=====----- */
 
 /* LOGIN TOP LEFT */
@@ -27,17 +40,4 @@ body.dark-theme .hover\:stroke-legacy-main:hover {
 /* USER PICTURE BORDER */
 body.dark-theme .w-52.h-52.text-black.md\:w-40.md\:h-40.lg\:h-28.lg\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full.bg-gray-300.border-2.shadow-base {
     border-color: var(--better42-purple) !important;
-}
-
-/* LEFT SIDEBAR DARK */
-body.dark-theme .bg-\[\#4E5566\] {
-    background-color: var(--better42-bg-secondary) !important;
-}
-
-body.dark-theme .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg {
-    stroke: var(--better42-purple) !important;
-}
-
-body.dark-theme .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg path {
-    stroke: var(--better42-purple) !important;
 }

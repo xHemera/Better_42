@@ -10,9 +10,17 @@ class ProfileDetector {
     init() {
         if (this.initialized) return;
         
+        console.log('[Better42] ProfileDetector initializing on:', window.location.hostname);
+        
         this.detectCurrentUser();
         this.detectViewedProfile();
         this.checkIfOwnProfile();
+        
+        console.log('[Better42] ProfileDetector results:', {
+            currentUser: this.currentUserLogin,
+            viewedUser: this.viewedUserLogin,
+            isOwnProfile: this.isOwnProfile
+        });
         
         this.setupURLWatcher();
         
@@ -28,6 +36,19 @@ class ProfileDetector {
     }
 
     detectCurrentUser() {
+        console.log('[Better42] Detecting current user...');
+        
+        // Check for data-login in HTML first (specific to projects.intra.42.fr)
+        const dataLoginElement = document.querySelector('[data-login]');
+        if (dataLoginElement) {
+            const login = dataLoginElement.getAttribute('data-login');
+            if (login) {
+                console.log('[Better42] Found user via data-login:', login);
+                this.currentUserLogin = login;
+                return;
+            }
+        }
+        
         this.tryDetectFromJWT();
         if (this.currentUserLogin) return;
         

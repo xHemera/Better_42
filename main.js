@@ -8,6 +8,9 @@ class Better42App {
         document.documentElement.style.visibility = 'hidden';
         
         Better42Utils.onDOMReady(() => {
+            console.log('[Better42] Domain:', window.location.hostname);
+            console.log('[Better42] URL:', window.location.href);
+            
             if (!window.ColorThemeManager) {
                 console.error('ColorThemeManager not loaded');
                 return;
@@ -35,6 +38,10 @@ class Better42App {
             window.ColorThemeManager.startLogtimeObserver();
             
             window.ProfileManager.earlyLoadDefaultProfile();
+            
+            if (window.domainStyleManager) {
+                window.domainStyleManager.init();
+            }
             
             this.init();
         });

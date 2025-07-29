@@ -89,7 +89,6 @@ class ColorThemeManager {
 
     getCurrentTheme() {
         const theme = localStorage.getItem('better42-color-theme') || 'violet';
-        console.log('🎨 getCurrentTheme:', theme);
         return theme;
     }
 
@@ -99,10 +98,8 @@ class ColorThemeManager {
     }
 
     applyTheme(themeName) {
-        console.log('🎨 applyTheme called with:', themeName);
         const theme = this.themes[themeName];
         if (!theme) {
-            console.log('❌ Theme not found:', themeName);
             return;
         }
 
@@ -134,7 +131,6 @@ class ColorThemeManager {
         }
 
         this.setCurrentTheme(themeName);
-        console.log('✅ Theme applied:', themeName);
     }
 
     updateLogtimeColors(theme) {

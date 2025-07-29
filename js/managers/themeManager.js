@@ -6,8 +6,11 @@ class ThemeManager {
     }
 
     init() {
+        console.log('[Better42] ThemeManager.init() called');
         const userModePreference = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
         const forceWorseMode = localStorage.getItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
+        console.log('[Better42] userModePreference:', userModePreference);
+        console.log('[Better42] forceWorseMode:', forceWorseMode);
         
         if (forceWorseMode === 'true') {
             localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
@@ -23,12 +26,16 @@ class ThemeManager {
         }
         
         const hasDefaultProfile = window.ProfileManager.getDefaultProfile();
+        console.log('[Better42] hasDefaultProfile:', hasDefaultProfile);
         this.isDark = !!hasDefaultProfile; 
+        console.log('[Better42] ThemeManager.isDark set to:', this.isDark);
         
         if (this.isDark) {
+            console.log('[Better42] Activating dark mode...');
             localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'better');
             this.activateDarkModeWithoutSaving();
         } else {
+            console.log('[Better42] Setting worse mode...');
             localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         }
     }
@@ -59,8 +66,10 @@ class ThemeManager {
     }
 
     activateDarkModeWithoutSaving() {
+        console.log('[Better42] activateDarkModeWithoutSaving() called');
         document.body.classList.add('dark-theme');
         this.isDark = true;
+        console.log('[Better42] dark-theme class added to body');
         
         if (window.ColorThemeManager) {
             window.ColorThemeManager.init();

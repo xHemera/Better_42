@@ -5,6 +5,36 @@
     position: fixed !important;
     top: 10px !important;
     right: 180px !important;
+    background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
+    color: white !important;
+    border: 2px solid #6b7280 !important;
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    z-index: 10000 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
+    transition: none !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+}
+
+#theme-switcher:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4) !important;
+    background: linear-gradient(135deg, #9ca3af, #d1d5db) !important;
+    position: fixed !important;
+    top: 10px !important;
+    right: 180px !important;
+}
+
+body.dark-theme #theme-switcher {
+    position: fixed !important;
+    top: 10px !important;
+    right: 180px !important;
     background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
     color: white !important;
     border: 2px solid var(--better42-purple) !important;
@@ -22,7 +52,7 @@
     margin: 0 !important;
 }
 
-#theme-switcher:hover {
+body.dark-theme #theme-switcher:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px var(--better42-purple) !important;
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;

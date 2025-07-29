@@ -9,7 +9,15 @@ class PageDetector {
     }
 
     isSupported() {
-        return window.location.hostname === 'profile-v3.intra.42.fr';
+        const supportedDomains = [
+            'profile-v3.intra.42.fr',
+            'meta.intra.42.fr',
+            'companies.intra.42.fr',
+            'elearning.intra.42.fr',
+            'projects.intra.42.fr',
+            'shop.intra.42.fr'
+        ];
+        return supportedDomains.includes(window.location.hostname);
     }
 
     getPageConfig() {
