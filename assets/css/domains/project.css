@@ -1,25 +1,116 @@
 /* ========== PROJECTS.INTRA.42.FR STYLES ========== */
 
-/* -----=====TEST SIMPLE=====----- */
+/* -----=====BODY=====----- */
 body {
-    background-color: #ff0000 !important; /* Test rouge pour voir si ça marche */
+    background-color: var(--better42-bg-dark) !important;
 }
 
-/* -----=====LEFT SIDEBAR=====----- */
-.page-sidebar {
-    background-color: #000000 !important;
+.container-item.project-home {
+    background-color: var(--better42-bg-secondary) !important;
+    border-color: var(--better42-bg-secondary) !important;
 }
 
-.main-left-navbar {
-    background-color: #1a1a1a !important;
+.font-weight-bold.text-center {
+    color: var(--better42-text-light) !important;
 }
 
-/* -----=====NAVBAR TOP=====----- */
-.main-navbar {
-    background-color: #2d3748 !important;
+.project-status-box[data-status="subscribed"] {
+    background-color: var(--better42-purple) !important;
+}
+
+.project-status-box[data-status="subscribed"]:hover {
+    background-color: var(--better42-purple-dark) !important;
+}
+
+/* -----=====BOTTOME PAGE=====----- */
+
+.font-weight-bold.btn.btn {
+    background-color: var(--better42-purple) !important;
+    border-color: var(--better42-purple-dark) !important;
+}
+
+.font-weight-bold.btn.btn:hover {
+    background-color: var(--better42-purple-dark) !important;
+}
+
+.text-muted.small.px-4 {
+    color: var(--better42-text-light) !important;
+}
+
+.text-muted.small.px-4:hover {
+    color: var(--better42-purple) !important;
+}
+
+/* -----=====LEFT SIDEBAR/NAVBAR TOP=====----- */
+
+.page-sidebar,
+.main-left-navbar,
+.main-navbar,
+.main-navbar-logo {
+    background-color: var(--better42-bg-secondary) !important;
+}
+
+a:hover [class^="icon-"]::before,
+a:hover [class*=" icon-"]::before {
+  color: var(--better42-purple);
+}
+
+
+.project-status-icon {
+    color: var(--better42-text-light)!important;   
+}
+
+.project-item {
+    color: var(--better42-text-light) !important;
+}
+
+.project-item:hover {
+    color: var(--better42-purple) !important;
+}
+
+.app-sidebar-left {
+    background-color: var(--better42-gray) !important;
+}
+
+.icone:hover {
+    color: var(--better42-purple)!important;
+}
+
+.search-mobile-button {
+    color: var(--better42-bg-dark) !important;
+}
+
+.search-mobile-button:hover {
+    color: var(--better42-purple) !important;
+}
+
+.main-navbar-search .search-input {
+    color: var(--better42-bg-dark) !important;
+}
+
+.main-navbar-search:hover {
+    color: var(--better42-purple-dark) !important;
+}
+
+span[data-login]:hover {
+    color: var(--better42-purple) !important;
+}
+
+.dropdown > a:hover span[data-login] {
+    color: var(--better42-purple) !important;
+}
+
+.user-action .fa-bell {
+  color: var(--better42-bg-dark);
 }
 
 /* -----=====FORCE BUTTONS VISIBLE=====----- */
+
+/* body.page-loaded #theme-switcher,
+body.page-loaded #settings-btn {
+    opacity: 1 !important;
+}
+
 button#theme-switcher,
 div#theme-switcher,
 *#theme-switcher {
@@ -64,20 +155,20 @@ div#settings-btn,
     transform: none !important;
     clip: auto !important;
     clip-path: none !important;
-}
+} */
 
 .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg {
-    stroke: #8b5cf6 !important; /* Test couleur violette fixe */
+    stroke: #8b5cf6 !important;
 }
 
 .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg path {
-    stroke: #8b5cf6 !important; /* Test couleur violette fixe */
+    stroke: #8b5cf6 !important;
 }
 
 .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40 svg {
-    stroke: #9ca3af !important;
+    stroke: #083c96 !important;
 }
 
 .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40 svg path {
-    stroke: #9ca3af !important;
+    stroke: #124396 !important;
 }

@@ -8,6 +8,13 @@ body.dark-theme .w-full.h-full.outline-none {
     background-color: var(--better42-bg-secondary) !important;
 }
 
+body.dark-theme .text-legacy-main.cursor-pointer {
+    color: var(--better42-purple) !important;
+}
+
+body.dark-theme .text-legacy-main.cursor-pointer:hover {
+    color: var(--better42-purple-dark) !important;
+}
 /* -----=====LEFT SIDEBAR DARK=====----- */
 body.dark-theme .bg-\[\#4E5566\] {
     background-color: var(--better42-bg-secondary) !important;
