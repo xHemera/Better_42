@@ -367,17 +367,17 @@ class ClusterMapManager {
             }
 
             body.dark-theme .cluster-zoom-controls {
-                background: rgba(0, 0, 0, 0.9);
-                border-color: var(--better42-purple, #5c058f);
+                background: var(--better42-bg-dark);
+                border-color: var(--better42-purple);
             }
 
             body.dark-theme .zoom-reset-btn {
-                background: linear-gradient(135deg, var(--better42-purple, #5c058f), var(--better42-purple-light, #7d1aaa));
+                background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light));
             }
 
             body.dark-theme .zoom-reset-btn:hover {
-                background: linear-gradient(135deg, var(--better42-purple-light, #7d1aaa), var(--better42-purple-lighter, #9d2acc));
-                box-shadow: 0 4px 12px var(--better42-purple-alpha, rgba(92, 5, 143, 0.4));
+                background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter));
+                box-shadow: 0 4px 12px var(--better42-purple-alpha));
             }
 
             @media (max-width: 768px) {

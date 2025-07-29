@@ -35,15 +35,58 @@
     box-shadow: none !important;
 }
 
-/* LOAD BUTTON AFTER PAGE LOAD */
-#theme-switcher,
-#settings-btn {
-    opacity: 0 !important;
-    transition: opacity 0.3s ease !important;
-}
-
 /* LOAD THE BUTTONS */
 body.page-loaded #theme-switcher,
 body.page-loaded #settings-btn {
     opacity: 1 !important;
 }
+
+/* HIDE BUTTONS WHEN MODAL IS OPEN */
+body[style*="pointer-events: none"] #theme-switcher,
+body[style*="pointer-events: none"] #settings-btn,
+body[style*="pointer-events: none"] .time-remaining-btn,
+body:has([role="dialog"]) #theme-switcher,
+body:has([role="dialog"]) #settings-btn,
+body:has([role="dialog"]) .time-remaining-btn,
+body:has(.fixed.inset-0.z-50) #theme-switcher,
+body:has(.fixed.inset-0.z-50) #settings-btn,
+body:has(.fixed.inset-0.z-50) .time-remaining-btn {
+    display: none !important;
+}
+
+/* FORCE HIDE WITH HIGH SPECIFICITY */
+body[style*="pointer-events: none"] button#theme-switcher,
+body[style*="pointer-events: none"] button#settings-btn,
+body[style*="pointer-events: none"] button.time-remaining-btn,
+body:has([role="dialog"]) button#theme-switcher,
+body:has([role="dialog"]) button#settings-btn,
+body:has([role="dialog"]) button.time-remaining-btn,
+body:has(.fixed.inset-0.z-50) button#theme-switcher,
+body:has(.fixed.inset-0.z-50) button#settings-btn,
+body:has(.fixed.inset-0.z-50) button.time-remaining-btn {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transition: none !important;
+    transform: scale(0) !important;
+    animation: none !important;
+}
+
+/* MODAL COLORS */
+body.dark-theme .flex-col.p-4.justify-center {
+  background-color: var(--better42-purple) !important;
+}
+
+body.dark-theme .flex-wrap.gap-10.h-8 {
+    background-color: var(--better42-purple-darker) !important;
+}
+
+body.dark-theme .p-4 .prose p {
+    color: var(--better42-text-light) !important;
+}
+
+body.dark-theme [role="dialog"] {
+    background-color: var(--better42-bg-dark) !important;
+    color: var(--better42-text-light) !important;
+}
+

@@ -22,7 +22,7 @@ body.dark-theme .text-legacy-main.hover\:underline {
 
 body.dark-theme .text-legacy-main.hover\:underline:hover {
     text-decoration: underline !important;
-    color: var(--better42-purple) !important;
+    color: var(--better42-purple-dark) !important;
 }
 
 /* ALL MARKS */

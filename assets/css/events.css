@@ -44,3 +44,17 @@ body.dark-theme .block.text-xs[style*="color: rgb(237, 129, 121)"],
 body.dark-theme .block.text-xs[style*="color: rgb(0, 186, 188)"] {
     color: var(--better42-text-white) !important;
 }
+
+/* OVERRIDE INTRA COLORS VISITING */
+[style*="color: rgb(58, 97, 135)"] {
+    color: var(--better42-purple) !important;
+}
+
+[style*="border-color: rgb(58, 97, 135)"] {
+    border-color: var(--better42-purple) !important;
+}
+
+[style*="background-color: rgb(58, 97, 135)"] {
+    background-color: var(--better42-purple) !important;
+}
+

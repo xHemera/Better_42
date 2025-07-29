@@ -223,7 +223,7 @@ class UIManager {
             font-size: 14px !important;
             font-weight: 600 !important;
             box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
-            transition: all 0.3s ease !important;
+            transition: none !important;
         `;
         
         if (this.settingsBtn) {
@@ -241,7 +241,7 @@ class UIManager {
                 font-size: 14px !important;
                 font-weight: 600 !important;
                 box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3) !important;
-                transition: all 0.3s ease !important;
+                transition: none !important;
                 display: ${window.ThemeManager && window.ThemeManager.isDark ? 'block' : 'none'} !important;
             `;
         }
@@ -544,7 +544,7 @@ class UIManager {
                 cursor: pointer !important;
                 font-weight: 600 !important;
                 font-size: 12px !important;
-                transition: all 0.3s ease !important;
+                transition: none !important;
             }
 
             #apply-bg:hover, #apply-pfp:hover {
@@ -561,7 +561,7 @@ class UIManager {
                 cursor: pointer !important;
                 font-weight: 600 !important;
                 font-size: 12px !important;
-                transition: all 0.3s ease !important;
+                transition: none !important;
             }
 
             #reset-bg:hover, #reset-pfp:hover {
@@ -585,7 +585,7 @@ class UIManager {
                 cursor: pointer !important;
                 font-weight: 600 !important;
                 font-size: 14px !important;
-                transition: all 0.3s ease !important;
+                transition: none !important;
             }
 
             .reset-themes-btn:hover {

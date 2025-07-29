@@ -62,3 +62,30 @@ body.dark-theme .h-full.w-full.flex-1.transition.duration-1000.ease-out {
 body.dark-theme .w-full.h-2\.5.rounded.drop-shadow-md.relative.overflow-hidden.bg-secondary {
     background-color: var(--better42-bg-secondary) !important;
 }
+
+/* NOTIFICATION CENTER */
+body.dark-theme .z-50.min-w-\[8rem\].rounded-md.bg-popover.p-1.shadow-md {
+  background-color: var(--better42-bg-dark) !important;
+}
+
+
+
+/* HOVER NOTIFICATION CENTER */
+body.dark-theme [role="menuitem"]:hover {
+  background-color: var(--better42-bg-secondary) !important;
+}
+
+body.dark-theme [role="menuitem"] .flex-row p:first-child {
+  color: var(--better42-purple) !important;
+}
+
+/* NOTIFICATION DATE */
+body.dark-theme [role="menuitem"] .flex-row > p.text-xs:not(.text-legacy-main) {
+  color: var(--better42-purple) !important;
+}
+
+/* SETTINGS PROFILE SECTIONS */
+body.dark-theme [role="menuitem"] a {
+  color: var(--better42-purple) !important;
+}
+
