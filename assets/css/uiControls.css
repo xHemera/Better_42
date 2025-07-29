@@ -16,7 +16,6 @@
     font-weight: 600 !important;
     box-shadow: 0 4px 12px var(--better42-purple-light) !important;
     transition: none !important;
-    /* Force la position même si d'autres styles tentent de la modifier */
     left: auto !important;
     bottom: auto !important;
     transform: none !important;
@@ -27,7 +26,6 @@
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px var(--better42-purple) !important;
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
-    /* Maintenir la position lors du hover */
     position: fixed !important;
     top: 10px !important;
     right: 180px !important;
@@ -50,7 +48,6 @@
     box-shadow: 0 4px 12px var(--better42-purple-light) !important;
     transition: none !important;
     display: none !important;
-    /* Force la position même si d'autres styles tentent de la modifier */
     left: auto !important;
     bottom: auto !important;
     transform: none !important;
@@ -62,7 +59,6 @@
     box-shadow: 0 6px 20px var(--better42-purple) !important;
     background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
     border-color: var(--better42-purple-lighter) !important;
-    /* Maintenir la position lors du hover */
     position: fixed !important;
     top: 10px !important;
     right: 265px !important;
