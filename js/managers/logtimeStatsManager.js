@@ -1,16 +1,19 @@
 
 class LogtimeStatsManager {
+    // INITIALIZES LOGTIME STATS MANAGER WITH DEFAULT VALUES
     constructor() {
         this.initialized = false;
         this.observer = null;
     }
 
+    // INITIALIZES THE MANAGER AND SETS UP OBSERVERS AND BUTTONS
     init() {
         this.initialized = true;
         this.addStatsButtons();
         this.setupObserver();
     }
 
+    // SETS UP MUTATION OBSERVER TO DETECT LOGTIME TABLE CHANGES
     setupObserver() {
         if (this.observer) {
             this.observer.disconnect();
@@ -21,7 +24,6 @@ class LogtimeStatsManager {
             
             mutations.forEach((mutation) => {
                 if (mutation.type === 'childList') {
-                    // Vérifier si des tables de logtime ont été ajoutées
                     mutation.addedNodes.forEach((node) => {
                         if (node.nodeType === Node.ELEMENT_NODE) {
                             if (node.querySelector && node.querySelector('table thead tr th[colspan="7"]')) {
@@ -44,19 +46,17 @@ class LogtimeStatsManager {
             subtree: true
         });
 
-        // Observer pour les changements de couleur
         this.setupColorObserver();
     }
 
+    // SETS UP OBSERVERS FOR COLOR THEME CHANGES
     setupColorObserver() {
-        // Écouter les événements de changement de couleur custom
         document.addEventListener('better42-color-changed', () => {
             setTimeout(() => {
                 this.updateButtonColors();
             }, 50);
         });
 
-        // Observer les changements dans localStorage pour le thème
         window.addEventListener('storage', (event) => {
             if (event.key === 'better42-color-theme' || event.key === 'better42-custom-color') {
                 setTimeout(() => {
@@ -65,9 +65,7 @@ class LogtimeStatsManager {
             }
         });
 
-        // Observer seulement les boutons Apply/Save et les couleurs prédéfinies
         setTimeout(() => {
-            // Observer le bouton Appliquer
             const applyBtn = document.querySelector('#apply-custom-color');
             if (applyBtn) {
                 applyBtn.addEventListener('click', () => {
@@ -77,7 +75,6 @@ class LogtimeStatsManager {
                 });
             }
 
-            // Observer le bouton Sauver
             const saveBtn = document.querySelector('#save-custom-color');
             if (saveBtn) {
                 saveBtn.addEventListener('click', () => {
@@ -87,7 +84,6 @@ class LogtimeStatsManager {
                 });
             }
 
-            // Observer aussi les boutons de couleur prédéfinis
             const colorButtons = document.querySelectorAll('[data-theme]');
             colorButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -99,12 +95,13 @@ class LogtimeStatsManager {
         }, 1000);
     }
 
+
+    // UPDATES THE COLORS OF ALL STATS BUTTONS TO MATCH CURRENT THEME
     updateButtonColors() {
         if (!this.initialized) return;
         
         const newColor = this.getCurrentThemeColor();
         
-        // Mettre à jour les boutons mensuels
         const monthlyBtns = document.querySelectorAll('.monthly-stats-btn');
         monthlyBtns.forEach(btn => {
             btn.style.background = `rgba(${newColor}, 0.1)`;
@@ -112,7 +109,6 @@ class LogtimeStatsManager {
             btn.style.color = `rgb(${newColor})`;
         });
 
-        // Mettre à jour les boutons hebdomadaires  
         const weeklyBtns = document.querySelectorAll('.weekly-stats-btn');
         weeklyBtns.forEach(btn => {
             btn.style.background = `rgba(${newColor}, 0.15)`;
@@ -121,13 +117,13 @@ class LogtimeStatsManager {
         });
     }
 
+    // CONVERTS CSS OPACITY VALUE TO HOURS USING CALIBRATED FORMULA
     convertOpacityToHours(opacity) {
         if (!opacity || opacity <= 0) return 0;
-        // Formule ultra précise calibrée avec vraies valeurs 42
-        // 0.094 → 2h16, 0.224 → 5h23, 0.12 → 2h56, 0.075 → 1h48, 0.03 → 45min
         return opacity / 0.0414;
     }
 
+    // EXTRACTS OPACITY VALUE FROM CSS STYLE STRING
     extractOpacityFromStyle(styleText) {
         if (!styleText) return 0;
         
@@ -139,6 +135,7 @@ class LogtimeStatsManager {
         return 0;
     }
 
+    // GETS LOGTIME HOURS FROM A TABLE CELL ELEMENT
     getLogtimeFromCell(cellElement) {
         const styleAttr = cellElement.getAttribute('style');
         if (!styleAttr) return 0;
@@ -147,6 +144,7 @@ class LogtimeStatsManager {
         return this.convertOpacityToHours(opacity);
     }
 
+    // FORMATS HOURS INTO READABLE TIME STRING
     formatTime(totalHours) {
         if (totalHours <= 0) return "0h00";
         
@@ -160,6 +158,7 @@ class LogtimeStatsManager {
         }
     }
 
+    // CALCULATES TOTAL HOURS FOR A WEEK ROW
     calculateWeeklyTotal(row) {
         let total = 0;
         
@@ -173,6 +172,7 @@ class LogtimeStatsManager {
         return total;
     }
 
+    // CALCULATES TOTAL HOURS FOR AN ENTIRE MONTH TABLE
     calculateMonthlyTotal(table) {
         let total = 0;
         
@@ -184,16 +184,14 @@ class LogtimeStatsManager {
         return total;
     }
 
+    // GETS CURRENT THEME COLOR FROM LOCALSTORAGE OR THEME MANAGER
     getCurrentThemeColor() {
-        
-        // Vérifier d'abord si on est en mode custom
         const currentTheme = localStorage.getItem('better42-color-theme') || 'violet';
         
         if (currentTheme === 'custom') {
             const savedCustomColor = localStorage.getItem('better42-custom-color');
             
             if (savedCustomColor) {
-                // Convertir hex vers RGB
                 const hex = savedCustomColor.replace('#', '');
                 const r = parseInt(hex.substring(0, 2), 16);
                 const g = parseInt(hex.substring(2, 4), 16);
@@ -203,13 +201,11 @@ class LogtimeStatsManager {
             }
         }
         
-        // Utiliser ThemeManager si disponible pour les couleurs prédéfinies
         if (window.ThemeManager && window.ThemeManager.getCurrentThemeColor) {
             const color = window.ThemeManager.getCurrentThemeColor();
             return color;
         }
         
-        // Couleurs prédéfinies en fallback
         const themeColors = {
             violet: '124, 58, 237',
             blue: '59, 130, 246', 
@@ -224,20 +220,20 @@ class LogtimeStatsManager {
         return fallbackColor;
     }
 
+    // ADDS STATS BUTTONS TO ALL LOGTIME TABLES ON THE PAGE
     addStatsButtons() {
-        
         const tables = document.querySelectorAll('table');
         
         tables.forEach(table => {
             const monthHeader = table.querySelector('thead tr th[colspan="7"]');
             if (!monthHeader) return;
             
-            
             this.addMonthlyStatsButton(table, monthHeader);
             this.addWeeklyStatsButtons(table);
         });
     }
 
+    // ADDS MONTHLY TOTAL BUTTON TO TABLE HEADER
     addMonthlyStatsButton(table, monthHeader) {
         const existingBtn = monthHeader.querySelector('.monthly-stats-btn');
         if (existingBtn) existingBtn.remove();
@@ -264,9 +260,9 @@ class LogtimeStatsManager {
                 ">${formattedTime}</button>
             </div>
         `;
-        
     }
 
+    // ADDS WEEKLY TOTAL BUTTONS TO EACH TABLE ROW
     addWeeklyStatsButtons(table) {
         const rows = table.querySelectorAll('tbody tr');
         const themeColor = this.getCurrentThemeColor();
@@ -296,30 +292,28 @@ class LogtimeStatsManager {
             
             row.appendChild(statsCell);
         });
-        
     }
 
+    // REFRESHES ALL STATS BUTTONS IF MANAGER IS INITIALIZED
     refresh() {
         if (this.initialized) {
             this.addStatsButtons();
         }
     }
 
+    // DESTROYS THE MANAGER AND REMOVES ALL STATS BUTTONS AND OBSERVERS
     destroy() {
         this.initialized = false;
         
-        // Déconnecter l'observer
         if (this.observer) {
             this.observer.disconnect();
             this.observer = null;
         }
         
-        // Supprimer TOUS les boutons de stats (mensuel et hebdomadaire)
         document.querySelectorAll('.monthly-stats-btn, .weekly-stats-btn').forEach(btn => {
             btn.remove();
         });
         
-        // Restaurer les headers de mois originaux
         document.querySelectorAll('table thead tr th[colspan="7"]').forEach(header => {
             const div = header.querySelector('div');
             if (div && div.querySelector('span')) {
@@ -328,11 +322,9 @@ class LogtimeStatsManager {
             }
         });
         
-        // Supprimer toutes les colonnes ajoutées pour les stats hebdomadaires
         document.querySelectorAll('table tbody tr').forEach(row => {
             const cells = row.querySelectorAll('td');
-            // Supprimer la dernière cellule si elle contient un bouton de stats
-            if (cells.length > 7) { // Plus de 7 cellules = une cellule de stats ajoutée
+            if (cells.length > 7) {
                 const lastCell = cells[cells.length - 1];
                 if (lastCell.querySelector('.weekly-stats-btn')) {
                     lastCell.remove();
@@ -340,7 +332,6 @@ class LogtimeStatsManager {
             }
         });
         
-        // Nettoyer les event listeners
         document.removeEventListener('better42-color-changed', this.updateButtonColors);
         window.removeEventListener('storage', this.updateButtonColors);
     }

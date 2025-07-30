@@ -2,11 +2,11 @@
 
 /* CIRCLE DAY */
 body.dark-theme .dropdown .flex.flex-row.items-center.text-stone-500 {
-    background-color: var(--better42-purple) !important;
+    background-color: var(--better42-primary) !important;
 }
 
 body.dark-theme .fill-legacy-main {
-    fill: var(--better42-purple) !important;
+    fill: var(--better42-primary) !important;
 }
 
 body.dark-theme .fill-gray-400 {
@@ -15,48 +15,48 @@ body.dark-theme .fill-gray-400 {
 
 /* ALL MILESTONE */
 body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main-muted {
-    background-color: var(--better42-purple-darker) !important;
+    background-color: var(--better42-primary-darker) !important;
 }
 
 body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main {
-    background-color: var(--better42-purple) !important;
+    background-color: var(--better42-primary) !important;
 }
 
 /* CURR MILESTON POINT */
 body.dark-theme .rounded-full.mr-0.h-3.w-3.bg-red-500 {
-    background-color: var(--better42-purple) !important;
+    background-color: var(--better42-primary) !important;
 }
 
 body.dark-theme .w-\[2px\].mr-0.h-full.bg-red-500 {
-    background-color: var(--better42-purple-dark) !important;
+    background-color: var(--better42-primary-dark) !important;
 }
 
 /* COMPLETE DAY ON MILESTONE CIRCLE GRAPH */
 body.dark-theme .stroke-legacy-main {
-    stroke: var(--better42-purple) !important;
+    stroke: var(--better42-primary) !important;
 }
 
 body.dark-theme svg circle[class*="stroke-[hsla(180"] {
-    stroke: var(--better42-purple-alpha) !important;
+    stroke: var(--better42-primary-dark-alpha) !important;
 }
 
 /* LOGTIME GRAPH WEEKS */
 body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer {
-    background-color: var(--better42-purple) !important;
+    background-color: var(--better42-primary) !important;
 }
 
 body.dark-theme .mx-2\.5.w-8.rounded-3xl.h-full.bg-legacy-main-muted.cursor-pointer:hover {
-    background-color: var(--better42-purple-dark) !important;
+    background-color: var(--better42-primary-dark-alpha) !important;
 }
 
 /* MAIL && PHONE USER */
 body.dark-theme [style*="color: rgb(181, 22, 63);"] {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 /* BAR LEVEL XP USER */
 body.dark-theme .h-full.w-full.flex-1.transition.duration-1000.ease-out {
-    background-color: var(--better42-purple) !important;
+    background-color: var(--better42-primary) !important;
 }
 
 body.dark-theme .w-full.h-2\.5.rounded.drop-shadow-md.relative.overflow-hidden.bg-secondary {
@@ -76,16 +76,16 @@ body.dark-theme [role="menuitem"]:hover {
 }
 
 body.dark-theme [role="menuitem"] .flex-row p:first-child {
-  color: var(--better42-purple) !important;
+  color: var(--better42-primary) !important;
 }
 
 /* NOTIFICATION DATE */
 body.dark-theme [role="menuitem"] .flex-row > p.text-xs:not(.text-legacy-main) {
-  color: var(--better42-purple) !important;
+  color: var(--better42-primary) !important;
 }
 
 /* SETTINGS PROFILE SECTIONS */
 body.dark-theme [role="menuitem"] a {
-  color: var(--better42-purple) !important;
+  color: var(--better42-primary) !important;
 }
 

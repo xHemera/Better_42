@@ -7,20 +7,15 @@ class ProfileDetector {
         this.initialized = false;
     }
 
+    // INITIALIZE PROFILE DETECTOR
     init() {
         if (this.initialized) return;
         
-        console.log('[Better42] ProfileDetector initializing on:', window.location.hostname);
         
         this.detectCurrentUser();
         this.detectViewedProfile();
         this.checkIfOwnProfile();
         
-        console.log('[Better42] ProfileDetector results:', {
-            currentUser: this.currentUserLogin,
-            viewedUser: this.viewedUserLogin,
-            isOwnProfile: this.isOwnProfile
-        });
         
         this.setupURLWatcher();
         
@@ -35,15 +30,14 @@ class ProfileDetector {
         }
     }
 
+    // DETECT CURRENT LOGGED-IN USER
     detectCurrentUser() {
-        console.log('[Better42] Detecting current user...');
         
         // Check for data-login in HTML first (specific to projects.intra.42.fr)
         const dataLoginElement = document.querySelector('[data-login]');
         if (dataLoginElement) {
             const login = dataLoginElement.getAttribute('data-login');
             if (login) {
-                console.log('[Better42] Found user via data-login:', login);
                 this.currentUserLogin = login;
                 return;
             }
@@ -88,6 +82,7 @@ class ProfileDetector {
         this.tryDetectFromDOM();
     }
     
+    // TRY TO DETECT USER FROM JWT TOKENS
     tryDetectFromJWT() {
         try {
             const scripts = document.querySelectorAll('script');
@@ -112,13 +107,12 @@ class ProfileDetector {
                 }
             }
             
-            if (window.console) {
-            }
             
         } catch (error) {
         }
     }
     
+    // EXTRACT USERNAME FROM JWT TOKEN
     extractUsernameFromJWT(token) {
         try {
             const parts = token.split('.');
@@ -131,8 +125,8 @@ class ProfileDetector {
         }
     }
 
+    // TRY TO DETECT USER FROM DOM ELEMENTS
     tryDetectFromDOM() {
- 
         const userElements = document.querySelectorAll('[data-user-login], [data-login], [data-username]');
         for (const element of userElements) {
             const login = element.getAttribute('data-user-login') || 
@@ -145,11 +139,13 @@ class ProfileDetector {
         }
     }
 
+    // CHECK IF ELEMENT BELONGS TO CURRENT USER
     isCurrentUserElement(element) {
         const parent = element.closest('.profile-owner, .current-user, .my-profile, [class*="own"]');
         return !!parent;
     }
 
+    // DETECT WHICH USER PROFILE IS BEING VIEWED
     detectViewedProfile() {
         const currentURL = window.location.href;
         const urlMatch = currentURL.match(/\/users\/([^\/\?]+)/);
@@ -174,11 +170,13 @@ class ProfileDetector {
         }
     }
 
+    // CHECK IF TEXT LOOKS LIKE A USERNAME
     looksLikeUsername(text) {
         return /^[a-z][a-z0-9-_]{1,15}$/.test(text.toLowerCase()) && 
                !['profile', 'user', 'account', 'dashboard'].includes(text.toLowerCase());
     }
 
+    // CHECK IF VIEWING OWN PROFILE
     checkIfOwnProfile() {
         if (!this.currentUserLogin || !this.viewedUserLogin) {
             this.isOwnProfile = !this.viewedUserLogin || window.location.pathname === '/';
@@ -188,6 +186,7 @@ class ProfileDetector {
         this.isOwnProfile = this.currentUserLogin.toLowerCase() === this.viewedUserLogin.toLowerCase();
     }
 
+    // SETUP URL CHANGE WATCHER
     setupURLWatcher() {
         let lastURL = window.location.href;
         
@@ -208,6 +207,7 @@ class ProfileDetector {
         window.addEventListener('replacestate', () => this.onURLChange());
     }
 
+    // HANDLE URL CHANGES
     onURLChange() {
         setTimeout(() => {
             const oldViewedUser = this.viewedUserLogin;
@@ -222,8 +222,8 @@ class ProfileDetector {
         }, 100);
     }
 
+    // NOTIFY OTHER COMPONENTS OF PROFILE CHANGES
     notifyProfileChange() {
-
         if (window.ProfileManager && window.ProfileManager.onProfileChange) {
             window.ProfileManager.onProfileChange(this.isOwnProfile);
         }
@@ -242,18 +242,22 @@ class ProfileDetector {
         document.dispatchEvent(event);
     }
 
+    // GET CURRENT USER LOGIN
     getCurrentUser() {
         return this.currentUserLogin;
     }
 
+    // GET VIEWED USER LOGIN
     getViewedUser() {
         return this.viewedUserLogin;
     }
 
+    // CHECK IF VIEWING OWN PROFILE
     isViewingOwnProfile() {
         return this.isOwnProfile;
     }
 
+    // REFRESH PROFILE DETECTION
     refresh() {
         this.detectCurrentUser();
         this.detectViewedProfile();
@@ -261,12 +265,14 @@ class ProfileDetector {
         return this.isOwnProfile;
     }
 
+    // SAVE CURRENT USER LOGIN
     saveCurrentUser(login) {
         this.currentUserLogin = login;
         localStorage.setItem('current-user-login', login);
         this.checkIfOwnProfile();
     }
 
+    // GET DEBUG INFORMATION
     getDebugInfo() {
         return {
             currentUserLogin: this.currentUserLogin,

@@ -8,11 +8,11 @@ body.dark-theme .text-xs.border-white.border {
 
 /* ASSOC EVENT */
 body.dark-theme [style*="background-color: rgb(162, 179, 229)"] {
-    background-color: var(--better42-purple-alpha) !important;
+    background-color: var(--better42-primary-dark-alpha) !important;
 }
 
 body.dark-theme .inline-block.text-xl.pr-4[style*="color: rgb(162, 179, 229)"] {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 /* EXAM EVENT */
@@ -47,14 +47,14 @@ body.dark-theme .block.text-xs[style*="color: rgb(0, 186, 188)"] {
 
 /* OVERRIDE INTRA COLORS VISITING */
 [style*="color: rgb(58, 97, 135)"] {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 [style*="border-color: rgb(58, 97, 135)"] {
-    border-color: var(--better42-purple) !important;
+    border-color: var(--better42-primary) !important;
 }
 
 [style*="background-color: rgb(58, 97, 135)"] {
-    background-color: var(--better42-purple) !important;
+    background-color: var(--better42-primary) !important;
 }
 

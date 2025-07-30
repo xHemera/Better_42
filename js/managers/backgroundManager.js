@@ -6,33 +6,29 @@ class BackgroundManager {
             profilePics: new Map()
         };
         
-        // Capturer les images par défaut dès que possible
         this.captureDefaultImages();
     }
 
-    // ✅ NOUVELLE MÉTHODE : Capturer les images par défaut du site
+    // CAPTURES DEFAULT BACKGROUND AND PROFILE PICTURE IMAGES FROM THE WEBSITE
     captureDefaultImages() {
         if (this.defaultImagesCaptured) return;
 
-        // Attendre que le DOM soit chargé
         setTimeout(() => {
             this._captureBackgroundImages();
             this._captureProfilePicImages();
             this.defaultImagesCaptured = true;
-            console.log('📸 Images par défaut capturées:', this.defaultImages);
         }, 1000);
     }
 
+    // CAPTURES BACKGROUND IMAGES FROM DOM ELEMENTS
     _captureBackgroundImages() {
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach((el, index) => {
-            // Capturer seulement si pas encore modifié par Better42
             if (!el.hasAttribute('data-better42-modified')) {
                 const computedStyle = window.getComputedStyle(el);
                 const backgroundImage = computedStyle.backgroundImage;
                 const styleAttr = el.getAttribute('style') || '';
                 
-                // Stocker les informations par défaut
                 this.defaultImages.backgrounds.set(index, {
                     element: el,
                     computedBackgroundImage: backgroundImage,
@@ -40,36 +36,31 @@ class BackgroundManager {
                     originalInnerHTML: el.innerHTML,
                     selector: this._getElementSelector(el)
                 });
-                
-                console.log(`📸 Background ${index} capturé:`, backgroundImage);
             }
         });
     }
 
+    // CAPTURES PROFILE PICTURE IMAGES FROM DOM ELEMENTS
     _captureProfilePicImages() {
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         pfpElements.forEach((el, index) => {
-            // Capturer seulement si pas encore modifié par Better42
             if (!el.hasAttribute('data-better42-modified')) {
                 const computedStyle = window.getComputedStyle(el);
                 const backgroundImage = computedStyle.backgroundImage;
                 const styleAttr = el.getAttribute('style') || '';
                 
-                // Stocker les informations par défaut
                 this.defaultImages.profilePics.set(index, {
                     element: el,
                     computedBackgroundImage: backgroundImage,
                     originalStyleAttr: styleAttr,
                     selector: this._getElementSelector(el)
                 });
-                
-                console.log(`📸 ProfilePic ${index} capturé:`, backgroundImage);
             }
         });
     }
 
+    // CREATES UNIQUE CSS SELECTOR FOR GIVEN DOM ELEMENT
     _getElementSelector(element) {
-        // Créer un sélecteur unique pour retrouver l'élément plus tard
         if (element.id) return `#${element.id}`;
         
         let selector = element.tagName.toLowerCase();
@@ -77,7 +68,6 @@ class BackgroundManager {
             selector += '.' + element.className.split(' ').join('.');
         }
         
-        // Ajouter la position si nécessaire
         const parent = element.parentElement;
         if (parent) {
             const siblings = Array.from(parent.children).filter(child => 
@@ -93,8 +83,8 @@ class BackgroundManager {
         return selector;
     }
 
+    // APPLIES CUSTOM BACKGROUND IMAGE OR VIDEO TO BACKGROUND ELEMENTS
     applyCustomBackground(url) {
-        // ❌ Ne pas appliquer si on n'est pas en mode Better
         if (!window.ThemeManager || !window.ThemeManager.isDark) {
             return;
         }
@@ -107,6 +97,7 @@ class BackgroundManager {
         this._applyImageBackground(url);
     }
 
+    // APPLIES YOUTUBE VIDEO AS BACKGROUND TO BACKGROUND ELEMENTS
     _applyYouTubeBackground(url) {
         const videoId = Better42Utils.extractYouTubeId(url);
         if (!videoId) return;
@@ -115,7 +106,6 @@ class BackgroundManager {
         
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach((el, index) => {
-            // ✅ Capturer l'état par défaut AVANT modification
             if (!this.defaultImages.backgrounds.has(index)) {
                 this._captureElementDefaults(el, index, 'backgrounds');
             }
@@ -130,16 +120,15 @@ class BackgroundManager {
             el.style.overflow = 'hidden';
             el.style.backgroundImage = 'none';
             
-            // ✅ Marquer l'élément comme modifié par Better42
             el.setAttribute('data-better42-modified', 'true');
             el.setAttribute('data-better42-element-index', index);
         });
     }
 
+    // APPLIES STATIC IMAGE AS BACKGROUND TO BACKGROUND ELEMENTS
     _applyImageBackground(url) {
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach((el, index) => {
-            // ✅ Capturer l'état par défaut AVANT modification
             if (!this.defaultImages.backgrounds.has(index)) {
                 this._captureElementDefaults(el, index, 'backgrounds');
             }
@@ -157,21 +146,19 @@ class BackgroundManager {
                 el.setAttribute('style', style + ` background-image: url("${url}");`);
             }
             
-            // ✅ Marquer l'élément comme modifié par Better42
             el.setAttribute('data-better42-modified', 'true');
             el.setAttribute('data-better42-element-index', index);
         });
     }
 
+    // APPLIES CUSTOM PROFILE PICTURE TO PROFILE PICTURE ELEMENTS
     applyCustomPfp(url) {
-        // ❌ Ne pas appliquer si on n'est pas en mode Better
         if (!window.ThemeManager || !window.ThemeManager.isDark) {
             return;
         }
 
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         pfpElements.forEach((el, index) => {
-            // ✅ Capturer l'état par défaut AVANT modification
             if (!this.defaultImages.profilePics.has(index)) {
                 this._captureElementDefaults(el, index, 'profilePics');
             }
@@ -184,12 +171,12 @@ class BackgroundManager {
                 el.setAttribute('style', style + ` background-image: url("${url}");`);
             }
             
-            // ✅ Marquer l'élément comme modifié par Better42
             el.setAttribute('data-better42-modified', 'true');
             el.setAttribute('data-better42-element-index', index);
         });
     }
 
+    // CAPTURES DEFAULT STATE OF ELEMENT BEFORE MODIFICATION
     _captureElementDefaults(element, index, type) {
         const computedStyle = window.getComputedStyle(element);
         const backgroundImage = computedStyle.backgroundImage;
@@ -202,30 +189,17 @@ class BackgroundManager {
             originalInnerHTML: element.innerHTML,
             selector: this._getElementSelector(element)
         });
-        
-        console.log(`📸 ${type} ${index} capturé dynamiquement:`, backgroundImage);
     }
 
-    // ✅ MÉTHODE PRINCIPALE : Suppression complète et restauration des défauts
+    // REMOVES ALL CUSTOMIZATIONS AND RESTORES DEFAULT IMAGES
     removeAllCustomizations() {
-        console.log('🧹 Suppression complète des personnalisations...');
-        
-        // 1. Supprimer tous les styles injectés par Better42
         this._removeInjectedStyles();
-        
-        // 2. Restaurer tous les éléments background avec leurs images par défaut
         this._restoreBackgroundElements();
-        
-        // 3. Restaurer tous les éléments profile pic avec leurs images par défaut
         this._restoreProfilePicElements();
-        
-        console.log('✅ Personnalisations supprimées et images par défaut restaurées');
     }
 
+    // RESTORES BACKGROUND ELEMENTS TO THEIR DEFAULT STATE
     _restoreBackgroundElements() {
-        console.log('🔄 Restauration des backgrounds...');
-        
-        // Restaurer tous les éléments background modifiés par Better42
         const modifiedBgElements = document.querySelectorAll('[data-better42-modified]');
         modifiedBgElements.forEach(el => {
             if (el.matches(Better42Config.SELECTORS.BACKGROUND.split(', ').join(', '))) {
@@ -233,57 +207,44 @@ class BackgroundManager {
                 const defaultData = this.defaultImages.backgrounds.get(elementIndex);
                 
                 if (defaultData) {
-                    // Restaurer le HTML original
                     if (defaultData.originalInnerHTML) {
                         el.innerHTML = defaultData.originalInnerHTML;
                     }
                     
-                    // Restaurer le style original OU l'image par défaut
                     if (defaultData.originalStyleAttr) {
                         el.setAttribute('style', defaultData.originalStyleAttr);
                     } else if (defaultData.computedBackgroundImage && defaultData.computedBackgroundImage !== 'none') {
-                        // Remettre l'image par défaut via CSS
                         el.style.backgroundImage = defaultData.computedBackgroundImage;
                     } else {
                         el.removeAttribute('style');
                     }
-                    
-                    console.log(`✅ Background ${elementIndex} restauré:`, defaultData.computedBackgroundImage);
                 } else {
-                    // Fallback : nettoyer au minimum
                     this._cleanupElement(el);
                 }
                 
-                // Nettoyer les attributs Better42
                 el.removeAttribute('data-better42-modified');
                 el.removeAttribute('data-better42-element-index');
             }
         });
 
-        // Nettoyer aussi les éléments sans attributs mais modifiés
         const allBgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         allBgElements.forEach((el, index) => {
-            // Si l'élément a été modifié mais n'a pas nos attributs
             if (!el.hasAttribute('data-better42-modified')) {
                 const defaultData = this.defaultImages.backgrounds.get(index);
                 if (defaultData && this._elementNeedsRestoration(el)) {
                     if (defaultData.computedBackgroundImage && defaultData.computedBackgroundImage !== 'none') {
                         el.style.backgroundImage = defaultData.computedBackgroundImage;
-                        console.log(`✅ Background ${index} restauré (sans attribut):`, defaultData.computedBackgroundImage);
                     }
                 }
             }
             
-            // Supprimer les iframes YouTube injectées
             const iframes = el.querySelectorAll('iframe[src*="youtube"]');
             iframes.forEach(iframe => iframe.remove());
         });
     }
 
+    // RESTORES PROFILE PICTURE ELEMENTS TO THEIR DEFAULT STATE
     _restoreProfilePicElements() {
-        console.log('🔄 Restauration des profile pics...');
-        
-        // Restaurer tous les éléments profile pic modifiés par Better42
         const modifiedPfpElements = document.querySelectorAll('[data-better42-modified]');
         modifiedPfpElements.forEach(el => {
             if (el.matches(Better42Config.SELECTORS.PROFILE_PIC)) {
@@ -291,29 +252,22 @@ class BackgroundManager {
                 const defaultData = this.defaultImages.profilePics.get(elementIndex);
                 
                 if (defaultData) {
-                    // Restaurer le style original OU l'image par défaut
                     if (defaultData.originalStyleAttr) {
                         el.setAttribute('style', defaultData.originalStyleAttr);
                     } else if (defaultData.computedBackgroundImage && defaultData.computedBackgroundImage !== 'none') {
-                        // Remettre l'image par défaut via CSS
                         el.style.backgroundImage = defaultData.computedBackgroundImage;
                     } else {
                         el.removeAttribute('style');
                     }
-                    
-                    console.log(`✅ ProfilePic ${elementIndex} restauré:`, defaultData.computedBackgroundImage);
                 } else {
-                    // Fallback : nettoyer au minimum
                     this._cleanupElement(el);
                 }
                 
-                // Nettoyer les attributs Better42
                 el.removeAttribute('data-better42-modified');
                 el.removeAttribute('data-better42-element-index');
             }
         });
 
-        // Nettoyer aussi les éléments sans attributs mais modifiés
         const allPfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         allPfpElements.forEach((el, index) => {
             if (!el.hasAttribute('data-better42-modified')) {
@@ -321,24 +275,23 @@ class BackgroundManager {
                 if (defaultData && this._elementNeedsRestoration(el)) {
                     if (defaultData.computedBackgroundImage && defaultData.computedBackgroundImage !== 'none') {
                         el.style.backgroundImage = defaultData.computedBackgroundImage;
-                        console.log(`✅ ProfilePic ${index} restauré (sans attribut):`, defaultData.computedBackgroundImage);
                     }
                 }
             }
         });
     }
 
+    // CHECKS IF ELEMENT NEEDS RESTORATION TO DEFAULT STATE
     _elementNeedsRestoration(element) {
         const style = element.getAttribute('style');
         const computedStyle = window.getComputedStyle(element);
         
-        // Vérifier si l'élément n'a pas d'image de fond
         return (!style || !style.includes('background-image')) && 
                (!computedStyle.backgroundImage || computedStyle.backgroundImage === 'none');
     }
 
+    // CLEANS UP ELEMENT BY REMOVING CUSTOM MODIFICATIONS
     _cleanupElement(element) {
-        // Nettoyage minimal pour les éléments sans données par défaut
         const style = element.getAttribute('style');
         if (style && style.includes('background-image: url')) {
             const cleanedStyle = style.replace(/background-image\s*:\s*url\([^)]*\)\s*;?\s*/g, '');
@@ -349,11 +302,11 @@ class BackgroundManager {
             }
         }
         
-        // Supprimer les iframes YouTube
         const iframes = element.querySelectorAll('iframe[src*="youtube"]');
         iframes.forEach(iframe => iframe.remove());
     }
 
+    // REMOVES INJECTED CSS STYLES CREATED BY BETTER42
     _removeInjectedStyles() {
         const injectedStyles = document.querySelectorAll('style');
         injectedStyles.forEach(style => {
@@ -368,13 +321,12 @@ class BackgroundManager {
         });
     }
 
-    // ✅ ANCIENNE MÉTHODE : Gardée pour compatibilité
+    // LEGACY METHOD FOR REMOVING CUSTOMIZATIONS
     removeCustomizations() {
-        console.log('🧹 BackgroundManager.removeCustomizations() appelée');
         this.removeAllCustomizations();
     }
 
-    // ✅ NOUVELLE MÉTHODE : Recapturer les images sur changement de page
+    // RECAPTURES DEFAULT IMAGES WHEN PAGE CHANGES
     recaptureDefaultImages() {
         this.defaultImagesCaptured = false;
         this.defaultImages.backgrounds.clear();
@@ -382,7 +334,7 @@ class BackgroundManager {
         this.captureDefaultImages();
     }
 
-    // ✅ DIAGNOSTICS améliorés
+    // RETURNS DIAGNOSTIC INFORMATION ABOUT CURRENT STATE
     getDiagnostics() {
         const modifiedBg = document.querySelectorAll(`${Better42Config.SELECTORS.BACKGROUND}[data-better42-modified]`).length;
         const modifiedPfp = document.querySelectorAll(`${Better42Config.SELECTORS.PROFILE_PIC}[data-better42-modified]`).length;
@@ -411,6 +363,7 @@ class BackgroundManager {
         };
     }
 
+    // CHECKS IF THERE ARE ANY ACTIVE CUSTOMIZATIONS ON THE PAGE
     hasActiveCustomizations() {
         const modifiedElements = document.querySelectorAll('[data-better42-modified]');
         if (modifiedElements.length > 0) return true;

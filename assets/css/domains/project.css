@@ -15,22 +15,22 @@ body {
 }
 
 .project-status-box[data-status="subscribed"] {
-    background-color: var(--better42-purple) !important;
+    background-color: var(--better42-primary) !important;
 }
 
 .project-status-box[data-status="subscribed"]:hover {
-    background-color: var(--better42-purple-dark) !important;
+    background-color: var(--better42-primary-dark) !important;
 }
 
 /* -----=====BOTTOME PAGE=====----- */
 
 .font-weight-bold.btn.btn {
-    background-color: var(--better42-purple) !important;
-    border-color: var(--better42-purple-dark) !important;
+    background-color: var(--better42-primary) !important;
+    border-color: var(--better42-primary-dark) !important;
 }
 
 .font-weight-bold.btn.btn:hover {
-    background-color: var(--better42-purple-dark) !important;
+    background-color: var(--better42-primary-dark) !important;
 }
 
 .text-muted.small.px-4 {
@@ -38,7 +38,7 @@ body {
 }
 
 .text-muted.small.px-4:hover {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 /* -----=====LEFT SIDEBAR/NAVBAR TOP=====----- */
@@ -52,7 +52,7 @@ body {
 
 a:hover [class^="icon-"]::before,
 a:hover [class*=" icon-"]::before {
-  color: var(--better42-purple);
+  color: var(--better42-primary);
 }
 
 
@@ -65,7 +65,7 @@ a:hover [class*=" icon-"]::before {
 }
 
 .project-item:hover {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 .app-sidebar-left {
@@ -73,7 +73,7 @@ a:hover [class*=" icon-"]::before {
 }
 
 .icone:hover {
-    color: var(--better42-purple)!important;
+    color: var(--better42-primary)!important;
 }
 
 .search-mobile-button {
@@ -81,7 +81,7 @@ a:hover [class*=" icon-"]::before {
 }
 
 .search-mobile-button:hover {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 .main-navbar-search .search-input {
@@ -89,15 +89,15 @@ a:hover [class*=" icon-"]::before {
 }
 
 .main-navbar-search:hover {
-    color: var(--better42-purple-dark) !important;
+    color: var(--better42-primary-dark) !important;
 }
 
 span[data-login]:hover {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 .dropdown > a:hover span[data-login] {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 .user-action .fa-bell {

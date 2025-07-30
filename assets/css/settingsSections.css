@@ -40,8 +40,8 @@
 #bg-url-input:focus,
 #pfp-url-input:focus,
 #profile-name-input:focus {
-    border-color: var(--better42-purple) !important;
-    box-shadow: 0 0 0 3px var(--better42-purple-alpha) !important;
+    border-color: var(--better42-primary) !important;
+    box-shadow: 0 0 0 3px var(--better42-primary-dark-alpha) !important;
     background: rgba(0, 0, 0, 0.5) !important;
 }
 
@@ -68,7 +68,7 @@
     font-weight: 600 !important;
     transition: all 0.3s ease !important;
     font-size: 14px !important;
-    background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
+    background: linear-gradient(135deg, var(--better42-primary), var(--better42-primary-light)) !important;
 }
 
 .profile-controls button:hover {
@@ -99,7 +99,7 @@
 }
 
 #apply-bg {
-    background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
+    background: linear-gradient(135deg, var(--better42-primary), var(--better42-primary-light)) !important;
 }
 
 #reset-bg {

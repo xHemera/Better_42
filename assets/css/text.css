@@ -28,7 +28,7 @@ body.dark-theme .hover\:text-emerald-500 {
 }
 
 body.dark-theme .hover\:text-emerald-500:hover {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 body.dark-theme .hover\:text-emerald-500 a {
@@ -36,5 +36,5 @@ body.dark-theme .hover\:text-emerald-500 a {
 }
 
 body.dark-theme .hover\:text-emerald-500:hover a {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }

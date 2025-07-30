@@ -4,26 +4,23 @@ class UIManager {
         this.settingsBtn = null;
         this.settingsPopup = null;
         this.buttonsCreated = false;
-        this.listenersAttached = false; // Flag pour les listeners globaux
-        this.lastButtonState = null; // Pour éviter les appels redondants
+        this.listenersAttached = false;
+        this.lastButtonState = null;
     }
 
     createUI() {
-        console.log('[Better42] UIManager.createUI() called');
         
         if (!window.PageDetector) {
             console.error('PageDetector not available');
             return;
         }
 
-        console.log('[Better42] PageDetector.isSupported():', window.PageDetector.isSupported());
         
         if (!window.PageDetector.isSupported()) {
-            console.log('[Better42] Page not supported, UI creation skipped');
             return;
         }
 
-        // Vérifier si les boutons existent déjà
+
         const existingThemeBtn = document.getElementById('theme-switcher');
         const existingSettingsBtn = document.getElementById('settings-btn');
         
@@ -31,17 +28,13 @@ class UIManager {
             this.themeBtn = existingThemeBtn;
             this.settingsBtn = existingSettingsBtn;
             this.buttonsCreated = true;
-            
-            // Juste mettre à jour le texte du bouton thème si nécessaire
             this.updateThemeButtonText();
             return;
         }
 
         const pageConfig = window.PageDetector.getPageConfig();
-        console.log('[Better42] Page config:', pageConfig);
         
         if (!this.buttonsCreated) {
-            console.log('[Better42] Creating UI buttons...');
             this.createThemeButton();
             
             if (pageConfig.showSettings) {
@@ -52,12 +45,10 @@ class UIManager {
             this.attachEventListeners();
             this.appendToDOM();
             this.buttonsCreated = true;
-            console.log('[Better42] UI buttons created and added to DOM');
         }
     }
 
     createThemeButton() {
-        // Ne créer que si n'existe pas déjà
         if (document.getElementById('theme-switcher')) {
             this.themeBtn = document.getElementById('theme-switcher');
             return;
@@ -67,7 +58,6 @@ class UIManager {
         this.themeBtn.id = 'theme-switcher';
         this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
         
-        // Force la position CSS dès la création
         this.themeBtn.style.cssText = `
             position: fixed !important;
             top: 10px !important;
@@ -77,7 +67,6 @@ class UIManager {
     }
 
     createSettingsButton() {
-        // Ne créer que si n'existe pas déjà
         if (document.getElementById('settings-btn')) {
             this.settingsBtn = document.getElementById('settings-btn');
             return;
@@ -87,7 +76,6 @@ class UIManager {
         this.settingsBtn.id = 'settings-btn';
         this.settingsBtn.innerHTML = '⚙️';
         
-        // Force la position CSS dès la création
         this.settingsBtn.style.cssText = `
             position: fixed !important;
             top: 10px !important;
@@ -97,7 +85,6 @@ class UIManager {
     }
 
     createSettingsPopup() {
-        // Ne créer que si n'existe pas déjà
         if (document.getElementById('settings-popup')) {
             this.settingsPopup = document.getElementById('settings-popup');
             return;
@@ -112,12 +99,10 @@ class UIManager {
     }
 
     attachEventListeners() {
-        // Éviter d'attacher plusieurs fois les mêmes événements
         if (this.themeBtn && !this.themeBtn.hasAttribute('data-listeners-attached')) {
             this.themeBtn.addEventListener('click', () => {
                 if (window.ThemeManager.isDark) {
                     this.themeBtn.innerHTML = 'Better';
-                    // Appliquer immédiatement les couleurs grises
                     this.themeBtn.style.background = 'linear-gradient(135deg, #6b7280, #9ca3af) !important';
                     this.themeBtn.style.borderColor = '#6b7280 !important';
                 } else {
@@ -125,14 +110,11 @@ class UIManager {
                 }
                 
                 window.ThemeManager.toggleTheme();
-                
-                // Forcer la mise à jour des couleurs après le toggle
                 setTimeout(() => {
                     this.enforceButtonPositions();
                 }, 0);
             });
             
-            // Ajouter les effets hover pour le bouton thème
             this.themeBtn.addEventListener('mouseenter', () => {
                 this.applyHoverEffect(this.themeBtn, true);
             });
@@ -150,7 +132,6 @@ class UIManager {
                 this.toggleSettingsPopup();
             });
             
-            // Ajouter les effets hover pour le bouton settings
             this.settingsBtn.addEventListener('mouseenter', () => {
                 this.applyHoverEffect(this.settingsBtn, true);
             });
@@ -171,8 +152,6 @@ class UIManager {
             this.settingsPopup.setAttribute('data-listeners-attached', 'true');
         }
 
-        // Event listener global pour les boutons du popup (une seule fois)
-        // FIX: Utiliser document.body au lieu de document
         if (!this.listenersAttached) {
             document.addEventListener('click', (e) => {
                 this.handlePopupButtonClick(e);
@@ -183,21 +162,17 @@ class UIManager {
         }
     }
 
-    // Méthode pour forcer la position des boutons
     enforceButtonPositions() {
         if (!this.themeBtn) return;
         
-        // Éviter les appels redondants
         const currentState = `${window.ThemeManager?.isDark}-${window.ColorThemeManager?.getCurrentTheme()}`;
         if (this.lastButtonState === currentState) return;
         this.lastButtonState = currentState;
         
-        // Couleurs selon l'état du thème (Better = personnalisées, Worse = gris par défaut)
         const isThemeActive = window.ThemeManager && window.ThemeManager.isDark;
         let bgColors, borderColor;
         
         if (isThemeActive) {
-            // Utiliser les vraies couleurs du thème actuel
             if (window.ColorThemeManager) {
                 const currentTheme = window.ColorThemeManager.getCurrentTheme();
                 if (currentTheme === 'custom') {
@@ -207,8 +182,8 @@ class UIManager {
                         bgColors = `${customTheme.primary}, ${customTheme.primaryLight}`;
                         borderColor = customTheme.primary;
                     } else {
-                        bgColors = 'var(--better42-purple), var(--better42-purple-light)';
-                        borderColor = 'var(--better42-purple)';
+                        bgColors = 'var(--better42-primary), var(--better42-primary-light)';
+                        borderColor = 'var(--better42-primary)';
                     }
                 } else {
                     const theme = window.ColorThemeManager.themes[currentTheme];
@@ -216,16 +191,15 @@ class UIManager {
                         bgColors = `${theme.primary}, ${theme.primaryLight}`;
                         borderColor = theme.primary;
                     } else {
-                        bgColors = 'var(--better42-purple), var(--better42-purple-light)';
-                        borderColor = 'var(--better42-purple)';
+                        bgColors = 'var(--better42-primary), var(--better42-primary-light)';
+                        borderColor = 'var(--better42-primary)';
                     }
                 }
             } else {
-                bgColors = 'var(--better42-purple), var(--better42-purple-light)';
-                borderColor = 'var(--better42-purple)';
+                bgColors = 'var(--better42-primary), var(--better42-primary-light)';
+                borderColor = 'var(--better42-primary)';
             }
         } else {
-            // Mode "worse" - couleurs grises immédiatement
             bgColors = '#6b7280, #9ca3af';
             borderColor = '#6b7280';
         }
@@ -276,7 +250,6 @@ class UIManager {
         let bgColors, borderColor;
         
         if (isHover) {
-            // Couleurs hover (plus claires)
             if (isThemeActive) {
                 if (window.ColorThemeManager) {
                     const currentTheme = window.ColorThemeManager.getCurrentTheme();
@@ -287,8 +260,8 @@ class UIManager {
                             bgColors = `${customTheme.primaryLight}, ${customTheme.primaryLighter}`;
                             borderColor = customTheme.primaryLight;
                         } else {
-                            bgColors = 'var(--better42-purple-light), var(--better42-purple-lighter)';
-                            borderColor = 'var(--better42-purple-light)';
+                            bgColors = 'var(--better42-primary-light), var(--better42-primary-lighter)';
+                            borderColor = 'var(--better42-primary-light)';
                         }
                     } else {
                         const theme = window.ColorThemeManager.themes[currentTheme];
@@ -296,23 +269,22 @@ class UIManager {
                             bgColors = `${theme.primaryLight}, ${theme.primaryLighter}`;
                             borderColor = theme.primaryLight;
                         } else {
-                            bgColors = 'var(--better42-purple-light), var(--better42-purple-lighter)';
-                            borderColor = 'var(--better42-purple-light)';
+                            bgColors = 'var(--better42-primary-light), var(--better42-primary-lighter)';
+                            borderColor = 'var(--better42-primary-light)';
                         }
                     }
                 } else {
-                    bgColors = 'var(--better42-purple-light), var(--better42-purple-lighter)';
-                    borderColor = 'var(--better42-purple-light)';
+                    bgColors = 'var(--better42-primary-light), var(--better42-primary-lighter)';
+                    borderColor = 'var(--better42-primary-light)';
                 }
             } else {
-                bgColors = '#9ca3af, #d1d5db'; // Gris plus clair pour hover
+                bgColors = '#9ca3af, #d1d5db';
                 borderColor = '#9ca3af';
             }
             
             button.style.transform = 'translateY(-2px)';
             button.style.boxShadow = '0 6px 20px rgba(68, 68, 68, 0.4) !important';
         } else {
-            // Couleurs normales (même logique que enforceButtonPositions)
             if (isThemeActive) {
                 if (window.ColorThemeManager) {
                     const currentTheme = window.ColorThemeManager.getCurrentTheme();
@@ -323,8 +295,8 @@ class UIManager {
                             bgColors = `${customTheme.primary}, ${customTheme.primaryLight}`;
                             borderColor = customTheme.primary;
                         } else {
-                            bgColors = 'var(--better42-purple), var(--better42-purple-light)';
-                            borderColor = 'var(--better42-purple)';
+                            bgColors = 'var(--better42-primary), var(--better42-primary-light)';
+                            borderColor = 'var(--better42-primary)';
                         }
                     } else {
                         const theme = window.ColorThemeManager.themes[currentTheme];
@@ -332,13 +304,13 @@ class UIManager {
                             bgColors = `${theme.primary}, ${theme.primaryLight}`;
                             borderColor = theme.primary;
                         } else {
-                            bgColors = 'var(--better42-purple), var(--better42-purple-light)';
-                            borderColor = 'var(--better42-purple)';
+                            bgColors = 'var(--better42-primary), var(--better42-primary-light)';
+                            borderColor = 'var(--better42-primary)';
                         }
                     }
                 } else {
-                    bgColors = 'var(--better42-purple), var(--better42-purple-light)';
-                    borderColor = 'var(--better42-purple)';
+                    bgColors = 'var(--better42-primary), var(--better42-primary-light)';
+                    borderColor = 'var(--better42-primary)';
                 }
             } else {
                 bgColors = '#6b7280, #9ca3af';
@@ -349,7 +321,6 @@ class UIManager {
             button.style.boxShadow = '0 4px 12px rgba(68, 68, 68, 0.3) !important';
         }
         
-        // Appliquer le background et la bordure
         button.style.background = `linear-gradient(135deg, ${bgColors}) !important`;
         button.style.borderColor = `${borderColor} !important`;
     }
@@ -358,36 +329,26 @@ class UIManager {
         if (this.themeBtn) {
             this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
             
-            // Force la position à chaque mise à jour
             this.enforceButtonPositions();
         }
     }
 
     appendToDOM() {
-        console.log('[Better42] appendToDOM called');
-        console.log('[Better42] themeBtn exists:', !!this.themeBtn);
-        console.log('[Better42] settingsBtn exists:', !!this.settingsBtn);
         
-        // Vérifier si les éléments existent déjà avant de les ajouter
         if (this.themeBtn && !document.getElementById('theme-switcher')) {
             document.body.appendChild(this.themeBtn);
-            console.log('[Better42] Theme button added to DOM');
-            console.log('[Better42] Theme button style:', this.themeBtn.style.cssText);
         }
         
         const pageConfig = window.PageDetector.getPageConfig();
         if (pageConfig.showSettings) {
             if (this.settingsBtn && !document.getElementById('settings-btn')) {
                 document.body.appendChild(this.settingsBtn);
-                console.log('[Better42] Settings button added to DOM');
-                console.log('[Better42] Settings button style:', this.settingsBtn.style.cssText);
             }
             if (this.settingsPopup && !document.getElementById('settings-popup')) {
                 document.body.appendChild(this.settingsPopup);
             }
         }
         
-        // Force les positions après l'ajout au DOM
         setTimeout(() => {
             this.enforceButtonPositions();
         }, 100);
@@ -395,33 +356,22 @@ class UIManager {
         document.body.classList.add('page-loaded');
     }
 
-    // Méthode pour réinitialiser l'UI si nécessaire
     refreshUI() {
-        
-        // Mettre à jour le texte du bouton thème
         this.updateThemeButtonText();
-        
-        // Force les positions
         this.enforceButtonPositions();
-        
-        // Mettre à jour la visibilité du bouton settings selon le thème
         if (this.settingsBtn) {
             const shouldShow = window.ThemeManager && window.ThemeManager.isDark;
             this.settingsBtn.style.display = shouldShow ? 'block' : 'none';
         }
     }
-
-    // Observer les changements de page pour maintenir les boutons
     observePageChanges() {
         const observer = new MutationObserver(() => {
-            // Vérifier si les boutons ont été supprimés ou déplacés
             const themeBtn = document.getElementById('theme-switcher');
             const settingsBtn = document.getElementById('settings-btn');
             
             if (!themeBtn || !settingsBtn) {
                 this.createUI();
             } else {
-                // S'assurer que les positions sont correctes
                 this.enforceButtonPositions();
             }
         });
@@ -687,7 +637,6 @@ class UIManager {
         const bgInput = document.getElementById('bg-url-input');
         if (bgInput) bgInput.value = '';
         
-        // Supprimer les personnalisations d'arrière-plan sans recharger la page
         if (window.ProfileManager) {
             window.ProfileManager.resetBackgroundElements();
         }
@@ -705,7 +654,6 @@ class UIManager {
         const pfpInput = document.getElementById('pfp-url-input');
         if (pfpInput) pfpInput.value = '';
         
-        // Supprimer les personnalisations de photo de profil sans recharger la page
         if (window.ProfileManager) {
             window.ProfileManager.resetProfilePicElements();
         }

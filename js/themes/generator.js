@@ -1,9 +1,11 @@
 
 class ThemeCSSGenerator {
+    // INITIALIZES THE THEME CSS GENERATOR WITH STYLE ELEMENT ID
     constructor() {
         this.styleElementId = 'dynamic-color-theme';
     }
 
+    // GENERATES COMPLETE THEME CSS BY COMBINING ALL STYLE SECTIONS
     generateThemeCSS(themeColors) {
         return `
             ${this.generateCSSVariables(themeColors)}
@@ -16,23 +18,24 @@ class ThemeCSSGenerator {
         `;
     }
 
+    // GENERATES CSS CUSTOM PROPERTIES FOR THEME COLORS
     generateCSSVariables(colors) {
         return `
             :root {
-                --better42-purple: ${colors.primary} !important;
-                --better42-purple-light: ${colors.primaryLight} !important;
-                --better42-purple-lighter: ${colors.primaryLighter} !important;
-                --better42-purple-dark: ${colors.primaryDark} !important;
-                --better42-purple-darker: ${colors.primaryDarker} !important;
-                --better42-purple-alpha: ${colors.primaryAlpha} !important;
-                --better42-purple-alpha-light: ${colors.primaryAlphaLight} !important;
+                --better42-primary: ${colors.primary} !important;
+                --better42-primary-light: ${colors.primaryLight} !important;
+                --better42-primary-lighter: ${colors.primaryLighter} !important;
+                --better42-primary-dark: ${colors.primaryDark} !important;
+                --better42-primary-darker: ${colors.primaryDarker} !important;
+                --better42-primary-dark-alpha: ${colors.primaryAlpha} !important;
+                --better42-primary-alpha-dark: ${colors.primaryAlphaLight} !important;
             }
         `;
     }
 
+    // GENERATES CSS STYLES FOR BUTTONS AND INTERACTIVE ELEMENTS
     generateButtonStyles(colors) {
         return `
-            /* ===== BOUTONS ===== */
             body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\\.5.px-2.cursor-pointer.text-xs.uppercase,
             body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\\.5.px-1.cursor-pointer.text-xs.uppercase {
                 color: ${colors.primary} !important;
@@ -55,7 +58,6 @@ class ThemeCSSGenerator {
                 color: ${colors.primary} !important;
             }
 
-            /* Boutons de l'interface */
             body.dark-theme #theme-switcher {
                 background: linear-gradient(135deg, ${colors.primary}, ${colors.primaryLight}) !important;
                 box-shadow: 0 4px 12px ${colors.primaryAlpha} !important;
@@ -78,9 +80,9 @@ class ThemeCSSGenerator {
         `;
     }
 
+    // GENERATES CSS STYLES FOR EVENT ELEMENTS
     generateEventStyles(colors) {
         return `
-            /* ===== ÉVÉNEMENTS ===== */
             body.dark-theme [style*="background-color: rgb(162, 179, 229)"] {
                 background-color: ${colors.primaryAlpha.replace('0.3', '0.5')} !important;
             }
@@ -91,9 +93,9 @@ class ThemeCSSGenerator {
         `;
     }
 
+    // GENERATES CSS STYLES FOR USER STATISTICS AND PROGRESS ELEMENTS
     generateUserStatsStyles(colors) {
         return `
-            /* ===== STATS UTILISATEUR ===== */
             body.dark-theme .dropdown .flex.flex-row.items-center.text-stone-500 {
                 background-color: ${colors.primary} !important;
             }
@@ -110,7 +112,6 @@ class ThemeCSSGenerator {
                 stroke: ${colors.primary} !important;
             }
 
-            /* ALL MILESTONE - muted plus foncé car pas validé */
             body.dark-theme .h-10.rounded.flex.items-center.cursor-pointer.bg-legacy-main-muted {
                 background-color: ${colors.primaryDarker} !important;
             }
@@ -119,7 +120,6 @@ class ThemeCSSGenerator {
                 background-color: ${colors.primary} !important;
             }
 
-            /* Points et barres de progression */
             body.dark-theme .rounded-full.mr-0.h-3.w-3.bg-red-500 {
                 background-color: ${colors.primary} !important;
             }
@@ -146,9 +146,9 @@ class ThemeCSSGenerator {
         `;
     }
 
+    // GENERATES CSS STYLES FOR TOP NAVIGATION BAR ELEMENTS
     generateTopbarStyles(colors) {
         return `
-            /* ===== BARRE SUPÉRIEURE ===== */
             body.dark-theme .hover\\:text-legacy-main:hover {
                 color: ${colors.primary} !important;
             }
@@ -173,16 +173,15 @@ class ThemeCSSGenerator {
                 stroke: ${colors.primary} !important;
             }
 
-            /* SVG de recherche */
             body.dark-theme svg[stroke="#000"] {
                 stroke: ${colors.primary} !important;
             }
         `;
     }
 
+    // GENERATES CSS STYLES FOR POPUP AND SETTINGS MODAL ELEMENTS
     generatePopupStyles(colors) {
         return `
-            /* ===== POPUP PARAMÈTRES ===== */
             body.dark-theme .profile-section {
                 background: ${colors.primaryAlphaLight} !important;
                 border: 2px solid ${colors.primaryAlpha} !important;
@@ -220,9 +219,9 @@ class ThemeCSSGenerator {
         `;
     }
 
+    // GENERATES CSS STYLES FOR MISCELLANEOUS ELEMENTS
     generateMiscStyles(colors) {
         return `
-            /* ===== DIVERS ===== */
             body.dark-theme .hover\\:text-emerald-500:hover {
                 color: ${colors.primary} !important;
             }
@@ -233,6 +232,7 @@ class ThemeCSSGenerator {
         `;
     }
 
+    // APPLIES GENERATED CSS TO THE DOM BY CREATING OR UPDATING STYLE ELEMENT
     applyCSSToDOM(css) {
         const oldStyleElement = document.getElementById(this.styleElementId);
         if (oldStyleElement) {
@@ -245,6 +245,7 @@ class ThemeCSSGenerator {
         document.head.appendChild(styleElement);
     }
 
+    // REMOVES THEME CSS FROM THE DOM BY DELETING THE STYLE ELEMENT
     removeThemeCSS() {
         const styleElement = document.getElementById(this.styleElementId);
         if (styleElement) {

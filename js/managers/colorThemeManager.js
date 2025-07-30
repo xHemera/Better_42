@@ -87,16 +87,19 @@ class ColorThemeManager {
         this.currentTheme = 'violet';
     }
 
+    // GET CURRENT ACTIVE THEME NAME
     getCurrentTheme() {
         const theme = localStorage.getItem('better42-color-theme') || 'violet';
         return theme;
     }
 
+    // SET AND SAVE CURRENT THEME
     setCurrentTheme(themeName) {
         this.currentTheme = themeName;
         localStorage.setItem('better42-color-theme', themeName);
     }
 
+    // APPLY THEME TO INTERFACE
     applyTheme(themeName) {
         const theme = this.themes[themeName];
         if (!theme) {
@@ -120,7 +123,7 @@ class ColorThemeManager {
                 window.ThemeManager.updateLogtime();
                 // Forcer la mise à jour des boutons UI immédiatement
                 if (window.UIManager) {
-                    window.UIManager.lastButtonState = null; // Reset pour forcer la mise à jour
+                    window.UIManager.lastButtonState = null;
                     window.UIManager.enforceButtonPositions();
                 }
                 // Mettre à jour les totaux du logtime
@@ -133,6 +136,7 @@ class ColorThemeManager {
         this.setCurrentTheme(themeName);
     }
 
+    // UPDATE LOGTIME ELEMENT COLORS
     updateLogtimeColors(theme) {
         const primaryRgb = theme.primary.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).join(', ');
         const allLogtimeCases = document.querySelectorAll('.bg-slate-50.w-4.h-4[style*="background-color"]');
@@ -152,16 +156,17 @@ class ColorThemeManager {
         
     }
 
+    // GENERATE CSS FOR THEME
     generateThemeCSS(theme) {
         return `
             :root {
-                --better42-purple: ${theme.primary} !important;
-                --better42-purple-light: ${theme.primaryLight} !important;
-                --better42-purple-lighter: ${theme.primaryLighter} !important;
-                --better42-purple-dark: ${theme.primaryDark} !important;
-                --better42-purple-darker: ${theme.primaryDarker} !important;
-                --better42-purple-alpha: ${theme.primaryAlpha} !important;
-                --better42-purple-alpha-light: ${theme.primaryAlphaLight} !important;
+                --better42-primary: ${theme.primary} !important;
+                --better42-primary-light: ${theme.primaryLight} !important;
+                --better42-primary-lighter: ${theme.primaryLighter} !important;
+                --better42-primary-dark: ${theme.primaryDark} !important;
+                --better42-primary-darker: ${theme.primaryDarker} !important;
+                --better42-primary-dark-alpha: ${theme.primaryAlpha} !important;
+                --better42-primary-alpha-dark: ${theme.primaryAlphaLight} !important;
             }
 
             body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\\.5.px-2.cursor-pointer.text-xs.uppercase,
@@ -222,12 +227,12 @@ class ColorThemeManager {
         `;
     }
 
+    // LOAD PREVIOUSLY SAVED THEME
     loadSavedTheme() {
         const savedTheme = this.getCurrentTheme();
         if (savedTheme && this.themes[savedTheme]) {
             this.applyTheme(savedTheme);
         } else {
-            // Si pas de thème sauvegardé valide, appliquer violet mais ne pas le sauvegarder
             const defaultTheme = this.themes['violet'];
             if (defaultTheme) {
                 this.updateLogtimeColors(defaultTheme);
@@ -235,6 +240,7 @@ class ColorThemeManager {
         }
     }
 
+    // CREATE COLOR SELECTOR UI
     createColorSelector() {
         const colorSection = document.createElement('div');
         colorSection.className = 'settings-section';
@@ -453,6 +459,7 @@ class ColorThemeManager {
         return colorSection;
     }
 
+    // ATTACH EVENT LISTENERS TO COLOR SELECTOR
     attachColorSelectorEvents(colorSection) {
         const colorButtons = colorSection.querySelectorAll('.color-theme-btn');
         
@@ -484,21 +491,17 @@ class ColorThemeManager {
         applyBtn.addEventListener('click', () => {
             const selectedColor = colorPicker.value;
             
-            // Appliquer temporairement SANS sauvegarder
             this.applyCustomColor(selectedColor);
             
             colorButtons.forEach(b => b.classList.remove('active'));
             
-            // Forcer la mise à jour avec la couleur temporaire
             setTimeout(() => {
-                // Calculer la couleur RGB à partir du hex
                 const hex = selectedColor.replace('#', '');
                 const r = parseInt(hex.substring(0, 2), 16);
                 const g = parseInt(hex.substring(2, 4), 16);
                 const b = parseInt(hex.substring(4, 6), 16);
                 const tempColor = `${r}, ${g}, ${b}`;
                 
-                // Mettre à jour logtime avec couleur temporaire
                 if (window.LogtimeStatsManager) {
                     document.querySelectorAll('.monthly-stats-btn').forEach(btn => {
                         btn.style.background = `rgba(${tempColor}, 0.1)`;
@@ -512,12 +515,10 @@ class ColorThemeManager {
                     });
                 }
                 
-                // Mettre à jour boutons UI temporairement
                 if (window.ThemeManager && window.ThemeManager.updateButtonColors) {
                     window.ThemeManager.updateButtonColors();
                 }
                 
-                // Mettre à jour directement le bouton Worse/Better
                 const themeBtn = document.getElementById('theme-switcher');
                 const settingsBtn = document.getElementById('settings-btn');
                 if (themeBtn) {
@@ -537,30 +538,26 @@ class ColorThemeManager {
             const selectedColor = colorPicker.value;
             localStorage.setItem('better42-custom-color', selectedColor);
             this.applyCustomColor(selectedColor);
-            
+
             colorButtons.forEach(b => b.classList.remove('active'));
-            
-            // Forcer la mise à jour des boutons logtime ET boutons UI
+
             if (window.LogtimeStatsManager) {
                 setTimeout(() => {
                     window.LogtimeStatsManager.updateButtonColors();
                 }, 150);
-            } else {
             }
-            
-            // Mettre à jour les boutons engrenage/better/worse
+
             if (window.ThemeManager && window.ThemeManager.updateButtonColors) {
                 setTimeout(() => {
                     window.ThemeManager.updateButtonColors();
                 }, 150);
             }
-            
+
             alert('💾 Couleur personnalisée sauvegardée !');
         });
-
-        // Supprimé: mise à jour en temps réel pour éviter les bugs/crashes
     }
 
+    // APPLY CUSTOM COLOR THEME
     applyCustomColor(hexColor) {
         const customTheme = this.generateCustomTheme(hexColor);
         
@@ -581,7 +578,7 @@ class ColorThemeManager {
                 window.ThemeManager.updateLogtime();
                 // Forcer la mise à jour des boutons UI immédiatement
                 if (window.UIManager) {
-                    window.UIManager.lastButtonState = null; // Reset pour forcer la mise à jour
+                    window.UIManager.lastButtonState = null;
                     window.UIManager.enforceButtonPositions();
                 }
                 // Mettre à jour les totaux du logtime
@@ -591,7 +588,6 @@ class ColorThemeManager {
             }, 50);
         }
 
-        // Déclencher l'événement de changement de couleur
         document.dispatchEvent(new CustomEvent('better42-color-changed', {
             detail: { color: hexColor }
         }));
@@ -600,6 +596,7 @@ class ColorThemeManager {
         this.currentTheme = 'custom';
     }
 
+    // GENERATE CUSTOM THEME FROM BASE COLOR
     generateCustomTheme(baseColor) {
         const rgb = this.hexToRgb(baseColor);
         if (!rgb) return this.themes.violet;
@@ -621,6 +618,7 @@ class ColorThemeManager {
         };
     }
 
+    // LIGHTEN HEX COLOR BY PERCENTAGE
     lightenColor(hex, percent) {
         const rgb = this.hexToRgb(hex);
         if (!rgb) return hex;
@@ -633,6 +631,7 @@ class ColorThemeManager {
         return this.rgbToHex(r, g, b);
     }
 
+    // DARKEN HEX COLOR BY PERCENTAGE
     darkenColor(hex, percent) {
         const rgb = this.hexToRgb(hex);
         if (!rgb) return hex;
@@ -645,10 +644,12 @@ class ColorThemeManager {
         return this.rgbToHex(r, g, b);
     }
 
+    // CONVERT RGB VALUES TO HEX
     rgbToHex(r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
     }
 
+    // CONVERT HEX COLOR TO RGB OBJECT
     hexToRgb(hex) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -658,8 +659,8 @@ class ColorThemeManager {
         } : null;
     }
 
+    // INITIALIZE COLOR THEME MANAGER
     init() {
-        // Ne pas appliquer les thèmes de couleur en mode normal
         if (!window.ThemeManager || !window.ThemeManager.isDark) {
             this.startLogtimeObserver();
             return;
@@ -681,6 +682,7 @@ class ColorThemeManager {
         this.forceInitialLogtimeCheck();
     }
     
+    // START OBSERVING LOGTIME CHANGES
     startLogtimeObserver() {
         if (this.logtimeObserver) {
             this.logtimeObserver.disconnect();
@@ -707,7 +709,6 @@ class ColorThemeManager {
             
             if (needsUpdate) {
                 setTimeout(() => {
-                    // Ne pas changer les couleurs si on n'est pas en mode sombre
                     if (!window.ThemeManager || !window.ThemeManager.isDark) {
                         return;
                     }
@@ -736,6 +737,7 @@ class ColorThemeManager {
         });
     }
     
+    // CHECK IF ELEMENT HAS LOGTIME COLORS
     hasLogtimeColors(element) {
         if (!element.getAttribute) return false;
         
@@ -753,6 +755,7 @@ class ColorThemeManager {
         return false;
     }
     
+    // FORCE INITIAL LOGTIME COLOR CHECK
     forceInitialLogtimeCheck() {
         const delays = [500, 1000, 2000, 3000];
         
@@ -784,12 +787,14 @@ class ColorThemeManager {
         });
     }
 
+    // CREATE COLOR THEME UI
     createUI() {
         const colorSection = this.createColorSelector();
         this.attachColorSelectorEvents(colorSection);
         return colorSection;
     }
 
+    // GET CURRENT THEME AS RGB STRING
     getCurrentThemeRgb() {
         const currentTheme = this.getCurrentTheme();
         
@@ -814,6 +819,7 @@ class ColorThemeManager {
         return `${r}, ${g}, ${b}`;
     }
 
+    // RESET THEME TO DEFAULT VALUES
     resetToDefaults() {
         localStorage.removeItem('better42-color-theme');
         
@@ -825,6 +831,7 @@ class ColorThemeManager {
         return true;
     }
 
+    // GET THEME STATISTICS
     getThemeStats() {
         return {
             currentTheme: this.getCurrentTheme(),

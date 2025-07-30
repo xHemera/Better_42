@@ -1,12 +1,12 @@
 /* -----=====VARIABLES CSS=====----- */
 :root {
-    --better42-purple: #5c058f;
-    --better42-purple-light: #7d1aaa;
-    --better42-purple-lighter: #9d2acc;
-    --better42-purple-dark: #430169;
-    --better42-purple-darker: #2a0241;
-    --better42-purple-alpha: rgba(92, 5, 143, 0.3);
-    --better42-purple-alpha-light: rgba(92, 5, 143, 0.1);
+    --better42-primary: #5c058f;
+    --better42-primary-light: #7d1aaa;
+    --better42-primary-lighter: #9d2acc;
+    --better42-primary-dark: #430169;
+    --better42-primary-darker: #2a0241;
+    --better42-primary-dark-alpha: rgba(92, 5, 143, 0.3);
+    --better42-primary-alpha-dark: rgba(92, 5, 143, 0.1);
     
     --better42-bg-dark: #0f0f0f;
     --better42-bg-secondary: #2a2a2a;
@@ -74,11 +74,11 @@ body:has(.fixed.inset-0.z-50) button.time-remaining-btn {
 
 /* MODAL COLORS */
 body.dark-theme .flex-col.p-4.justify-center {
-  background-color: var(--better42-purple) !important;
+  background-color: var(--better42-primary) !important;
 }
 
 body.dark-theme .flex-wrap.gap-10.h-8 {
-    background-color: var(--better42-purple-darker) !important;
+    background-color: var(--better42-primary-darker) !important;
 }
 
 body.dark-theme .p-4 .prose p {

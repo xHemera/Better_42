@@ -4,13 +4,11 @@ class Better42App {
         this.urlWatcher = null;
     }
 
+    // EARLY INITIALIZATION OF BETTER42 APP
     earlyInit() {
         document.documentElement.style.visibility = 'hidden';
         
         Better42Utils.onDOMReady(() => {
-            console.log('[Better42] Domain:', window.location.hostname);
-            console.log('[Better42] URL:', window.location.href);
-            
             if (!window.ColorThemeManager) {
                 console.error('ColorThemeManager not loaded');
                 return;
@@ -47,6 +45,7 @@ class Better42App {
         });
     }
 
+    // INITIALIZE ALL MANAGERS AND COMPONENTS
     init() {
         if (this.initialized) return;
         
@@ -101,6 +100,7 @@ class Better42App {
         }
     }
 
+    // SETUP PAGE CHANGE DETECTION AND HANDLING
     setupPageChangeWatcher() {
         let lastURL = window.location.href;
         
@@ -142,6 +142,7 @@ class Better42App {
         window.UIManager.observePageChanges();
     }
 
+    // HANDLE PAGE NAVIGATION CHANGES
     handlePageChange() {
         setTimeout(() => {
             try {
@@ -181,13 +182,13 @@ class Better42App {
                     }, 400);
                 }
             } catch (error) {
-                console.error('❌ Erreur lors du changement de page:', error);
+                console.error('Error during page change:', error);
             }
         }, 300);
     }
 
+    // FORCE REINITIALIZATION OF ALL COMPONENTS
     forceReinit() {
-        
         if (window.UIManager) {
             window.UIManager.createUI();
         }

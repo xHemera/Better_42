@@ -1,5 +1,5 @@
-
 class ColorThemeManager {
+    // INITIALIZE THEME MANAGER WITH REQUIRED DEPENDENCIES
     constructor() {
         this.storage = window.ThemeStorage;
         this.cssGenerator = window.ThemeCSSGenerator;
@@ -9,12 +9,14 @@ class ColorThemeManager {
         this.ui.setThemeManager(this);
     }
 
+    // INITIALIZE THEME SYSTEM AND LOAD SAVED THEME
     init() {
         this.storage.cleanup();
         
         this.loadSavedTheme();
     }
 
+    // LOAD PREVIOUSLY SAVED THEME OR DEFAULT THEME
     loadSavedTheme() {
         const savedThemeId = this.storage.getCurrentTheme();
         const theme = this.storage.getTheme(savedThemeId);
@@ -26,6 +28,7 @@ class ColorThemeManager {
         }
     }
 
+    // APPLY SPECIFIED THEME TO THE DOM AND UPDATE ELEMENTS
     applyTheme(themeId) {
         const theme = this.storage.getTheme(themeId);
         if (!theme) {
@@ -46,6 +49,7 @@ class ColorThemeManager {
         return true;
     }
 
+    // UPDATE INLINE STYLED ELEMENTS WITH NEW THEME COLORS
     updateInlineElements(colors) {
         const primaryRgb = this.hexToRgb(colors.primary);
         if (!primaryRgb) return;
@@ -55,6 +59,7 @@ class ColorThemeManager {
         this.updateEventElements(colors);
     }
 
+    // UPDATE LOGTIME ELEMENTS WITH PRIMARY COLOR RGB VALUES
     updateLogtimeElements(primaryRgb) {
         const rgbString = `${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}`;
         
@@ -68,14 +73,14 @@ class ColorThemeManager {
         });
 
         const oldThemePatterns = [
-            /rgba\(92, 5, 143, ([\d\.]+)\)/g,    
-            /rgba\(30, 64, 175, ([\d\.]+)\)/g,   
-            /rgba\(190, 24, 93, ([\d\.]+)\)/g,   
-            /rgba\(5, 150, 105, ([\d\.]+)\)/g,   
-            /rgba\(229, 229, 229, ([\d\.]+)\)/g, 
-            /rgba\(234, 88, 12, ([\d\.]+)\)/g,     
-            /rgba\(220, 38, 38, ([\d\.]+)\)/g,   
-            /rgba\(8, 145, 178, ([\d\.]+)\)/g    
+            /rgba\(92, 5, 143, ([\d\.]+)\)/g,
+            /rgba\(30, 64, 175, ([\d\.]+)\)/g,
+            /rgba\(190, 24, 93, ([\d\.]+)\)/g,
+            /rgba\(5, 150, 105, ([\d\.]+)\)/g,
+            /rgba\(229, 229, 229, ([\d\.]+)\)/g,
+            /rgba\(234, 88, 12, ([\d\.]+)\)/g,
+            /rgba\(220, 38, 38, ([\d\.]+)\)/g,
+            /rgba\(8, 145, 178, ([\d\.]+)\)/g
         ];
 
         oldThemePatterns.forEach(pattern => {
@@ -92,6 +97,7 @@ class ColorThemeManager {
         });
     }
 
+    // UPDATE EVENT ELEMENTS WITH NEW THEME BACKGROUND COLORS
     updateEventElements(colors) {
         const eventElements = document.querySelectorAll('[style*="background-color: rgb(162, 179, 229)"]');
         eventElements.forEach(el => {
@@ -106,6 +112,7 @@ class ColorThemeManager {
         });
     }
 
+    // NOTIFY EXTERNAL THEME MANAGER OF THEME CHANGES
     notifyThemeManager() {
         if (window.ThemeManager && window.ThemeManager.isDark) {
             setTimeout(() => {
@@ -114,27 +121,32 @@ class ColorThemeManager {
         }
     }
 
+    // GET CURRENTLY ACTIVE THEME ID
     getCurrentTheme() {
         return this.currentTheme || this.storage.getCurrentTheme();
     }
 
+    // GET COMPLETE DATA OBJECT FOR CURRENT THEME
     getCurrentThemeData() {
         const currentId = this.getCurrentTheme();
         return this.storage.getTheme(currentId);
     }
 
+    // GET PRIMARY COLOR RGB STRING FOR CURRENT THEME
     getCurrentThemeRgb() {
         const theme = this.getCurrentThemeData();
-        if (!theme) return '92, 5, 143'; 
+        if (!theme) return '92, 5, 143';
         
         const rgb = this.hexToRgb(theme.colors.primary);
         return rgb ? `${rgb.r}, ${rgb.g}, ${rgb.b}` : '92, 5, 143';
     }
 
+    // CREATE THEME SELECTION USER INTERFACE
     createUI() {
         return this.ui.createThemeSection();
     }
 
+    // CREATE NEW CUSTOM THEME FROM BASE COLOR AND NAME
     createCustomTheme(name, baseColor, emoji = '✨') {
         const themeData = window.THEME_CONFIG.COLOR_UTILS.generateThemeFromBase(baseColor, name, emoji);
         const themeId = this.storage.generateThemeId(name);
@@ -143,22 +155,27 @@ class ColorThemeManager {
         return themeId;
     }
 
+    // DELETE CUSTOM THEME BY ID
     deleteCustomTheme(themeId) {
         return this.storage.removeCustomTheme(themeId);
     }
 
+    // EXPORT ALL CUSTOM THEMES TO JSON FORMAT
     exportCustomThemes() {
         return this.storage.exportCustomThemes();
     }
 
+    // IMPORT CUSTOM THEMES FROM JSON DATA
     importCustomThemes(jsonData) {
         return this.storage.importCustomThemes(jsonData);
     }
 
+    // GET ALL AVAILABLE THEMES INCLUDING PREDEFINED AND CUSTOM
     getAllThemes() {
         return this.storage.getAllThemes();
     }
 
+    // GET STATISTICS ABOUT THEME COLLECTION
     getThemeStats() {
         const allThemes = this.getAllThemes();
         const predefinedCount = Object.values(allThemes).filter(t => t.category === 'predefined').length;
@@ -172,6 +189,7 @@ class ColorThemeManager {
         };
     }
 
+    // RESET ALL THEMES TO DEFAULT STATE AND DELETE CUSTOM THEMES
     resetToDefaults() {
         if (confirm('⚠️ Reset all themes to defaults?\n\nThis will delete all custom themes and cannot be undone.')) {
             localStorage.removeItem(window.THEME_CONFIG.STORAGE_KEYS.CUSTOM_THEMES);
@@ -190,6 +208,7 @@ class ColorThemeManager {
         return false;
     }
 
+    // CREATE DUPLICATE COPY OF EXISTING THEME
     duplicateTheme(themeId, newName) {
         const originalTheme = this.storage.getTheme(themeId);
         if (!originalTheme) return null;
@@ -210,6 +229,7 @@ class ColorThemeManager {
         return newThemeId;
     }
 
+    // TEMPORARILY PREVIEW THEME FOR SPECIFIED DURATION
     previewTheme(themeId, duration = 3000) {
         const originalTheme = this.getCurrentTheme();
         
@@ -224,6 +244,7 @@ class ColorThemeManager {
         return false;
     }
 
+    // VALIDATE THEME DATA STRUCTURE AND COLOR FORMATS
     validateTheme(themeData) {
         const requiredProps = ['name', 'colors'];
         const requiredColors = ['primary', 'primaryLight', 'primaryLighter', 'primaryDark', 'primaryDarker', 'primaryAlpha', 'primaryAlphaLight'];
@@ -259,6 +280,7 @@ class ColorThemeManager {
         return { valid: true };
     }
 
+    // CONVERT HEX COLOR CODE TO RGB OBJECT
     hexToRgb(hex) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -268,10 +290,12 @@ class ColorThemeManager {
         } : null;
     }
 
+    // CONVERT RGB VALUES TO HEX COLOR CODE
     rgbToHex(r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
     }
 
+    // CALCULATE COLOR LUMINANCE VALUE FOR ACCESSIBILITY
     getColorLuminance(hex) {
         const rgb = this.hexToRgb(hex);
         if (!rgb) return 0;
@@ -288,6 +312,7 @@ class ColorThemeManager {
         return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
     }
 
+    // FIND THEMES WITH SIMILAR COLOR LUMINANCE VALUES
     getSimilarThemes(themeId, maxResults = 3) {
         const targetTheme = this.storage.getTheme(themeId);
         if (!targetTheme) return [];
@@ -308,10 +333,11 @@ class ColorThemeManager {
         return similarities.map(s => ({ id: s.id, theme: s.theme }));
     }
 
+    // GENERATE RANDOM THEME WITH RANDOM HSL COLOR VALUES
     generateRandomTheme(name = 'Random Theme') {
         const hue = Math.floor(Math.random() * 360);
-        const saturation = 60 + Math.floor(Math.random() * 40); 
-        const lightness = 35 + Math.floor(Math.random() * 30);  
+        const saturation = 60 + Math.floor(Math.random() * 40);
+        const lightness = 35 + Math.floor(Math.random() * 30);
         
         const baseColor = this.hslToHex(hue, saturation, lightness);
         const emoji = ['🎨', '✨', '🌈', '💫', '🎭', '🔮', '💎', '🌟'][Math.floor(Math.random() * 8)];
@@ -319,6 +345,7 @@ class ColorThemeManager {
         return this.createCustomTheme(name, baseColor, emoji);
     }
 
+    // CONVERT HSL COLOR VALUES TO HEX COLOR CODE
     hslToHex(h, s, l) {
         l /= 100;
         const a = s * Math.min(l, 1 - l) / 100;
@@ -330,6 +357,7 @@ class ColorThemeManager {
         return `#${f(0)}${f(8)}${f(4)}`;
     }
 
+    // GET DIAGNOSTIC INFORMATION ABOUT THEME SYSTEM STATUS
     getDiagnostics() {
         const stats = this.getThemeStats();
         const currentTheme = this.getCurrentThemeData();

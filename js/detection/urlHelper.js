@@ -1,10 +1,12 @@
 
 class URLHelper {
+    // INITIALIZES URL HELPER WITH CURRENT URL AND EMPTY OBSERVERS ARRAY
     constructor() {
         this.currentURL = window.location.href;
         this.observers = [];
     }
 
+    // EXTRACTS USERNAME FROM URL USING REGEX PATTERNS FOR PROFILE PAGES
     getUserFromURL(url = window.location.href) {
         const patterns = [
             /\/users\/([^\/\?\#]+)/,
@@ -21,10 +23,12 @@ class URLHelper {
         return null;
     }
 
+    // CHECKS IF CURRENT URL IS A USER PROFILE PAGE
     isUserProfileURL(url = window.location.href) {
         return this.getUserFromURL(url) !== null;
     }
 
+    // DETERMINES IF CURRENT URL IS A HOME OR DASHBOARD PAGE
     isHomePage(url = window.location.href) {
         const homePatterns = [
             /^https?:\/\/[^\/]+\/?$/,
@@ -35,6 +39,7 @@ class URLHelper {
         return homePatterns.some(pattern => pattern.test(url));
     }
 
+    // RETURNS PAGE TYPE BASED ON URL PATTERNS
     getPageType(url = window.location.href) {
         if (this.isUserProfileURL(url)) {
             return 'user_profile';
@@ -51,6 +56,7 @@ class URLHelper {
         return 'other';
     }
 
+    // REGISTERS CALLBACK FOR URL CHANGES AND SETS UP OBSERVERS
     onURLChange(callback) {
         this.observers.push(callback);
         
@@ -90,6 +96,7 @@ class URLHelper {
         };
     }
 
+    // NOTIFIES ALL REGISTERED OBSERVERS WHEN URL CHANGES
     notifyURLChange() {
         const oldURL = this.currentURL;
         const newURL = window.location.href;
@@ -109,6 +116,7 @@ class URLHelper {
         }
     }
 
+    // RETURNS COMPLETE INFORMATION ABOUT CURRENT PAGE
     getCurrentPageInfo() {
         const url = window.location.href;
         return {
@@ -120,17 +128,20 @@ class URLHelper {
         };
     }
 
+    // NORMALIZES USERNAME TO LOWERCASE AND TRIMS WHITESPACE
     normalizeUsername(username) {
         if (!username) return null;
         return username.toLowerCase().trim();
     }
 
+    // COMPARES TWO USERNAMES AFTER NORMALIZATION
     isSameUser(user1, user2) {
         const norm1 = this.normalizeUsername(user1);
         const norm2 = this.normalizeUsername(user2);
         return norm1 && norm2 && norm1 === norm2;
     }
 
+    // EXTRACTS USERNAME FROM DOM ELEMENTS USING VARIOUS SELECTORS
     extractUserFromDOM() {
         const selectors = [
             '[data-user-login]',
@@ -162,12 +173,14 @@ class URLHelper {
         return null;
     }
 
+    // VALIDATES IF TEXT MATCHES USERNAME PATTERN
     looksLikeUsername(text) {
         const normalized = text.toLowerCase().trim();
         return /^[a-z][a-z0-9-_]{0,15}$/.test(normalized) && 
                !['profile', 'user', 'account', 'dashboard', 'home', 'projects'].includes(normalized);
     }
 
+    // RETURNS DEBUG INFORMATION ABOUT URL HELPER STATE
     getDebugInfo() {
         return {
             currentURL: this.currentURL,

@@ -1,13 +1,14 @@
 class ProfileManager {
+    // INITIALIZES THE PROFILE MANAGER WITH DEFAULT VALUES
     constructor() {
         this.currentProfile = null;
-        this.isOwnProfile = true; // Par défaut, assumer que c'est son propre profil
+        this.isOwnProfile = true;
     }
 
+    // HANDLES PROFILE OWNERSHIP CHANGES AND APPLIES OR REMOVES CUSTOMIZATIONS ACCORDINGLY
     onProfileChange(isOwnProfile) {
         const wasOwnProfile = this.isOwnProfile;
         this.isOwnProfile = isOwnProfile;
-        
         
         if (wasOwnProfile && !isOwnProfile) {
             this.removeCustomizations();
@@ -16,6 +17,7 @@ class ProfileManager {
         }
     }
 
+    // DETERMINES WHETHER CUSTOMIZATIONS SHOULD BE APPLIED BASED ON PROFILE OWNERSHIP
     shouldApplyCustomizations() {
         if (window.ProfileDetector && window.ProfileDetector.initialized) {
             return window.ProfileDetector.isViewingOwnProfile();
@@ -24,14 +26,17 @@ class ProfileManager {
         return this.isOwnProfile;
     }
 
+    // RETRIEVES THE DEFAULT PROFILE ID FROM LOCAL STORAGE
     getDefaultProfile() {
         return localStorage.getItem(Better42Config.STORAGE_KEYS.DEFAULT_PROFILE);
     }
 
+    // SETS THE DEFAULT PROFILE ID IN LOCAL STORAGE
     setDefaultProfile(profileId) {
         localStorage.setItem(Better42Config.STORAGE_KEYS.DEFAULT_PROFILE, profileId);
     }
 
+    // LOADS AND POPULATES THE PROFILES LIST IN THE SELECTOR DROPDOWN
     loadProfilesList() {
         const selector = document.getElementById('profile-selector');
         if (!selector) return;
@@ -59,6 +64,7 @@ class ProfileManager {
         }
     }
     
+    // ENSURES THE PUBLIC PROFILE EXISTS IN STORAGE AND CREATES IT IF MISSING
     ensurePublicProfileExists() {
         let profiles = JSON.parse(localStorage.getItem(Better42Config.STORAGE_KEYS.PROFILES_LIST) || '[]');
         
@@ -84,10 +90,10 @@ class ProfileManager {
                 };
                 localStorage.setItem(publicDataKey, JSON.stringify(emptyPublicData));
             }
-            
         }
     }
 
+    // LOADS THE DEFAULT PROFILE ON STARTUP IF CONDITIONS ARE MET
     loadDefaultProfileOnStartup() {
         if (!window.PageDetector) {
             return;
@@ -98,15 +104,11 @@ class ProfileManager {
             return;
         }
 
-        // ✅ Vérifications avant d'appliquer
         if (!this.shouldApplyCustomizations()) {
-            console.log('⚠️ Ne pas charger le profil (pas son profil)');
             return;
         }
         
-        // ✅ Vérifier qu'on est en mode Better
         if (!window.ThemeManager || !window.ThemeManager.isDark) {
-            console.log('⚠️ Mode Worse actif, ne pas charger le profil');
             return;
         }
 
@@ -137,6 +139,7 @@ class ProfileManager {
         }, 100);
     }
 
+    // CREATES A NEW PROFILE WITH THE SPECIFIED NAME AND ADDS IT TO STORAGE
     createProfile() {
         const nameInput = document.getElementById('profile-name-input');
         if (!nameInput) return;
@@ -174,6 +177,7 @@ class ProfileManager {
         this.loadProfilesList();
     }
 
+    // SAVES THE CURRENT PROFILE DATA INCLUDING BACKGROUND AND PROFILE PICTURE URLS
     saveCurrentProfile() {
         const selector = document.getElementById('profile-selector');
         if (!selector || !selector.value) {
@@ -199,6 +203,7 @@ class ProfileManager {
         alert(`💾 Profile saved!`);
     }
     
+    // SYNCHRONIZES THE PUBLIC PROFILE DATA TO FIREBASE FOR SHARING
     async syncPublicProfileToFirebase(profileData) {
         try {
             const currentUser = window.ProfileDetector?.getCurrentUser();
@@ -216,17 +221,13 @@ class ProfileManager {
                 if (oldProfileData) {
                     window.ProfileManager.getCurrentProfileData = oldProfileData;
                 }
-                
-                if (success) {
-                } else {
-                }
-            } else {
             }
         } catch (error) {
             console.error('❌ Erreur synchronisation profil Public:', error);
         }
     }
 
+    // LOADS A SELECTED PROFILE AND APPLIES ITS CUSTOMIZATIONS
     loadProfile() {
         const selector = document.getElementById('profile-selector');
         if (!selector || !selector.value) {
@@ -259,6 +260,7 @@ class ProfileManager {
         alert(`📂 Profile loaded!`);
     }
 
+    // DELETES A SELECTED PROFILE AND HANDLES DEFAULT PROFILE REASSIGNMENT
     deleteProfile() {
         const selector = document.getElementById('profile-selector');
         if (!selector || !selector.value) {
@@ -308,11 +310,11 @@ class ProfileManager {
         alert(`🗑️ Profile "${profileName}" deleted!`);
     }
 
+    // LOADS THE DEFAULT PROFILE EARLY IN THE PAGE LIFECYCLE TO PREVENT FLASHING
     earlyLoadDefaultProfile() {
         const userModePreference = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
         const forceWorseMode = localStorage.getItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
         
-        // Si on est en mode worse ou force worse, NE JAMAIS charger d'images perso
         if (forceWorseMode === 'true' || userModePreference === 'worse') {
             if (forceWorseMode === 'true') {
                 localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
@@ -322,7 +324,6 @@ class ProfileManager {
         }
         
         setTimeout(() => {
-            // Double vérification pour éviter les race conditions
             const currentMode = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
             if (currentMode === 'worse') {
                 document.documentElement.style.visibility = 'visible';
@@ -338,6 +339,7 @@ class ProfileManager {
         }, 50);
     }
 
+    // APPLIES EARLY CUSTOMIZATIONS FROM DEFAULT PROFILE TO PREVENT VISUAL FLASHING
     applyEarlyCustomizations() {
         const defaultProfileId = this.getDefaultProfile();
         if (!defaultProfileId) {
@@ -376,16 +378,13 @@ class ProfileManager {
         }, 100);
     }
 
+    // APPLIES PROFILE CUSTOMIZATIONS WHEN VIEWING OWN PROFILE
     applyOwnProfileCustomizations() {
-        // ✅ Vérifier qu'on doit appliquer les personnalisations
         if (!this.shouldApplyCustomizations()) {
-            console.log('⚠️ Ne pas appliquer les personnalisations (pas son profil)');
             return;
         }
         
-        // ✅ Vérifier qu'on est en mode Better
         if (!window.ThemeManager || !window.ThemeManager.isDark) {
-            console.log('⚠️ Mode Worse actif, ne pas appliquer les personnalisations');
             return;
         }
         
@@ -393,48 +392,38 @@ class ProfileManager {
         this.loadDefaultProfileOnStartup();
     }
 
+    // REMOVES ALL PROFILE CUSTOMIZATIONS WHEN NOT VIEWING OWN PROFILE
     removeCustomizations() {
-        console.log('🧹 ProfileManager.removeCustomizations() appelée');
-        
-        // ✅ 1. Vérifier qu'on est bien en mode "Worse" avant de supprimer
         if (window.ThemeManager && window.ThemeManager.isDark) {
-            console.log('⚠️ Mode Better actif, ne pas supprimer les personnalisations');
             return;
         }
         
-        // ✅ 2. Utiliser BackgroundManager pour nettoyer proprement
         if (window.BackgroundManager) {
             window.BackgroundManager.removeAllCustomizations();
         }
         
-        // ✅ 3. Supprimer la classe dark-theme seulement si vraiment en mode Worse
         if (!this.shouldApplyCustomizations()) {
             document.body.classList.remove('dark-theme');
         }
-        
-        console.log('✅ ProfileManager personnalisations supprimées');
     }
 
+    // RESETS ALL BACKGROUND ELEMENTS TO THEIR DEFAULT STATE
     resetBackgroundElements() {
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach(el => {
-            // Supprimer les iframes YouTube personnalisées
             const iframes = el.querySelectorAll('iframe[src*="youtube"]');
             iframes.forEach(iframe => iframe.remove());
             
-            // Restaurer le contenu original si il y a eu du wrapping pour YouTube
             const contentDiv = el.querySelector('div[style*="z-index:2"]');
             if (contentDiv) {
                 el.innerHTML = contentDiv.innerHTML;
             }
             
-            // Supprimer TOUS les styles inline de background-image pour laisser le CSS par défaut
             el.style.removeProperty('background-image');
             el.style.removeProperty('background-size');
             el.style.removeProperty('background-position');
             el.style.removeProperty('background-repeat');
             
-            // Nettoyer l'attribut style s'il contient des background-image
             const style = el.getAttribute('style') || '';
             if (style.includes('background-image:')) {
                 const newStyle = style.replace(/background-image:[^;]*;?/g, '').trim();
@@ -447,16 +436,15 @@ class ProfileManager {
         });
     }
 
+    // RESETS ALL PROFILE PICTURE ELEMENTS TO THEIR DEFAULT STATE
     resetProfilePicElements() {
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         pfpElements.forEach(el => {
-            // Supprimer TOUS les styles inline de background-image pour laisser le CSS par défaut
             el.style.removeProperty('background-image');
             el.style.removeProperty('background-size');
             el.style.removeProperty('background-position');
             el.style.removeProperty('background-repeat');
             
-            // Nettoyer l'attribut style s'il contient des background-image
             const style = el.getAttribute('style') || '';
             if (style.includes('background-image:')) {
                 const newStyle = style.replace(/background-image:[^;]*;?/g, '').trim();
@@ -469,19 +457,17 @@ class ProfileManager {
         });
     }
 
+    // FORCES DEFAULT STYLES TO BE REAPPLIED BY TRIGGERING A REFLOW
     forceDefaultStyles() {
-        // Forcer la réapplication des styles CSS par défaut en déclenchant un reflow
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         
         [...bgElements, ...pfpElements].forEach(el => {
-            // Forcer un reflow pour que les styles CSS par défaut se réappliquent
             const display = el.style.display;
             el.style.display = 'none';
-            el.offsetHeight; // Force reflow
+            el.offsetHeight;
             el.style.display = display || '';
             
-            // S'assurer qu'aucun style inline de background ne reste
             el.style.removeProperty('background');
             el.style.removeProperty('background-image');
             el.style.removeProperty('background-size');

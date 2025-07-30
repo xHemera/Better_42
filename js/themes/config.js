@@ -1,4 +1,3 @@
-// config.js - Configuration centralisée des thèmes
 
 const THEME_CONFIG = {
     // Clés de stockage
@@ -120,6 +119,7 @@ const THEME_CONFIG = {
 
     // Utilitaires pour les couleurs
     COLOR_UTILS: {
+        // CONVERTS HEX COLOR TO RGB OBJECT
         hexToRgb(hex) {
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             return result ? {
@@ -129,10 +129,12 @@ const THEME_CONFIG = {
             } : null;
         },
 
+        // CONVERTS RGB VALUES TO HEX COLOR STRING
         rgbToHex(r, g, b) {
             return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
         },
 
+        // LIGHTENS HEX COLOR BY SPECIFIED PERCENTAGE
         lighten(hex, percent) {
             const rgb = this.hexToRgb(hex);
             if (!rgb) return hex;
@@ -145,6 +147,7 @@ const THEME_CONFIG = {
             );
         },
 
+        // DARKENS HEX COLOR BY SPECIFIED PERCENTAGE
         darken(hex, percent) {
             const rgb = this.hexToRgb(hex);
             if (!rgb) return hex;
@@ -157,12 +160,14 @@ const THEME_CONFIG = {
             );
         },
 
+        // GENERATES RGBA COLOR STRING FROM HEX WITH OPACITY
         generateAlpha(hex, opacity) {
             const rgb = this.hexToRgb(hex);
             if (!rgb) return `rgba(0, 0, 0, ${opacity})`;
             return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
         },
 
+        // GENERATES COMPLETE THEME OBJECT FROM BASE COLOR
         generateThemeFromBase(baseColor, name, emoji) {
             const utils = THEME_CONFIG.COLOR_UTILS;
             return {

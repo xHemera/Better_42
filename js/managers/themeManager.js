@@ -5,12 +5,10 @@ class ThemeManager {
         this.intervalId = null;
     }
 
+    // INITIALIZE THEME MANAGER
     init() {
-        console.log('[Better42] ThemeManager.init() called');
         const userModePreference = localStorage.getItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE);
         const forceWorseMode = localStorage.getItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
-        console.log('[Better42] userModePreference:', userModePreference);
-        console.log('[Better42] forceWorseMode:', forceWorseMode);
         
         if (forceWorseMode === 'true') {
             localStorage.removeItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE);
@@ -26,20 +24,17 @@ class ThemeManager {
         }
         
         const hasDefaultProfile = window.ProfileManager.getDefaultProfile();
-        console.log('[Better42] hasDefaultProfile:', hasDefaultProfile);
         this.isDark = !!hasDefaultProfile; 
-        console.log('[Better42] ThemeManager.isDark set to:', this.isDark);
         
         if (this.isDark) {
-            console.log('[Better42] Activating dark mode...');
             localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'better');
             this.activateDarkModeWithoutSaving();
         } else {
-            console.log('[Better42] Setting worse mode...');
             localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         }
     }
 
+    // ACTIVATE DARK THEME MODE
     activateDarkMode() {
         document.body.classList.add('dark-theme');
         this.isDark = true;
@@ -50,7 +45,7 @@ class ThemeManager {
         }
         
         this.updateLogtime();
-        this.updateButtonColors(); // Ajout de la méthode
+        this.updateButtonColors();
         this.startLogtimeWatcher();
         
         if (window.LogtimeStatsManager) {
@@ -59,24 +54,22 @@ class ThemeManager {
             }, 500);
         }
         
-        // Restaurer les images du profil par défaut
         setTimeout(() => {
             window.ProfileManager.loadDefaultProfileOnStartup();
         }, 200);
     }
 
+    // ACTIVATE DARK MODE WITHOUT SAVING PREFERENCE
     activateDarkModeWithoutSaving() {
-        console.log('[Better42] activateDarkModeWithoutSaving() called');
         document.body.classList.add('dark-theme');
         this.isDark = true;
-        console.log('[Better42] dark-theme class added to body');
         
         if (window.ColorThemeManager) {
             window.ColorThemeManager.init();
         }
         
         this.updateLogtime();
-        this.updateButtonColors(); // Ajout de la méthode
+        this.updateButtonColors();
         this.startLogtimeWatcher();
         
         if (window.LogtimeStatsManager) {
@@ -85,53 +78,43 @@ class ThemeManager {
             }, 500);
         }
         
-        // Restaurer les images du profil par défaut
         setTimeout(() => {
             window.ProfileManager.loadDefaultProfileOnStartup();
         }, 200);
     }
 
+    // DEACTIVATE DARK THEME MODE
     deactivateDarkMode() {
-        console.log('🌙 Désactivation du mode sombre...');
         
         document.body.classList.remove('dark-theme');
         this.isDark = false;
         
-        // ✅ 1. Nettoyer les personnalisations d'images PROPREMENT
         if (window.BackgroundManager) {
-            window.BackgroundManager.removeAllCustomizations(); // ✅ Nouvelle méthode sans reload
+            window.BackgroundManager.removeAllCustomizations();
         }
         
-        // ✅ 2. Restaurer le logtime
         this.restoreLogtime();
         this.stopLogtimeWatcher();
         
-        // ✅ 3. Restaurer les éléments SVG stroke-legacy-main et fill-legacy-main
         this.restoreLegacyElements();
         
-        // ✅ 4. Nettoyer les couleurs des boutons
         this.restoreButtonColors();
         
-        // ✅ 5. Détruire LogtimeStatsManager
         if (window.LogtimeStatsManager) {
             window.LogtimeStatsManager.destroy();
         }
         
-        // ✅ 6. Détruire TimeRemainingManager
         if (window.TimeRemainingManager) {
             window.TimeRemainingManager.destroy();
         }
         
-        // ✅ 7. Sauvegarder les préférences
         localStorage.setItem(Better42Config.STORAGE_KEYS.USER_MODE_PREFERENCE, 'worse');
         localStorage.setItem(Better42Config.STORAGE_KEYS.FORCE_WORSE_MODE, 'true');
         
-        // ✅ 8. Ne plus appeler removeCustomizations() qui fait un reload
-        // window.BackgroundManager.removeCustomizations(); // ❌ SUPPRIMÉ
         
-        console.log('✅ Mode sombre désactivé proprement');
     }
 
+    // TOGGLE BETWEEN DARK AND LIGHT THEME
     toggleTheme() {
         if (this.isDark) {
             this.deactivateDarkMode();
@@ -139,7 +122,6 @@ class ThemeManager {
             this.activateDarkMode();
         }
         
-        // Notifier le ClusterMapManager du changement de thème
         if (window.ClusterMapManager) {
             setTimeout(() => {
                 window.ClusterMapManager.onThemeChange();
@@ -147,8 +129,8 @@ class ThemeManager {
         }
     }
 
+    // GET CURRENT THEME COLOR AS RGB VALUES
     getCurrentThemeColor() {
-        // Récupérer directement depuis le localStorage pour éviter les problèmes de timing
         const currentTheme = localStorage.getItem('better42-color-theme') || 'violet';
         
         if (currentTheme === 'custom') {
@@ -161,7 +143,6 @@ class ThemeManager {
             }
         }
         
-        // Couleurs des thèmes prédéfinis
         const themes = {
             violet: '#5c058f',
             blanc: '#e5e5e5',
@@ -180,9 +161,10 @@ class ThemeManager {
             return `${rgb.r}, ${rgb.g}, ${rgb.b}`;
         }
         
-        return '92, 5, 143'; // Fallback violet
+        return '92, 5, 143';
     }
 
+    // CONVERT HEX COLOR TO RGB OBJECT
     hexToRgb(hex) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -192,12 +174,10 @@ class ThemeManager {
         } : null;
     }
 
-    // MÉTHODE MANQUANTE AJOUTÉE
+    // UPDATE BUTTON COLORS ACCORDING TO CURRENT THEME
     updateButtonColors() {
-        // Mettre à jour les couleurs des boutons selon le thème actuel
         const currentColor = this.getCurrentThemeColor();
         
-        // Mettre à jour les boutons de l'interface
         const themeBtn = document.getElementById('theme-switcher');
         const settingsBtn = document.getElementById('settings-btn');
         
@@ -209,12 +189,11 @@ class ThemeManager {
             }
         }
         
-        // Mettre à jour d'autres éléments colorés si nécessaire
         this.updateColoredElements(currentColor);
     }
 
+    // UPDATE ALL COLORED ELEMENTS WITH CURRENT THEME
     updateColoredElements(currentColor) {
-        // Mettre à jour les éléments avec des couleurs dynamiques
         const elementsToUpdate = [
             '.fill-legacy-main',
             '.stroke-legacy-main', 
@@ -238,6 +217,7 @@ class ThemeManager {
         });
     }
 
+    // UPDATE LOGTIME COLORS TO MATCH CURRENT THEME
     updateLogtime() {
         const currentColor = this.getCurrentThemeColor();
         
@@ -280,25 +260,23 @@ class ThemeManager {
         });
     }
 
+    // RESTORE LOGTIME TO ORIGINAL TEAL COLOR
     restoreLogtime() {
-        // Restaurer tous les éléments avec des couleurs custom vers la couleur teal originale
         const allColoredElements = document.querySelectorAll('[style*="rgba("]');
         
         allColoredElements.forEach(el => {
             const style = el.getAttribute('style');
             if (!style) return;
             
-            // Patterns pour toutes les couleurs de thème personnalisées
             const customColorPatterns = [
-                /rgba\(92, 5, 143, ([\d\.]+)\)/g,      // violet
-                /rgba\(30, 64, 175, ([\d\.]+)\)/g,      // bleu
-                /rgba\(190, 24, 93, ([\d\.]+)\)/g,      // rose
-                /rgba\(5, 150, 105, ([\d\.]+)\)/g,      // vert
-                /rgba\(229, 229, 229, ([\d\.]+)\)/g,    // blanc
-                /rgba\(234, 88, 12, ([\d\.]+)\)/g,      // orange
-                /rgba\(220, 38, 38, ([\d\.]+)\)/g,      // rouge
-                /rgba\(8, 145, 178, ([\d\.]+)\)/g,      // cyan
-                // Patterns pour couleurs custom (n'importe quels RGB sauf teal)
+                /rgba\(92, 5, 143, ([\d\.]+)\)/g,
+                /rgba\(30, 64, 175, ([\d\.]+)\)/g,
+                /rgba\(190, 24, 93, ([\d\.]+)\)/g,
+                /rgba\(5, 150, 105, ([\d\.]+)\)/g,
+                /rgba\(229, 229, 229, ([\d\.]+)\)/g,
+                /rgba\(234, 88, 12, ([\d\.]+)\)/g,
+                /rgba\(220, 38, 38, ([\d\.]+)\)/g,
+                /rgba\(8, 145, 178, ([\d\.]+)\)/g,
                 /rgba\((?!0, 186, 188)(\d{1,3}, \d{1,3}, \d{1,3}), ([\d\.]+)\)/g
             ];
             
@@ -318,36 +296,33 @@ class ThemeManager {
         });
     }
 
+    // RESTORE LEGACY ELEMENTS TO ORIGINAL COLORS
     restoreLegacyElements() {
-        // Restaurer stroke-legacy-main vers la couleur teal originale
         const strokeElements = document.querySelectorAll('.stroke-legacy-main');
         strokeElements.forEach(el => {
             el.style.stroke = '';
-            // Retirer le style inline pour revenir au CSS original
         });
         
-        // Restaurer fill-legacy-main vers la couleur teal originale  
+  
         const fillElements = document.querySelectorAll('.fill-legacy-main');
         fillElements.forEach(el => {
             el.style.fill = '';
             el.style.color = '';
         });
         
-        // Restaurer text-legacy-main
         const textElements = document.querySelectorAll('.text-legacy-main');
         textElements.forEach(el => {
             el.style.color = '';
         });
         
-        // Restaurer border-legacy-main
         const borderElements = document.querySelectorAll('.border-legacy-main');
         borderElements.forEach(el => {
             el.style.borderColor = '';
         });
     }
 
+    // RESTORE BUTTON COLORS TO DEFAULT
     restoreButtonColors() {
-        // Restaurer les couleurs des boutons de l'interface
         const settingsBtn = document.getElementById('settings-btn');
         if (settingsBtn) {
             settingsBtn.style.background = '';
@@ -363,6 +338,7 @@ class ThemeManager {
         }
     }
 
+    // START WATCHING FOR LOGTIME CHANGES
     startLogtimeWatcher() {
         if (!this.isDark) return;
         
@@ -388,6 +364,7 @@ class ThemeManager {
         }, 2000);
     }
 
+    // STOP LOGTIME WATCHER
     stopLogtimeWatcher() {
         if (this.observer) {
             this.observer.disconnect();
@@ -400,15 +377,17 @@ class ThemeManager {
         }
     }
 
+    // GET TEXT FOR THEME TOGGLE BUTTON
     getThemeButtonText() {
         return this.isDark ? 'Worse' : 'Better';
     }
 
+    // SYNC WITH COLOR THEME MANAGER
     syncWithColorThemeManager() {
         if (this.isDark && window.ColorThemeManager) {
             setTimeout(() => {
                 this.updateLogtime();
-                this.updateButtonColors(); // Ajout de la méthode
+                this.updateButtonColors();
                 
                 if (window.LogtimeStatsManager) {
                     window.LogtimeStatsManager.refresh();
@@ -417,6 +396,7 @@ class ThemeManager {
         }
     }
 
+    // GET DEBUG INFORMATION FOR THEME MANAGER
     getDebugInfo() {
         return {
             isDark: this.isDark,
@@ -427,14 +407,13 @@ class ThemeManager {
         };
     }
 
+    // FORCE CLEANUP FOR WORSE MODE
     forceCleanupForWorseMode() {
-        // 1. Supprimer IMMÉDIATEMENT toutes les variables CSS violettes
         const rootStyle = document.documentElement.style;
-        rootStyle.removeProperty('--better42-purple');
-        rootStyle.removeProperty('--better42-purple-light');
-        rootStyle.removeProperty('--better42-purple-lighter');
+        rootStyle.removeProperty('--better42-primary');
+        rootStyle.removeProperty('--better42-primary-light');
+        rootStyle.removeProperty('--better42-primary-lighter');
         
-        // 2. Supprimer TOUS les styles injectés par Better42
         const allStyles = document.querySelectorAll('style');
         allStyles.forEach(style => {
             const content = style.textContent;
@@ -449,41 +428,34 @@ class ThemeManager {
             }
         });
 
-        // 3. Nettoyer tous les éléments directement ET restaurer les images par défaut
         const bgSelector = '.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black, .w-full.xl\\:h-72.bg-center.bg-cover';
         const pfpSelector = '.w-52.h-52.text-black.md\\:w-40.md\\:h-40.lg\\:h-28.lg\\:w-28.bg-cover.bg-no-repeat.bg-center.rounded-full';
         
         document.querySelectorAll(`${bgSelector}, ${pfpSelector}`).forEach(el => {
-            // Nettoyer complètement l'élément
             el.removeAttribute('style');
             
-            // Supprimer les iframes YouTube
             el.querySelectorAll('iframe').forEach(iframe => iframe.remove());
             
-            // Restaurer le contenu original
             const wrappedContent = el.querySelector('div[style*="z-index:2"]');
             if (wrappedContent) {
                 el.innerHTML = wrappedContent.innerHTML;
             }
             
-            // FORCER la réapplication des styles CSS par défaut
             const originalDisplay = el.style.display;
             el.style.display = 'none';
-            el.offsetHeight; // Force reflow
+            el.offsetHeight;
             el.style.display = originalDisplay;
             
-            // Forcer les classes à se réappliquer
             const classes = el.className;
             el.className = '';
-            el.offsetHeight; // Force reflow
+            el.offsetHeight;
             el.className = classes;
         });
 
-        // 4. INJECTER un CSS override ultra-fort pour écraser le CSS statique
         const overrideStyle = document.createElement('style');
         overrideStyle.id = 'better42-worse-mode-override';
         overrideStyle.textContent = `
-            /* OVERRIDE TOTAL pour mode worse - priorité maximale */
+            /* OVERRIDE TOTAL pour mode worse - priorite maximale */
             html body #theme-switcher,
             html body #theme-switcher:hover,
             html body #theme-switcher[style],
@@ -503,16 +475,15 @@ class ThemeManager {
                 display: none !important;
             }
             
-            /* Redéfinir les variables CSS pour qu'elles soient grises */
+            /* Redefinir les variables CSS pour qu'elles soient grises */
             :root {
-                --better42-purple: #6b7280 !important;
-                --better42-purple-light: #9ca3af !important;
-                --better42-purple-lighter: #d1d5db !important;
+                --better42-primary: #6b7280 !important;
+                --better42-primary-light: #9ca3af !important;
+                --better42-primary-lighter: #d1d5db !important;
             }
         `;
         document.head.appendChild(overrideStyle);
         
-        // 5. Forcer aussi les styles inline en backup
         const themeBtn = document.getElementById('theme-switcher');
         const settingsBtn = document.getElementById('settings-btn');
         

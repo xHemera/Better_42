@@ -26,11 +26,6 @@
         "assets/css/scrollbar.css"
       ],
       "js": [
-        "js/sync/firebase/lib/firebase-app-compat.js",
-        "js/sync/firebase/lib/firebase-firestore-compat.js",
-        "js/sync/firebase/lib/firebase-auth-compat.js",
-        "js/sync/firebase/config-local.js",
-        "js/sync/firebase/themeSync-local.js",
         "js/sync/themeSyncAPI.js",
         "js/core/config.js",
         "js/detection/urlHelper.js",

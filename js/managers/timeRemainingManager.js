@@ -1,9 +1,11 @@
 class TimeRemainingManager {
+    // INITIALIZES THE TIME REMAINING MANAGER WITH DEFAULT PROPERTIES
     constructor() {
         this.initialized = false;
         this.observer = null;
     }
 
+    // INITIALIZES THE TIME REMAINING MANAGER AND SETS UP ALL OBSERVERS AND BUTTONS
     init() {
         this.initialized = true;
         this.setupObserver();
@@ -11,6 +13,7 @@ class TimeRemainingManager {
         this.addTimeRemainingButton();
     }
 
+    // SETS UP MUTATION OBSERVER TO DETECT WHEN TIME DISPLAY ELEMENTS ARE ADDED TO THE DOM
     setupObserver() {
         if (this.observer) {
             this.observer.disconnect();
@@ -23,7 +26,6 @@ class TimeRemainingManager {
                 if (mutation.type === 'childList') {
                     mutation.addedNodes.forEach((node) => {
                         if (node.nodeType === Node.ELEMENT_NODE) {
-                            // Détecter si le SVG du temps écoulé a été ajouté
                             if (node.querySelector && 
                                 (node.querySelector('text.fill-legacy-main') || 
                                  node.querySelector('text.fill-gray-400'))) {
@@ -47,30 +49,26 @@ class TimeRemainingManager {
         });
     }
 
+    // SETS UP THEME AND COLOR CHANGE OBSERVERS TO UPDATE BUTTON APPEARANCE AND VISIBILITY
     setupThemeObserver() {
-        // Écouter les changements de thème pour supprimer/ajouter le bouton
         document.addEventListener('better42-theme-changed', () => {
             setTimeout(() => {
                 this.handleThemeChange();
             }, 100);
         });
 
-        // Observer les clicks sur le bouton thème
         document.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'theme-switcher') {
-                // Suppression immédiate pour le passage en mode worse
                 this.handleThemeChange();
             }
         });
 
-        // Écouter les changements de couleur custom
         document.addEventListener('better42-color-changed', () => {
             setTimeout(() => {
                 this.updateButtonColors();
             }, 50);
         });
 
-        // Observer les changements dans localStorage pour le thème
         window.addEventListener('storage', (event) => {
             if (event.key === 'better42-color-theme' || event.key === 'better42-custom-color') {
                 setTimeout(() => {
@@ -79,12 +77,10 @@ class TimeRemainingManager {
             }
         });
 
-        // Observer les boutons Apply/Save et les couleurs prédéfinies
         setTimeout(() => {
             this.attachColorObservers();
         }, 1000);
 
-        // Observer aussi quand les éléments sont ajoutés dynamiquement
         const settingsObserver = new MutationObserver(() => {
             this.attachColorObservers();
         });
@@ -95,8 +91,8 @@ class TimeRemainingManager {
         });
     }
 
+    // ATTACHES EVENT LISTENERS TO COLOR CONTROLS FOR REAL-TIME BUTTON COLOR UPDATES
     attachColorObservers() {
-        // Observer le color picker en temps réel
         const colorPicker = document.querySelector('#custom-color-picker');
         if (colorPicker && !colorPicker.hasAttribute('data-time-remaining-listener')) {
             colorPicker.addEventListener('input', () => {
@@ -105,7 +101,6 @@ class TimeRemainingManager {
             colorPicker.setAttribute('data-time-remaining-listener', 'true');
         }
 
-        // Observer le bouton Appliquer
         const applyBtn = document.querySelector('#apply-custom-color');
         if (applyBtn && !applyBtn.hasAttribute('data-time-remaining-listener')) {
             applyBtn.addEventListener('click', () => {
@@ -116,7 +111,6 @@ class TimeRemainingManager {
             applyBtn.setAttribute('data-time-remaining-listener', 'true');
         }
 
-        // Observer le bouton Sauver
         const saveBtn = document.querySelector('#save-custom-color');
         if (saveBtn && !saveBtn.hasAttribute('data-time-remaining-listener')) {
             saveBtn.addEventListener('click', () => {
@@ -127,7 +121,6 @@ class TimeRemainingManager {
             saveBtn.setAttribute('data-time-remaining-listener', 'true');
         }
 
-        // Observer les boutons de couleur prédéfinis
         const colorButtons = document.querySelectorAll('[data-theme]:not([data-time-remaining-listener])');
         colorButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -139,37 +132,34 @@ class TimeRemainingManager {
         });
     }
 
+    // HANDLES THEME CHANGES BY SHOWING OR HIDING THE TIME REMAINING BUTTON
     handleThemeChange() {
-        // Si on est en mode "Worse" (pas de thème sombre), supprimer le bouton
         if (!window.ThemeManager || !window.ThemeManager.isDark) {
             this.removeButton();
         } else {
-            // Si on est en mode "Better", ajouter le bouton
             this.addTimeRemainingButton();
         }
     }
 
+    // REMOVES THE TIME REMAINING BUTTON FROM THE DOM
     removeButton() {
         const button = document.querySelector('.time-remaining-btn');
         if (button) {
-            // Supprimer la transition pour une disparition instantanée
             button.style.transition = 'none !important';
             button.remove();
         }
     }
 
+    // EXTRACTS TIME DATA FROM THE DOM TO CALCULATE REMAINING DAYS
     extractTimeData() {
-        // Chercher les éléments text avec les bonnes classes
         const elapsedElement = document.querySelector('text.fill-legacy-main[font-size="24"]');
         const totalElement = document.querySelector('text.fill-gray-400[font-size="16"]');
         
         if (!elapsedElement || !totalElement) return null;
 
-        // Extraire le nombre de jours écoulés (ex: "157 days")
         const elapsedMatch = elapsedElement.textContent.match(/(\d+)\s*days?/);
         const elapsedDays = elapsedMatch ? parseInt(elapsedMatch[1]) : null;
 
-        // Extraire le total (ex: "On 188")
         const totalMatch = totalElement.textContent.match(/On\s*(\d+)/);
         const totalDays = totalMatch ? parseInt(totalMatch[1]) : null;
 
@@ -184,6 +174,7 @@ class TimeRemainingManager {
         return null;
     }
 
+    // GETS THE CURRENT THEME COLOR AS RGB VALUES FOR STYLING THE BUTTON
     getCurrentThemeColor() {
         const currentTheme = localStorage.getItem('better42-color-theme') || 'violet';
         
@@ -215,13 +206,12 @@ class TimeRemainingManager {
         return themeColors[currentTheme] || '124, 58, 237';
     }
 
+    // ADDS THE TIME REMAINING BUTTON TO THE DOM WITH PROPER STYLING AND POSITIONING
     addTimeRemainingButton() {
-        // Ne pas ajouter le bouton si on n'est pas en mode "Better"
         if (!window.ThemeManager || !window.ThemeManager.isDark) {
             return;
         }
 
-        // Supprimer le bouton existant
         const existingBtn = document.querySelector('.time-remaining-btn');
         if (existingBtn) {
             existingBtn.remove();
@@ -230,7 +220,6 @@ class TimeRemainingManager {
         const timeData = this.extractTimeData();
         if (!timeData) return;
 
-        // Trouver le conteneur du SVG en cherchant par les éléments text
         const elapsedElement = document.querySelector('text.fill-legacy-main[font-size="24"]');
         if (!elapsedElement) return;
 
@@ -240,10 +229,8 @@ class TimeRemainingManager {
         const svgContainer = svg.closest('.flex.flex-col.items-center');
         if (!svgContainer) return;
 
-        // Rendre le conteneur relatif pour le positionnement absolu
         svgContainer.style.position = 'relative';
 
-        // Créer le bouton
         const remainingButton = document.createElement('button');
         remainingButton.className = 'time-remaining-btn';
         
@@ -270,7 +257,6 @@ class TimeRemainingManager {
             white-space: nowrap !important;
         `;
 
-        // Effets hover
         remainingButton.addEventListener('mouseenter', () => {
             remainingButton.style.background = `rgba(${themeColor}, 0.2) !important`;
             remainingButton.style.transform = 'translateX(-50%) translateY(-2px) !important';
@@ -286,16 +272,15 @@ class TimeRemainingManager {
         svgContainer.appendChild(remainingButton);
     }
 
+    // UPDATES THE BUTTON COLORS WHEN THEME OR CUSTOM COLORS CHANGE
     updateButtonColors() {
         const button = document.querySelector('.time-remaining-btn');
         if (!button) return;
 
-        // Récupérer la couleur actuelle (y compris du color picker)
         const currentTheme = localStorage.getItem('better42-color-theme') || 'violet';
         let newColor;
 
         if (currentTheme === 'custom') {
-            // Vérifier d'abord si le color picker est actif
             const colorPicker = document.querySelector('#custom-color-picker');
             if (colorPicker && colorPicker.value) {
                 const hex = colorPicker.value.replace('#', '');
@@ -304,7 +289,6 @@ class TimeRemainingManager {
                 const b = parseInt(hex.substring(4, 6), 16);
                 newColor = `${r}, ${g}, ${b}`;
             } else {
-                // Fallback sur la couleur sauvegardée
                 newColor = this.getCurrentThemeColor();
             }
         } else {
@@ -314,12 +298,14 @@ class TimeRemainingManager {
         button.style.setProperty('color', `rgb(${newColor})`, 'important');
     }
 
+    // REFRESHES THE TIME REMAINING BUTTON IF THE MANAGER IS INITIALIZED
     refresh() {
         if (this.initialized) {
             this.addTimeRemainingButton();
         }
     }
 
+    // DESTROYS THE MANAGER AND CLEANS UP ALL OBSERVERS AND DOM ELEMENTS
     destroy() {
         this.initialized = false;
         

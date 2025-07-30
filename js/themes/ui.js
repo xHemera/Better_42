@@ -1,10 +1,12 @@
 
 class ThemeUI {
+    // INITIALIZES THEME UI COMPONENT WITH STORAGE AND MANAGER REFERENCES
     constructor() {
         this.storage = window.ThemeStorage;
         this.manager = null;
     }
 
+    // CREATES AND RETURNS THE COMPLETE THEME SECTION ELEMENT WITH HTML AND EVENT HANDLERS
     createThemeSection() {
         const section = document.createElement('div');
         section.className = 'settings-section theme-section';
@@ -16,12 +18,11 @@ class ThemeUI {
         return section;
     }
 
-    // HTML de la section thèmes
+    // GENERATES THE HTML CONTENT FOR THE THEME SECTION INCLUDING PREDEFINED AND CUSTOM THEMES
     getThemeSectionHTML() {
         return `
             <h4>🎨 Color Themes</h4>
             
-            <!-- Thèmes prédéfinis -->
             <div class="theme-category">
                 <h5>📦 Predefined Themes</h5>
                 <div class="predefined-themes-grid" id="predefined-themes">
@@ -29,7 +30,6 @@ class ThemeUI {
                 </div>
             </div>
             
-            <!-- Thèmes customs -->
             <div class="theme-category" id="custom-themes-category">
                 <h5>✨ Custom Themes</h5>
                 <div class="custom-themes-container">
@@ -52,7 +52,7 @@ class ThemeUI {
         `;
     }
 
-    // Générer HTML des thèmes prédéfinis
+    // GENERATES HTML FOR PREDEFINED THEMES GRID WITH ACTIVE STATE AND STYLING
     generatePredefinedThemesHTML() {
         const predefinedThemes = window.THEME_CONFIG.PREDEFINED_THEMES;
         const currentTheme = this.storage.getCurrentTheme();
@@ -69,7 +69,7 @@ class ThemeUI {
         }).join('');
     }
 
-    // Générer HTML des thèmes customs
+    // GENERATES HTML FOR CUSTOM THEMES GRID WITH DELETE BUTTONS AND ACTIVE STATE
     generateCustomThemesHTML() {
         const customThemes = this.storage.getCustomThemes();
         const currentTheme = this.storage.getCurrentTheme();
@@ -95,7 +95,7 @@ class ThemeUI {
         }).join('');
     }
 
-    // Injecter les styles CSS pour l'UI des thèmes
+    // INJECTS CSS STYLES FOR THEME UI COMPONENTS INCLUDING RESPONSIVE DESIGN
     injectThemeStyles() {
         if (document.getElementById('theme-ui-styles')) return;
         
@@ -343,14 +343,14 @@ class ThemeUI {
 
             .theme-control-btn {
                 padding: 10px 16px !important;
-                border: 2px solid var(--better42-purple-alpha) !important;
+                border: 2px solid var(--better42-primary-dark-alpha) !important;
                 border-radius: 8px !important;
                 cursor: pointer !important;
                 color: white !important;
                 font-weight: 600 !important;
                 font-size: 12px !important;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                background: var(--better42-purple-alpha-light) !important;
+                background: var(--better42-primary-alpha-dark) !important;
                 backdrop-filter: blur(10px) !important;
                 min-width: 100px !important;
             }
@@ -361,34 +361,33 @@ class ThemeUI {
             }
 
             .create-btn {
-                border-color: var(--better42-purple) !important;
-                background: linear-gradient(135deg, var(--better42-purple-dark), var(--better42-purple)) !important;
+                border-color: var(--better42-primary) !important;
+                background: linear-gradient(135deg, var(--better42-primary-dark), var(--better42-primary)) !important;
             }
 
             .create-btn:hover {
-                background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
+                background: linear-gradient(135deg, var(--better42-primary), var(--better42-primary-light)) !important;
             }
 
             .import-btn {
-                border-color: var(--better42-purple-light) !important;
-                background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
+                border-color: var(--better42-primary-light) !important;
+                background: linear-gradient(135deg, var(--better42-primary), var(--better42-primary-light)) !important;
             }
 
             .import-btn:hover {
-                background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
+                background: linear-gradient(135deg, var(--better42-primary-light), var(--better42-primary-lighter)) !important;
             }
 
             .export-btn {
-                border-color: var(--better42-purple-lighter) !important;
-                background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter)) !important;
+                border-color: var(--better42-primary-lighter) !important;
+                background: linear-gradient(135deg, var(--better42-primary-light), var(--better42-primary-lighter)) !important;
             }
 
             .export-btn:hover {
-                background: linear-gradient(135deg, var(--better42-purple-lighter), var(--better42-purple-light)) !important;
+                background: linear-gradient(135deg, var(--better42-primary-lighter), var(--better42-primary-light)) !important;
                 opacity: 0.9 !important;
             }
 
-            /* Scrollbar pour la section thèmes */
             .theme-section::-webkit-scrollbar {
                 width: 6px !important;
             }
@@ -408,7 +407,7 @@ class ThemeUI {
             }
 
             .primary-btn {
-                background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light)) !important;
+                background: linear-gradient(135deg, var(--better42-primary), var(--better42-primary-light)) !important;
                 color: white !important;
                 border: none !important;
                 padding: 12px 24px !important;
@@ -444,11 +443,13 @@ class ThemeUI {
 }
 
 class ThemeImporter {
+    // INITIALIZES THEME IMPORTER WITH STORAGE REFERENCE AND CALLBACK FUNCTION
     constructor(storage, onThemesImported) {
         this.storage = storage;
         this.onThemesImported = onThemesImported;
     }
 
+    // DISPLAYS FILE INPUT DIALOG FOR IMPORTING THEME FILES
     show() {
         const input = document.createElement('input');
         input.type = 'file';
@@ -462,6 +463,7 @@ class ThemeImporter {
         input.click();
     }
 
+    // PROCESSES IMPORTED THEME FILE AND HANDLES SUCCESS OR ERROR STATES
     handleFileImport(file) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -471,9 +473,11 @@ class ThemeImporter {
                     alert(`✅ Successfully imported ${result.imported} theme(s)!`);
                     this.onThemesImported();
                 } else {
+                    console.error('Import failed:', result.error);
                     alert(`❌ Import failed: ${result.error}`);
                 }
             } catch (error) {
+                console.error('Error reading file:', error.message);
                 alert(`❌ Error reading file: ${error.message}`);
             }
         };

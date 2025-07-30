@@ -1,5 +1,6 @@
 console.log("Better 42 loaded");
 
+// MAIN CONFIGURATION OBJECT FOR BETTER42
 const BETTER42_CONFIG = {
     SELECTORS: {
         BACKGROUND: '.w-full.xl\\:h-72.bg-center.bg-cover.bg-ft-black, .w-full.xl\\:h-72.bg-center.bg-cover',
@@ -20,20 +21,25 @@ const BETTER42_CONFIG = {
     }
 };
 
+// UTILITY FUNCTIONS FOR BETTER42
 const Better42Utils = {
+    // CHECK IF URL IS A YOUTUBE VIDEO
     isYouTubeVideo(url) {
         return url.includes('youtube.com/watch') || url.includes('youtu.be/');
     },
 
+    // EXTRACT YOUTUBE VIDEO ID FROM URL
     extractYouTubeId(url) {
         const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
         return match?.[1];
     },
 
+    // GENERATE YOUTUBE EMBED URL FOR BACKGROUND
     generateYouTubeEmbedUrl(videoId) {
         return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0`;
     },
 
+    // EXECUTE CALLBACK WHEN DOM IS READY
     onDOMReady(callback) {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', callback);
@@ -42,6 +48,7 @@ const Better42Utils = {
         }
     },
 
+    // INJECT CSS STYLES INTO DOCUMENT HEAD
     injectStyles(css) {
         const style = document.createElement('style');
         style.textContent = css;

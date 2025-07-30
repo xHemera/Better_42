@@ -2,51 +2,51 @@
 
 body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\.5.px-2.cursor-pointer.text-xs.uppercase,
 body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\.5.px-1.cursor-pointer.text-xs.uppercase {
-    color: var(--better42-purple) !important;
-    border-color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
+    border-color: var(--better42-primary) !important;
 }
 
 /* PROJECT IN PROGRESS */
 body.dark-theme .block.px-2\.5.py-2.font-medium.hover\:text-teal-700.text-legacy-main {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 body.dark-theme .block.px-2\.5.py-2.font-medium.hover\:text-teal-700.text-legacy-main:hover {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 /* MARKS / ACHIVEMENTS */
 body.dark-theme .text-legacy-main.hover\:underline {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 body.dark-theme .text-legacy-main.hover\:underline:hover {
     text-decoration: underline !important;
-    color: var(--better42-purple-dark) !important;
+    color: var(--better42-primary-dark) !important;
 }
 
 /* ALL MARKS */
 body.dark-theme .cursor-pointer.text-xs.uppercase.font-bold.hover\:text-legacy-main.text-legacy-main {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 body.dark-theme .cursor-pointer.text-xs.uppercase.font-bold.hover\:text-legacy-main.text-legacy-main:hover {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 body.dark-theme .font-bold.text-legacy-main {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
 }
 
 /* PENDING EVALUATION */
 body.dark-theme .border.grow.text-base.text-legacy-main {
-    color: var(--better42-purple) !important;
+    color: var(--better42-primary) !important;
     border: none !important;
 }
 
 /* ALL ACHIVEMENT */
 body.dark-theme svg[stroke="hsl(var(--legacy-main))"] {
-    stroke: var(--better42-purple) !important;
+    stroke: var(--better42-primary) !important;
 }
 
 /* LAST ACHIVEMENT */

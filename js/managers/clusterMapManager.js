@@ -1,4 +1,5 @@
 class ClusterMapManager {
+    // INITIALIZE CLUSTER MAP MANAGER WITH DEFAULT ZOOM AND DRAG SETTINGS
     constructor() {
         this.currentZoom = 1;
         this.minZoom = 1;
@@ -13,6 +14,7 @@ class ClusterMapManager {
         this.translateY = 0;
     }
 
+    // INITIALIZE THE CLUSTER MAP MANAGER WITH DELAYED LOADING
     init() {
         if (!this.shouldApplyToCurrentPage()) return;
         
@@ -29,12 +31,12 @@ class ClusterMapManager {
         }, 3000);
     }
 
+    // CHECK IF ZOOM CONTROLS SHOULD BE DISPLAYED BASED ON THEME
     shouldShowControls() {
-        // Seulement si on est en mode Better (dark theme)
         return window.ThemeManager && window.ThemeManager.isDark;
     }
 
-    // Méthode pour supprimer les contrôles si on passe en mode Worse
+    // REMOVE ALL ZOOM CONTROLS AND RESET ZOOM STATE
     removeControls() {
         const controls = document.querySelector('.cluster-zoom-controls');
         if (controls) {
@@ -58,27 +60,26 @@ class ClusterMapManager {
         
     }
 
-    // Méthode pour réagir aux changements de thème
+    // HANDLE THEME CHANGES BY ADDING OR REMOVING CONTROLS
     onThemeChange() {
         if (this.shouldShowControls() && !this.controlsAdded) {
-            // Passer en mode Better - ajouter les contrôles
             this.findAndEnhanceClusterMap();
         } else if (!this.shouldShowControls() && this.controlsAdded) {
-            // Passer en mode Worse - supprimer les contrôles
             this.removeControls();
         }
     }
 
+    // CHECK IF CURRENT PAGE SHOULD HAVE CLUSTER MAP FUNCTIONALITY
     shouldApplyToCurrentPage() {
         return window.location.hostname === 'meta.intra.42.fr' || 
                window.location.pathname.includes('cluster');
     }
 
+    // FIND CLUSTER MAP ELEMENT AND ADD ZOOM FUNCTIONALITY
     findAndEnhanceClusterMap() {
         const clusterMap = document.getElementById('cluster-map');
         if (!clusterMap || this.controlsAdded) return;
         
-        // Vérifier à nouveau si on doit afficher les contrôles
         if (!this.shouldShowControls()) return;
         
         const svgElements = clusterMap.querySelectorAll('svg');
@@ -89,11 +90,11 @@ class ClusterMapManager {
         this.addZoomStyles();
         this.controlsAdded = true;
         
-        // Appliquer le zoom initial
         this.applyZoom();
         
     }
 
+    // ADD ZOOM CONTROL BUTTONS AND UI TO THE CLUSTER MAP
     addZoomControls(container) {
         const controlsDiv = document.createElement('div');
         controlsDiv.className = 'cluster-zoom-controls';
@@ -115,6 +116,7 @@ class ClusterMapManager {
         this.attachZoomEvents();
     }
 
+    // ATTACH EVENT LISTENERS FOR ZOOM CONTROLS AND INTERACTIONS
     attachZoomEvents() {
         const zoomResetBtn = document.getElementById('zoom-reset');
 
@@ -128,6 +130,7 @@ class ClusterMapManager {
         }
     }
 
+    // INCREASE ZOOM LEVEL WITHIN MAXIMUM LIMITS
     zoomIn() {
         if (this.currentZoom < this.maxZoom) {
             this.currentZoom = Math.min(this.maxZoom, this.currentZoom + this.zoomStep);
@@ -135,6 +138,7 @@ class ClusterMapManager {
         }
     }
 
+    // DECREASE ZOOM LEVEL WITHIN MINIMUM LIMITS
     zoomOut() {
         if (this.currentZoom > this.minZoom) {
             this.currentZoom = Math.max(this.minZoom, this.currentZoom - this.zoomStep);
@@ -142,6 +146,7 @@ class ClusterMapManager {
         }
     }
 
+    // RESET ZOOM AND POSITION TO DEFAULT VALUES
     resetZoom() {
         this.currentZoom = 1;
         this.translateX = 0;
@@ -149,11 +154,11 @@ class ClusterMapManager {
         this.applyZoom();
     }
 
+    // ADD DRAG AND TOUCH FUNCTIONALITY TO CLUSTER MAP
     addDragFunctionality() {
         const container = this.svgElement.closest('.map-container');
         if (!container) return;
 
-        // Empêcher la sélection de texte lors du glissement
         container.style.userSelect = 'none';
         this.svgElement.style.userSelect = 'none';
 
@@ -162,7 +167,6 @@ class ClusterMapManager {
         container.addEventListener('mouseup', () => this.endDrag());
         container.addEventListener('mouseleave', () => this.endDrag());
 
-        // Touch events pour mobile
         container.addEventListener('touchstart', (e) => this.startDrag(e.touches[0]));
         container.addEventListener('touchmove', (e) => {
             e.preventDefault();
@@ -171,8 +175,9 @@ class ClusterMapManager {
         container.addEventListener('touchend', () => this.endDrag());
     }
 
+    // INITIALIZE DRAG OPERATION WITH STARTING COORDINATES
     startDrag(e) {
-        e.preventDefault(); // Empêcher la sélection de texte
+        e.preventDefault();
         this.isDragging = true;
         this.startX = e.clientX - this.translateX;
         this.startY = e.clientY - this.translateY;
@@ -183,6 +188,7 @@ class ClusterMapManager {
         }
     }
 
+    // HANDLE DRAG MOVEMENT AND UPDATE POSITION
     drag(e) {
         if (!this.isDragging) return;
         
@@ -193,6 +199,7 @@ class ClusterMapManager {
         this.applyZoom();
     }
 
+    // END DRAG OPERATION AND RESET CURSOR
     endDrag() {
         this.isDragging = false;
         
@@ -202,6 +209,7 @@ class ClusterMapManager {
         }
     }
 
+    // HANDLE MOUSE WHEEL ZOOM FUNCTIONALITY
     handleWheelZoom(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -215,6 +223,7 @@ class ClusterMapManager {
         }
     }
 
+    // APPLY CURRENT ZOOM AND POSITION TRANSFORMS TO SVG ELEMENT
     applyZoom() {
         if (!this.svgElement) return;
 
@@ -231,6 +240,7 @@ class ClusterMapManager {
         this.updateButtonStates();
     }
 
+    // UPDATE ZOOM PERCENTAGE DISPLAY IN UI
     updateZoomDisplay() {
         const zoomPercentage = document.getElementById('zoom-percentage');
         if (zoomPercentage) {
@@ -238,10 +248,12 @@ class ClusterMapManager {
         }
     }
 
+    // UPDATE ZOOM BUTTON STATES BASED ON CURRENT ZOOM LEVEL
     updateButtonStates() {
-        // Plus besoin de gérer les états des boutons + et -
+        
     }
 
+    // ADD CSS STYLES FOR ZOOM CONTROLS AND INTERACTIONS
     addZoomStyles() {
         const existingStyle = document.getElementById('cluster-zoom-styles');
         if (existingStyle) return;
@@ -368,16 +380,16 @@ class ClusterMapManager {
 
             body.dark-theme .cluster-zoom-controls {
                 background: var(--better42-bg-dark);
-                border-color: var(--better42-purple);
+                border-color: var(--better42-primary);
             }
 
             body.dark-theme .zoom-reset-btn {
-                background: linear-gradient(135deg, var(--better42-purple), var(--better42-purple-light));
+                background: linear-gradient(135deg, var(--better42-primary), var(--better42-primary-light));
             }
 
             body.dark-theme .zoom-reset-btn:hover {
-                background: linear-gradient(135deg, var(--better42-purple-light), var(--better42-purple-lighter));
-                box-shadow: 0 4px 12px var(--better42-purple-alpha));
+                background: linear-gradient(135deg, var(--better42-primary-light), var(--better42-primary-lighter));
+                box-shadow: 0 4px 12px var(--better42-primary-dark-alpha));
             }
 
             @media (max-width: 768px) {

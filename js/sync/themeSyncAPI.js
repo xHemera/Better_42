@@ -1,4 +1,5 @@
 
+// CHECKS FOR THEME SYNC FUNCTIONALITY AND AVAILABLE PROPERTIES
 window.checkThemeSync = function() {
     
     const contexts = [window, document, document.body];
@@ -6,8 +7,6 @@ window.checkThemeSync = function() {
         const themeSyncKeys = Object.getOwnPropertyNames(ctx).filter(name => 
             name.toLowerCase().includes('theme') || name.toLowerCase().includes('sync')
         );
-        if (themeSyncKeys.length > 0) {
-        }
     });
     
     if (window.ThemeSync) {
@@ -17,6 +16,7 @@ window.checkThemeSync = function() {
     }
 };
 
+// SHARES CURRENT THEME TO SPECIFIED USERNAME WITH PUBLIC OPTION
 window.shareMyTheme = function(username, isPublic = true) {
     
     if (window.ThemeSync && typeof window.ThemeSync.shareMyTheme === 'function') {
@@ -28,9 +28,10 @@ window.shareMyTheme = function(username, isPublic = true) {
     });
     document.dispatchEvent(event);
     
-    return 'Demande envoyée via événement';
+    return 'Request sent via event';
 };
 
+// LOADS THEME FROM SPECIFIED USERNAME
 window.loadUserTheme = function(username) {
     
     if (window.ThemeSync && typeof window.ThemeSync.autoLoadThemeForUser === 'function') {
@@ -42,6 +43,6 @@ window.loadUserTheme = function(username) {
     });
     document.dispatchEvent(event);
     
-    return 'Demande de chargement envoyée';
+    return 'Load request sent';
 };
 

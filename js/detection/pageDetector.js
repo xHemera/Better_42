@@ -3,11 +3,13 @@ class PageDetector {
         this.isInitialized = false;
     }
 
+    // INITIALIZE PAGE DETECTOR
     init() {
         if (this.isInitialized) return;
         this.isInitialized = true;
     }
 
+    // CHECK IF CURRENT DOMAIN IS SUPPORTED
     isSupported() {
         const supportedDomains = [
             'profile-v3.intra.42.fr',
@@ -20,6 +22,7 @@ class PageDetector {
         return supportedDomains.includes(window.location.hostname);
     }
 
+    // GET CONFIGURATION FOR CURRENT PAGE
     getPageConfig() {
         return {
             showSettings: true,
