@@ -157,7 +157,7 @@ div#settings-btn,
     clip-path: none !important;
 } */
 
-.py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg {
+/* .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40:hover svg {
     stroke: #8b5cf6 !important;
 }
 
@@ -171,4 +171,31 @@ div#settings-btn,
 
 .py-5.w-full.flex.justify-center.hover\:opacity-100.opacity-40 svg path {
     stroke: #124396 !important;
+} */
+
+.container-item {
+    background-color: var(--better42-bg-secondary) !important;
+    border-color: var(--better42-bg-secondary) !important;
+}
+
+.project-name {
+    color: var(--better42-gray-lighter) !important;
+}
+
+.project-item[data-registration="not_registered"] .project-name a {
+    color: var(--better42-primary) !important;
+}
+
+.project-duration,
+.project-difficulty,
+.project-registration-container {
+    color: var(--better42-text-light) !important;
+}
+
+.btn--action.filter-trigger.active.default-filter {
+    color: var(--better42-primary) !important;
+}
+
+a.iconf-setting-gear {
+  color: var(--better42-primary) !important;
 }

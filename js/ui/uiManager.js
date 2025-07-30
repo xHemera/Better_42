@@ -74,7 +74,7 @@ class UIManager {
         
         this.settingsBtn = document.createElement('button');
         this.settingsBtn.id = 'settings-btn';
-        this.settingsBtn.innerHTML = '⚙️';
+        this.settingsBtn.innerHTML = '⚙︎';
         
         this.settingsBtn.style.cssText = `
             position: fixed !important;
