@@ -45,6 +45,7 @@
         "js/managers/clusterMapManager.js",
         "js/managers/logtimeStatsManager.js",
         "js/managers/timeRemainingManager.js",
+        "js/managers/evaluationManager.js",
         "js/managers/sectionStyleManager.js",
         "js/ui/uiManager.js",
         "main.js"

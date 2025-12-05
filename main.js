@@ -84,10 +84,22 @@ class Better42App {
             }, 150);
 
             setTimeout(() => {
+                if (window.EvaluationManager) {
+                    window.EvaluationManager.init();
+                }
+            }, 180);
+
+            setTimeout(() => {
                 if (window.ProfileManager && window.ProfileManager.loadDefaultProfileOnStartup) {
                     window.ProfileManager.loadDefaultProfileOnStartup();
                 }
             }, 200);
+
+            setTimeout(() => {
+                if (window.BackgroundManager) {
+                    window.BackgroundManager.loadSavedBackground();
+                }
+            }, 250);
 
             setTimeout(() => {
                 document.documentElement.style.visibility = 'visible';
@@ -148,6 +160,7 @@ class Better42App {
             try {
                 if (window.BackgroundManager) {
                     window.BackgroundManager.recaptureDefaultImages();
+                    window.BackgroundManager.loadSavedBackground();
                 }
                 if (window.UIManager) {
                     window.UIManager.refreshUI();
@@ -180,6 +193,11 @@ class Better42App {
                     setTimeout(() => {
                         window.TimeRemainingManager.refresh();
                     }, 400);
+                }
+                if (window.EvaluationManager) {
+                    setTimeout(() => {
+                        window.EvaluationManager.refresh();
+                    }, 450);
                 }
             } catch (error) {
                 console.error('Error during page change:', error);

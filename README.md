@@ -141,11 +141,12 @@ Créez vos propres thèmes avec :
 
 ### Autres Fonctionnalités
 
+- **👤 Photos de Profil dans les Évaluations** - Affiche automatiquement les photos de profil des personnes à évaluer avec animation au survol
 - **Mode Sombre Optimisé** - Texte blanc/clair automatique pour une lisibilité maximale
 - **Partage de thèmes** - Exportez et partagez vos créations avec la communauté
 - **Styles pour différentes pages** de l'intranet 42 :
   - Profile V3
-  - Meta
+  - Meta (avec support des évaluations)
   - Companies
   - E-learning
   - Projects

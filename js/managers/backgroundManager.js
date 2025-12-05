@@ -5,7 +5,7 @@ class BackgroundManager {
             backgrounds: new Map(),
             profilePics: new Map()
         };
-        
+
         this.captureDefaultImages();
     }
 
@@ -28,7 +28,7 @@ class BackgroundManager {
                 const computedStyle = window.getComputedStyle(el);
                 const backgroundImage = computedStyle.backgroundImage;
                 const styleAttr = el.getAttribute('style') || '';
-                
+
                 this.defaultImages.backgrounds.set(index, {
                     element: el,
                     computedBackgroundImage: backgroundImage,
@@ -48,7 +48,7 @@ class BackgroundManager {
                 const computedStyle = window.getComputedStyle(el);
                 const backgroundImage = computedStyle.backgroundImage;
                 const styleAttr = el.getAttribute('style') || '';
-                
+
                 this.defaultImages.profilePics.set(index, {
                     element: el,
                     computedBackgroundImage: backgroundImage,
@@ -62,16 +62,16 @@ class BackgroundManager {
     // CREATES UNIQUE CSS SELECTOR FOR GIVEN DOM ELEMENT
     _getElementSelector(element) {
         if (element.id) return `#${element.id}`;
-        
+
         let selector = element.tagName.toLowerCase();
         if (element.className) {
             selector += '.' + element.className.split(' ').join('.');
         }
-        
+
         const parent = element.parentElement;
         if (parent) {
-            const siblings = Array.from(parent.children).filter(child => 
-                child.tagName === element.tagName && 
+            const siblings = Array.from(parent.children).filter(child =>
+                child.tagName === element.tagName &&
                 child.className === element.className
             );
             if (siblings.length > 1) {
@@ -79,7 +79,7 @@ class BackgroundManager {
                 selector += `:nth-of-type(${index + 1})`;
             }
         }
-        
+
         return selector;
     }
 
@@ -89,37 +89,53 @@ class BackgroundManager {
             return;
         }
 
+        // Save the URL to localStorage
+        if (url && url.trim() !== '') {
+            localStorage.setItem('better42-current-background-url', url);
+        }
+
         if (Better42Utils.isYouTubeVideo(url)) {
             this._applyYouTubeBackground(url);
             return;
         }
-        
+
         this._applyImageBackground(url);
+    }
+
+    // LOADS AND APPLIES SAVED BACKGROUND FROM LOCALSTORAGE
+    loadSavedBackground() {
+        const savedUrl = localStorage.getItem('better42-current-background-url');
+        if (savedUrl && window.ThemeManager && window.ThemeManager.isDark) {
+            setTimeout(() => {
+                this.applyCustomBackground(savedUrl);
+            }, 500);
+        }
     }
 
     // APPLIES YOUTUBE VIDEO AS BACKGROUND TO BACKGROUND ELEMENTS
     _applyYouTubeBackground(url) {
         const videoId = Better42Utils.extractYouTubeId(url);
         if (!videoId) return;
-        
+
         const embedUrl = Better42Utils.generateYouTubeEmbedUrl(videoId);
-        
+
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         bgElements.forEach((el, index) => {
             if (!this.defaultImages.backgrounds.has(index)) {
                 this._captureElementDefaults(el, index, 'backgrounds');
             }
-            
+
             const originalContent = el.innerHTML;
-            
+
             el.innerHTML = `
-                <iframe src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;z-index:1;pointer-events:none;"></iframe>
-                <div style="position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;justify-content:inherit;align-items:inherit;">${originalContent}</div>
+                <iframe src="${embedUrl}" style="position:absolute;top:50%;left:50%;width:177.77777778vh;height:56.25vw;min-height:100%;min-width:100%;transform:translate(-50%,-50%);border:none;z-index:1;pointer-events:none;"></iframe>
+                <div style="position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;justify-content:inherit;align-items:inherit;padding:0 2rem 12rem 2rem;">${originalContent}</div>
             `;
             el.style.position = 'relative';
             el.style.overflow = 'hidden';
             el.style.backgroundImage = 'none';
-            
+            el.style.padding = '0';
+
             el.setAttribute('data-better42-modified', 'true');
             el.setAttribute('data-better42-element-index', index);
         });
@@ -137,15 +153,15 @@ class BackgroundManager {
             if (contentDiv) {
                 el.innerHTML = contentDiv.innerHTML;
             }
-            
+
             const style = el.getAttribute('style') || '';
             if (style.includes('background-image: url')) {
                 const newStyle = style.replace(/background-image: url\([^)]+\)/g, `background-image: url("${url}")`);
-                el.setAttribute('style', newStyle);
+                el.setAttribute('style', newStyle + '; background-size: cover !important; background-position: center !important;');
             } else {
-                el.setAttribute('style', style + ` background-image: url("${url}");`);
+                el.setAttribute('style', style + ` background-image: url("${url}"); background-size: cover !important; background-position: center !important;`);
             }
-            
+
             el.setAttribute('data-better42-modified', 'true');
             el.setAttribute('data-better42-element-index', index);
         });
@@ -170,7 +186,7 @@ class BackgroundManager {
             } else {
                 el.setAttribute('style', style + ` background-image: url("${url}");`);
             }
-            
+
             el.setAttribute('data-better42-modified', 'true');
             el.setAttribute('data-better42-element-index', index);
         });
@@ -181,7 +197,7 @@ class BackgroundManager {
         const computedStyle = window.getComputedStyle(element);
         const backgroundImage = computedStyle.backgroundImage;
         const styleAttr = element.getAttribute('style') || '';
-        
+
         this.defaultImages[type].set(index, {
             element: element,
             computedBackgroundImage: backgroundImage,
@@ -205,12 +221,12 @@ class BackgroundManager {
             if (el.matches(Better42Config.SELECTORS.BACKGROUND.split(', ').join(', '))) {
                 const elementIndex = parseInt(el.getAttribute('data-better42-element-index')) || 0;
                 const defaultData = this.defaultImages.backgrounds.get(elementIndex);
-                
+
                 if (defaultData) {
                     if (defaultData.originalInnerHTML) {
                         el.innerHTML = defaultData.originalInnerHTML;
                     }
-                    
+
                     if (defaultData.originalStyleAttr) {
                         el.setAttribute('style', defaultData.originalStyleAttr);
                     } else if (defaultData.computedBackgroundImage && defaultData.computedBackgroundImage !== 'none') {
@@ -221,7 +237,7 @@ class BackgroundManager {
                 } else {
                     this._cleanupElement(el);
                 }
-                
+
                 el.removeAttribute('data-better42-modified');
                 el.removeAttribute('data-better42-element-index');
             }
@@ -237,7 +253,7 @@ class BackgroundManager {
                     }
                 }
             }
-            
+
             const iframes = el.querySelectorAll('iframe[src*="youtube"]');
             iframes.forEach(iframe => iframe.remove());
         });
@@ -250,7 +266,7 @@ class BackgroundManager {
             if (el.matches(Better42Config.SELECTORS.PROFILE_PIC)) {
                 const elementIndex = parseInt(el.getAttribute('data-better42-element-index')) || 0;
                 const defaultData = this.defaultImages.profilePics.get(elementIndex);
-                
+
                 if (defaultData) {
                     if (defaultData.originalStyleAttr) {
                         el.setAttribute('style', defaultData.originalStyleAttr);
@@ -262,7 +278,7 @@ class BackgroundManager {
                 } else {
                     this._cleanupElement(el);
                 }
-                
+
                 el.removeAttribute('data-better42-modified');
                 el.removeAttribute('data-better42-element-index');
             }
@@ -285,8 +301,8 @@ class BackgroundManager {
     _elementNeedsRestoration(element) {
         const style = element.getAttribute('style');
         const computedStyle = window.getComputedStyle(element);
-        
-        return (!style || !style.includes('background-image')) && 
+
+        return (!style || !style.includes('background-image')) &&
                (!computedStyle.backgroundImage || computedStyle.backgroundImage === 'none');
     }
 
@@ -301,7 +317,7 @@ class BackgroundManager {
                 element.setAttribute('style', cleanedStyle);
             }
         }
-        
+
         const iframes = element.querySelectorAll('iframe[src*="youtube"]');
         iframes.forEach(iframe => iframe.remove());
     }
@@ -311,7 +327,7 @@ class BackgroundManager {
         const injectedStyles = document.querySelectorAll('style');
         injectedStyles.forEach(style => {
             const content = style.textContent || '';
-            if (content.includes('w-full.xl\\:h-72.bg-center.bg-cover') || 
+            if (content.includes('w-full.xl\\:h-72.bg-center.bg-cover') ||
                 content.includes('w-52.h-52.text-black.md\\:w-40.md\\:h-40') ||
                 content.includes('background-image: url') ||
                 content.includes(Better42Config.SELECTORS.BACKGROUND) ||
@@ -340,7 +356,7 @@ class BackgroundManager {
         const modifiedPfp = document.querySelectorAll(`${Better42Config.SELECTORS.PROFILE_PIC}[data-better42-modified]`).length;
         const totalModified = document.querySelectorAll('[data-better42-modified]').length;
         const hasCustomizations = this.hasActiveCustomizations();
-        
+
         return {
             modifiedBackgrounds: modifiedBg,
             modifiedProfilePics: modifiedPfp,
@@ -367,20 +383,20 @@ class BackgroundManager {
     hasActiveCustomizations() {
         const modifiedElements = document.querySelectorAll('[data-better42-modified]');
         if (modifiedElements.length > 0) return true;
-        
+
         const bgElements = document.querySelectorAll(Better42Config.SELECTORS.BACKGROUND);
         for (const el of bgElements) {
             const style = el.getAttribute('style');
             if (style && style.includes('background-image: url')) return true;
             if (el.querySelector('iframe[src*="youtube"]')) return true;
         }
-        
+
         const pfpElements = document.querySelectorAll(Better42Config.SELECTORS.PROFILE_PIC);
         for (const el of pfpElements) {
             const style = el.getAttribute('style');
             if (style && style.includes('background-image: url')) return true;
         }
-        
+
         return false;
     }
 }

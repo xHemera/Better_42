@@ -84,3 +84,27 @@ body.dark-theme .hover\:text-emerald-500 a {
 body.dark-theme .hover\:text-emerald-500:hover a {
     color: var(--better42-primary) !important;
 }
+
+/* LOGTIME TOTAL TEXT - BETTER CONTRAST */
+body.dark-theme text[font-size="24"],
+body.dark-theme text[class*="fill-legacy-main"],
+body.dark-theme text.fill-legacy-main,
+body.dark-theme svg text[font-size="24"] {
+    fill: #ffffff !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+}
+
+/* LOGTIME SUBTITLE */
+body.dark-theme text[class*="fill-gray"],
+body.dark-theme text.fill-gray-400,
+body.dark-theme svg text[class*="fill-gray"] {
+    fill: #d1d5db !important;
+    opacity: 0.9 !important;
+}
+
+/* FORCE WHITE COLOR ON ALL SVG TEXT IN LOGTIME SECTION */
+body.dark-theme div[class*="logtime"] text,
+body.dark-theme div[class*="LOGTIME"] text {
+    fill: #ffffff !important;
+}

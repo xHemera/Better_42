@@ -1,23 +1,23 @@
 /* -----=====VARIABLES CSS=====----- */
 :root {
-    --better42-primary: #5c058f;
-    --better42-primary-light: #7d1aaa;
-    --better42-primary-lighter: #9d2acc;
-    --better42-primary-dark: #430169;
-    --better42-primary-darker: #2a0241;
-    --better42-primary-dark-alpha: rgba(92, 5, 143, 0.3);
-    --better42-primary-alpha-dark: rgba(92, 5, 143, 0.1);
-    
+    --better42-primary: #868686;
+    --better42-primary-light: #a9a9a9;
+    --better42-primary-lighter: #a4a4a4;
+    --better42-primary-dark: #5d5d5d;
+    --better42-primary-darker: #2d2d2d;
+    --better42-primary-dark-alpha: rgba(34, 34, 34, 0.3);
+    --better42-primary-alpha-dark: rgba(23, 23, 23, 0.1);
+
     --better42-bg-dark: #0f0f0f;
     --better42-bg-secondary: #2a2a2a;
     --better42-text-light: #e5e5e5;
     --better42-text-white: #ffffff;
-    
+
     --better42-red: #ff3535;
     --better42-red-alpha: rgba(255, 53, 53, 0.5);
     --better42-cyan: #00f7ff;
     --better42-cyan-alpha: rgba(0, 247, 255, 0.5);
-    
+
     --better42-gray: #444444;
     --better42-gray-light: #666666;
     --better42-gray-lighter: #888888;

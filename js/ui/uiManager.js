@@ -637,6 +637,9 @@ class UIManager {
         const bgInput = document.getElementById('bg-url-input');
         if (bgInput) bgInput.value = '';
 
+        // Remove saved background URL
+        localStorage.removeItem('better42-current-background-url');
+
         if (window.ProfileManager) {
             window.ProfileManager.resetBackgroundElements();
         }

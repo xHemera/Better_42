@@ -1,9 +1,60 @@
 /* ========== META.INTRA.42.FR STYLES ========== */
 
-/* Prêt pour recevoir les classes spécifiques */
-
-/* Exemple de structure :
-body.dark-theme .classe-specifique {
-    color: var(--better42-primary) !important;
+/* Evaluation Section Enhancements */
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4 {
+    color: var(--better42-text-primary) !important;
 }
-*/
+
+/* Pending Evaluations Section */
+body.dark-theme [class*="PENDING"] {
+    color: var(--better42-text-primary) !important;
+}
+
+/* Evaluation Items */
+body.dark-theme div[class*="flex"][class*="items-center"] {
+    transition: transform 0.2s ease, background-color 0.2s ease !important;
+}
+
+body.dark-theme div[class*="flex"][class*="items-center"]:hover {
+    transform: translateX(5px) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
+}
+
+/* Evaluation Links */
+body.dark-theme a[href*="evaluate"] {
+    color: var(--better42-primary) !important;
+    transition: color 0.2s ease !important;
+}
+
+body.dark-theme a[href*="evaluate"]:hover {
+    color: var(--better42-primary-light) !important;
+}
+
+/* Time Display */
+body.dark-theme [class*="text-gray"] {
+    color: var(--better42-text-secondary) !important;
+}
+
+/* Buttons in Evaluation Section */
+body.dark-theme button[class*="HIDE"],
+body.dark-theme button[class*="FEEDBACK"],
+body.dark-theme button[class*="MANAGE"] {
+    background: linear-gradient(135deg, var(--better42-primary), var(--better42-primary-light)) !important;
+    color: white !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+body.dark-theme button[class*="HIDE"]:hover,
+body.dark-theme button[class*="FEEDBACK"]:hover,
+body.dark-theme button[class*="MANAGE"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
