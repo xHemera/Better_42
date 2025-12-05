@@ -1,14 +1,8 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Better 42",
   "version": "2.0",
-  "description": "Extension for the intranet 42 with advanced theme system and theme sharing",
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "better42@intra42.extension",
-      "strict_min_version": "109.0"
-    }
-  },
+  "description": "Google extensions for the intranet 42 with advanced theme system and theme sharing",
   "content_scripts": [
     {
       "matches": [
@@ -51,7 +45,18 @@
     }
   ],
   "web_accessible_resources": [
-    "assets/css/domains/*.css"
+    {
+      "resources": [
+        "assets/css/domains/*.css"
+      ],
+      "matches": [
+        "https://profile-v3.intra.42.fr/*",
+        "https://meta.intra.42.fr/*", 
+        "https://companies.intra.42.fr/*",
+        "https://elearning.intra.42.fr/*",
+        "https://projects.intra.42.fr/*"
+      ]
+    }
   ],
   "permissions": ["activeTab"]
 }
