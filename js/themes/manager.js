@@ -5,14 +5,16 @@ class ColorThemeManager {
         this.cssGenerator = window.ThemeCSSGenerator;
         this.ui = window.ThemeUI;
         this.currentTheme = null;
-        
-        this.ui.setThemeManager(this);
+
+        if (this.ui) {
+            this.ui.setThemeManager(this);
+        }
     }
 
     // INITIALIZE THEME SYSTEM AND LOAD SAVED THEME
     init() {
         this.storage.cleanup();
-        
+
         this.loadSavedTheme();
     }
 
@@ -20,7 +22,7 @@ class ColorThemeManager {
     loadSavedTheme() {
         const savedThemeId = this.storage.getCurrentTheme();
         const theme = this.storage.getTheme(savedThemeId);
-        
+
         if (theme) {
             this.applyTheme(savedThemeId);
         } else {
@@ -55,14 +57,14 @@ class ColorThemeManager {
         if (!primaryRgb) return;
 
         this.updateLogtimeElements(primaryRgb);
-        
+
         this.updateEventElements(colors);
     }
 
     // UPDATE LOGTIME ELEMENTS WITH PRIMARY COLOR RGB VALUES
     updateLogtimeElements(primaryRgb) {
         const rgbString = `${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}`;
-        
+
         const tealElements = document.querySelectorAll('[style*="rgba(0, 186, 188,"]');
         tealElements.forEach(el => {
             const style = el.getAttribute('style');
@@ -103,7 +105,7 @@ class ColorThemeManager {
         eventElements.forEach(el => {
             const style = el.getAttribute('style');
             const newStyle = style.replace(
-                /background-color: rgb\(162, 179, 229\)/g, 
+                /background-color: rgb\(162, 179, 229\)/g,
                 `background-color: ${colors.primaryAlpha.replace('0.3', '0.5')}`
             );
             if (newStyle !== style) {
@@ -136,7 +138,7 @@ class ColorThemeManager {
     getCurrentThemeRgb() {
         const theme = this.getCurrentThemeData();
         if (!theme) return '92, 5, 143';
-        
+
         const rgb = this.hexToRgb(theme.colors.primary);
         return rgb ? `${rgb.r}, ${rgb.g}, ${rgb.b}` : '92, 5, 143';
     }
@@ -150,7 +152,7 @@ class ColorThemeManager {
     createCustomTheme(name, baseColor, emoji = '✨') {
         const themeData = window.THEME_CONFIG.COLOR_UTILS.generateThemeFromBase(baseColor, name, emoji);
         const themeId = this.storage.generateThemeId(name);
-        
+
         this.storage.addCustomTheme(themeId, themeData);
         return themeId;
     }
@@ -180,7 +182,7 @@ class ColorThemeManager {
         const allThemes = this.getAllThemes();
         const predefinedCount = Object.values(allThemes).filter(t => t.category === 'predefined').length;
         const customCount = Object.values(allThemes).filter(t => t.category === 'custom').length;
-        
+
         return {
             total: Object.keys(allThemes).length,
             predefined: predefinedCount,
@@ -193,15 +195,15 @@ class ColorThemeManager {
     resetToDefaults() {
         if (confirm('⚠️ Reset all themes to defaults?\n\nThis will delete all custom themes and cannot be undone.')) {
             localStorage.removeItem(window.THEME_CONFIG.STORAGE_KEYS.CUSTOM_THEMES);
-            
+
             this.applyTheme(window.THEME_CONFIG.DEFAULT_THEME);
-            
+
             const themeSection = document.querySelector('.theme-section');
             if (themeSection) {
                 const newSection = this.createUI();
                 themeSection.parentNode.replaceChild(newSection, themeSection);
             }
-            
+
             alert('✅ Themes reset to defaults!');
             return true;
         }
@@ -212,35 +214,35 @@ class ColorThemeManager {
     duplicateTheme(themeId, newName) {
         const originalTheme = this.storage.getTheme(themeId);
         if (!originalTheme) return null;
-        
+
         const duplicatedTheme = {
             ...originalTheme,
             name: `${originalTheme.name.replace(/^[^\s]+ /, '')} Copy`,
             category: 'custom'
         };
-        
+
         if (newName) {
             duplicatedTheme.name = newName;
         }
-        
+
         const newThemeId = this.storage.generateThemeId(duplicatedTheme.name);
         this.storage.addCustomTheme(newThemeId, duplicatedTheme);
-        
+
         return newThemeId;
     }
 
     // TEMPORARILY PREVIEW THEME FOR SPECIFIED DURATION
     previewTheme(themeId, duration = 3000) {
         const originalTheme = this.getCurrentTheme();
-        
+
         if (this.applyTheme(themeId)) {
             setTimeout(() => {
                 this.applyTheme(originalTheme);
             }, duration);
-            
+
             return true;
         }
-        
+
         return false;
     }
 
@@ -248,19 +250,19 @@ class ColorThemeManager {
     validateTheme(themeData) {
         const requiredProps = ['name', 'colors'];
         const requiredColors = ['primary', 'primaryLight', 'primaryLighter', 'primaryDark', 'primaryDarker', 'primaryAlpha', 'primaryAlphaLight'];
-        
+
         for (const prop of requiredProps) {
             if (!themeData[prop]) {
                 return { valid: false, error: `Missing property: ${prop}` };
             }
         }
-        
+
         for (const color of requiredColors) {
             if (!themeData.colors[color]) {
                 return { valid: false, error: `Missing color: ${color}` };
             }
         }
-        
+
         const hexColors = ['primary', 'primaryLight', 'primaryLighter', 'primaryDark', 'primaryDarker'];
         for (const colorKey of hexColors) {
             const color = themeData.colors[colorKey];
@@ -268,7 +270,7 @@ class ColorThemeManager {
                 return { valid: false, error: `Invalid hex color format: ${colorKey}` };
             }
         }
-        
+
         const rgbaColors = ['primaryAlpha', 'primaryAlphaLight'];
         for (const colorKey of rgbaColors) {
             const color = themeData.colors[colorKey];
@@ -276,7 +278,7 @@ class ColorThemeManager {
                 return { valid: false, error: `Invalid rgba color format: ${colorKey}` };
             }
         }
-        
+
         return { valid: true };
     }
 
@@ -299,16 +301,16 @@ class ColorThemeManager {
     getColorLuminance(hex) {
         const rgb = this.hexToRgb(hex);
         if (!rgb) return 0;
-        
+
         const { r, g, b } = rgb;
         const rsRGB = r / 255;
         const gsRGB = g / 255;
         const bsRGB = b / 255;
-        
+
         const rLinear = rsRGB <= 0.03928 ? rsRGB / 12.92 : Math.pow((rsRGB + 0.055) / 1.055, 2.4);
         const gLinear = gsRGB <= 0.03928 ? gsRGB / 12.92 : Math.pow((gsRGB + 0.055) / 1.055, 2.4);
         const bLinear = bsRGB <= 0.03928 ? bsRGB / 12.92 : Math.pow((bsRGB + 0.055) / 1.055, 2.4);
-        
+
         return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
     }
 
@@ -316,10 +318,10 @@ class ColorThemeManager {
     getSimilarThemes(themeId, maxResults = 3) {
         const targetTheme = this.storage.getTheme(themeId);
         if (!targetTheme) return [];
-        
+
         const allThemes = this.getAllThemes();
         const targetLuminance = this.getColorLuminance(targetTheme.colors.primary);
-        
+
         const similarities = Object.entries(allThemes)
             .filter(([id]) => id !== themeId)
             .map(([id, theme]) => {
@@ -329,7 +331,7 @@ class ColorThemeManager {
             })
             .sort((a, b) => b.similarity - a.similarity)
             .slice(0, maxResults);
-        
+
         return similarities.map(s => ({ id: s.id, theme: s.theme }));
     }
 
@@ -338,10 +340,10 @@ class ColorThemeManager {
         const hue = Math.floor(Math.random() * 360);
         const saturation = 60 + Math.floor(Math.random() * 40);
         const lightness = 35 + Math.floor(Math.random() * 30);
-        
+
         const baseColor = this.hslToHex(hue, saturation, lightness);
         const emoji = ['🎨', '✨', '🌈', '💫', '🎭', '🔮', '💎', '🌟'][Math.floor(Math.random() * 8)];
-        
+
         return this.createCustomTheme(name, baseColor, emoji);
     }
 
@@ -361,7 +363,7 @@ class ColorThemeManager {
     getDiagnostics() {
         const stats = this.getThemeStats();
         const currentTheme = this.getCurrentThemeData();
-        
+
         return {
             version: '2.0',
             stats,
@@ -383,5 +385,3 @@ class ColorThemeManager {
         };
     }
 }
-
-window.ColorThemeManager = new ColorThemeManager();

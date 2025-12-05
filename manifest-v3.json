@@ -31,6 +31,7 @@
         "js/detection/urlHelper.js",
         "js/detection/pageDetector.js",
         "js/detection/profileDetector.js",
+        "js/themes/config.js",
         "js/managers/colorThemeManager.js",
         "js/managers/profileManager.js",
         "js/managers/backgroundManager.js",
@@ -51,7 +52,7 @@
       ],
       "matches": [
         "https://profile-v3.intra.42.fr/*",
-        "https://meta.intra.42.fr/*", 
+        "https://meta.intra.42.fr/*",
         "https://companies.intra.42.fr/*",
         "https://elearning.intra.42.fr/*",
         "https://projects.intra.42.fr/*"

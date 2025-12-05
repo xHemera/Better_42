@@ -1,5 +1,118 @@
 # Changelog - Better 42 Extension
 
+## [Nouveaux Thèmes] - 2025-12-05
+
+### 🎨 Ajout de 15 Nouveaux Thèmes Prédéfinis
+
+L'extension propose maintenant **20 thèmes prédéfinis** + la possibilité de créer des thèmes personnalisés !
+
+#### 🌙 Collection Catppuccin (4 thèmes)
+La palette Catppuccin offre des couleurs pastel douces et agréables pour les yeux :
+
+1. **Catppuccin Mocha** 🌙
+   - Couleur principale : `#cba6f7` (Violet pastel)
+   - Style : Sombre et élégant
+   - Idéal pour : Sessions nocturnes de code
+
+2. **Catppuccin Latte** ☕
+   - Couleur principale : `#8839ef` (Violet vif)
+   - Style : Clair et énergique
+   - Idéal pour : Journées productives
+
+3. **Catppuccin Frappé** 🥤
+   - Couleur principale : `#ca9ee6` (Violet doux)
+   - Style : Équilibré et doux
+   - Idéal pour : Sessions de travail prolongées
+
+4. **Catppuccin Macchiato** 🍵
+   - Couleur principale : `#c6a0f6` (Violet élégant)
+   - Style : Sombre raffiné
+   - Idéal pour : Ambiance cosy
+
+#### 🎯 Thèmes Populaires de la Communauté
+
+5. **Tokyo Night** 🌃
+   - Inspiré de l'éditeur VS Code
+   - Couleur : `#7aa2f7` (Bleu nuit)
+
+6. **Dracula** 🧛
+   - Le classique intemporel
+   - Couleur : `#bd93f9` (Violet vibrant)
+
+7. **Nord** ❄️
+   - Palette froide et minimaliste
+   - Couleur : `#88c0d0` (Cyan glacé)
+
+8. **Gruvbox** 🟤
+   - Rétro avec des tons chauds
+   - Couleur : `#d79921` (Orange doré)
+
+9. **One Dark** 🌑
+   - Inspiré d'Atom
+   - Couleur : `#61afef` (Bleu ciel)
+
+10. **Solarized Dark** 🌅
+    - Palette scientifiquement optimisée
+    - Couleur : `#268bd2` (Bleu océan)
+
+11. **Material** 💎
+    - Design Material de Google
+    - Couleur : `#82aaff` (Bleu matériel)
+
+12. **Monokai** 🎨
+    - Classique coloré
+    - Couleur : `#f92672` (Rose magenta)
+
+13. **Ayu** 🌊
+    - Palette claire et aérée
+    - Couleur : `#59c2ff` (Cyan clair)
+
+14. **Synthwave** 🌆
+    - Aesthetic années 80
+    - Couleur : `#ff7edb` (Rose néon)
+
+15. **GitHub Dark** 🐙
+    - Style GitHub officiel
+    - Couleur : `#58a6ff` (Bleu GitHub)
+
+#### ✨ Système de Thèmes Personnalisés
+
+En plus des thèmes prédéfinis, vous pouvez maintenant :
+
+- **Créer** des thèmes illimités avec votre couleur favorite
+- **Nommer** vos thèmes avec emoji et texte personnalisé
+- **Exporter** vos thèmes pour les partager
+- **Importer** des thèmes partagés par la communauté
+- **Gérer** facilement vos thèmes (supprimer, modifier)
+
+#### 🎨 Comment Utiliser
+
+1. Cliquez sur le bouton **"Better"** pour activer le mode sombre
+2. Cliquez sur **"⚙️ Settings"**
+3. Naviguez jusqu'à la section **"🎨 Color Themes"**
+4. Choisissez parmi les 20 thèmes prédéfinis ou créez le vôtre !
+
+#### 💾 Format d'Export
+
+Les thèmes peuvent être exportés au format JSON pour partage :
+
+```json
+{
+  "customTheme1": {
+    "name": "🌸 Mon Thème",
+    "category": "custom",
+    "colors": {
+      "primary": "#ff69b4",
+      "primaryLight": "#ff85c3",
+      "primaryLighter": "#ffa1d2",
+      ...
+    }
+  }
+}
+```
+
+---
+
 ## [Améliorations récentes] - 2025-12-05
 
 ### 🎨 Améliorations du Mode Sombre

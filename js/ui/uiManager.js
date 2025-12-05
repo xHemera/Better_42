@@ -9,13 +9,13 @@ class UIManager {
     }
 
     createUI() {
-        
+
         if (!window.PageDetector) {
             console.error('PageDetector not available');
             return;
         }
 
-        
+
         if (!window.PageDetector.isSupported()) {
             return;
         }
@@ -23,7 +23,7 @@ class UIManager {
 
         const existingThemeBtn = document.getElementById('theme-switcher');
         const existingSettingsBtn = document.getElementById('settings-btn');
-        
+
         if (existingThemeBtn && existingSettingsBtn) {
             this.themeBtn = existingThemeBtn;
             this.settingsBtn = existingSettingsBtn;
@@ -33,15 +33,15 @@ class UIManager {
         }
 
         const pageConfig = window.PageDetector.getPageConfig();
-        
+
         if (!this.buttonsCreated) {
             this.createThemeButton();
-            
+
             if (pageConfig.showSettings) {
                 this.createSettingsButton();
                 this.createSettingsPopup();
             }
-            
+
             this.attachEventListeners();
             this.appendToDOM();
             this.buttonsCreated = true;
@@ -53,11 +53,11 @@ class UIManager {
             this.themeBtn = document.getElementById('theme-switcher');
             return;
         }
-        
+
         this.themeBtn = document.createElement('button');
         this.themeBtn.id = 'theme-switcher';
         this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
-        
+
         this.themeBtn.style.cssText = `
             position: fixed !important;
             top: 10px !important;
@@ -71,11 +71,11 @@ class UIManager {
             this.settingsBtn = document.getElementById('settings-btn');
             return;
         }
-        
+
         this.settingsBtn = document.createElement('button');
         this.settingsBtn.id = 'settings-btn';
         this.settingsBtn.innerHTML = '⚙︎';
-        
+
         this.settingsBtn.style.cssText = `
             position: fixed !important;
             top: 10px !important;
@@ -89,12 +89,12 @@ class UIManager {
             this.settingsPopup = document.getElementById('settings-popup');
             return;
         }
-        
+
         this.settingsPopup = document.createElement('div');
         this.settingsPopup.id = 'settings-popup';
         this.settingsPopup.innerHTML = this.getSettingsPopupHTML();
         this.settingsPopup.classList.remove('show');
-        
+
         this.addColorThemeSection();
     }
 
@@ -108,21 +108,21 @@ class UIManager {
                 } else {
                     this.themeBtn.innerHTML = 'Worse';
                 }
-                
+
                 window.ThemeManager.toggleTheme();
                 setTimeout(() => {
                     this.enforceButtonPositions();
                 }, 0);
             });
-            
+
             this.themeBtn.addEventListener('mouseenter', () => {
                 this.applyHoverEffect(this.themeBtn, true);
             });
-            
+
             this.themeBtn.addEventListener('mouseleave', () => {
                 this.applyHoverEffect(this.themeBtn, false);
             });
-            
+
             this.themeBtn.setAttribute('data-listeners-attached', 'true');
         }
 
@@ -131,15 +131,15 @@ class UIManager {
                 e.stopPropagation();
                 this.toggleSettingsPopup();
             });
-            
+
             this.settingsBtn.addEventListener('mouseenter', () => {
                 this.applyHoverEffect(this.settingsBtn, true);
             });
-            
+
             this.settingsBtn.addEventListener('mouseleave', () => {
                 this.applyHoverEffect(this.settingsBtn, false);
             });
-            
+
             this.settingsBtn.setAttribute('data-listeners-attached', 'true');
         }
 
@@ -157,21 +157,21 @@ class UIManager {
                 this.handlePopupButtonClick(e);
             });
             this.listenersAttached = true;
-            
+
             this.addResetButtonStyles();
         }
     }
 
     enforceButtonPositions() {
         if (!this.themeBtn) return;
-        
+
         const currentState = `${window.ThemeManager?.isDark}-${window.ColorThemeManager?.getCurrentTheme()}`;
         if (this.lastButtonState === currentState) return;
         this.lastButtonState = currentState;
-        
+
         const isThemeActive = window.ThemeManager && window.ThemeManager.isDark;
         let bgColors, borderColor;
-        
+
         if (isThemeActive) {
             if (window.ColorThemeManager) {
                 const currentTheme = window.ColorThemeManager.getCurrentTheme();
@@ -203,7 +203,7 @@ class UIManager {
             bgColors = '#6b7280, #9ca3af';
             borderColor = '#6b7280';
         }
-        
+
         this.themeBtn.style.cssText = `
             position: fixed !important;
             top: 10px !important;
@@ -222,7 +222,7 @@ class UIManager {
             display: block !important;
             visibility: visible !important;
         `;
-        
+
         if (this.settingsBtn) {
             this.settingsBtn.style.cssText = `
                 position: fixed !important;
@@ -248,7 +248,7 @@ class UIManager {
     applyHoverEffect(button, isHover) {
         const isThemeActive = window.ThemeManager && window.ThemeManager.isDark;
         let bgColors, borderColor;
-        
+
         if (isHover) {
             if (isThemeActive) {
                 if (window.ColorThemeManager) {
@@ -281,7 +281,7 @@ class UIManager {
                 bgColors = '#9ca3af, #d1d5db';
                 borderColor = '#9ca3af';
             }
-            
+
             button.style.transform = 'translateY(-2px)';
             button.style.boxShadow = '0 6px 20px rgba(68, 68, 68, 0.4) !important';
         } else {
@@ -316,11 +316,11 @@ class UIManager {
                 bgColors = '#6b7280, #9ca3af';
                 borderColor = '#6b7280';
             }
-            
+
             button.style.transform = 'none';
             button.style.boxShadow = '0 4px 12px rgba(68, 68, 68, 0.3) !important';
         }
-        
+
         button.style.background = `linear-gradient(135deg, ${bgColors}) !important`;
         button.style.borderColor = `${borderColor} !important`;
     }
@@ -328,17 +328,17 @@ class UIManager {
     updateThemeButtonText() {
         if (this.themeBtn) {
             this.themeBtn.innerHTML = window.ThemeManager.getThemeButtonText();
-            
+
             this.enforceButtonPositions();
         }
     }
 
     appendToDOM() {
-        
+
         if (this.themeBtn && !document.getElementById('theme-switcher')) {
             document.body.appendChild(this.themeBtn);
         }
-        
+
         const pageConfig = window.PageDetector.getPageConfig();
         if (pageConfig.showSettings) {
             if (this.settingsBtn && !document.getElementById('settings-btn')) {
@@ -348,11 +348,11 @@ class UIManager {
                 document.body.appendChild(this.settingsPopup);
             }
         }
-        
+
         setTimeout(() => {
             this.enforceButtonPositions();
         }, 100);
-        
+
         document.body.classList.add('page-loaded');
     }
 
@@ -368,14 +368,14 @@ class UIManager {
         const observer = new MutationObserver(() => {
             const themeBtn = document.getElementById('theme-switcher');
             const settingsBtn = document.getElementById('settings-btn');
-            
+
             if (!themeBtn || !settingsBtn) {
                 this.createUI();
             } else {
                 this.enforceButtonPositions();
             }
         });
-        
+
         observer.observe(document.body, {
             childList: true,
             subtree: true
@@ -384,15 +384,15 @@ class UIManager {
 
     addColorThemeSection() {
         if (!this.settingsPopup) return;
-        
+
         const popupContent = this.settingsPopup.querySelector('.popup-content');
         if (!popupContent) return;
-        
+
         const popupFooter = popupContent.querySelector('.popup-footer');
-        
+
         if (window.ColorThemeManager && window.ColorThemeManager.createUI) {
             const colorSection = window.ColorThemeManager.createUI();
-            
+
             if (popupFooter) {
                 popupContent.insertBefore(colorSection, popupFooter);
             } else {
@@ -405,7 +405,7 @@ class UIManager {
         return `
             <div class="popup-content">
                 <h3>🎨 Better 42 Settings</h3>
-                
+
                 <div class="profile-section">
                     <h4>📁 Gestionnaire de Profils</h4>
                     <div class="profile-row">
@@ -423,7 +423,7 @@ class UIManager {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="settings-section">
                     <h4>🖼️ Fond d'écran (IMG/GIF/VIDEO)</h4>
                     <div class="input-row">
@@ -434,7 +434,7 @@ class UIManager {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="settings-section">
                     <h4>👤 Photo de profil (IMG/GIF)</h4>
                     <div class="input-row">
@@ -445,8 +445,8 @@ class UIManager {
                         </div>
                     </div>
                 </div>
-                
-                
+
+
                 <div class="popup-footer">
                     <button id="close-popup">✖️ Fermer</button>
                     <button id="reset-all-themes" class="reset-themes-btn">🔄 Reset Couleurs</button>
@@ -457,7 +457,7 @@ class UIManager {
 
     addResetButtonStyles() {
         if (document.getElementById('ui-manager-styles')) return;
-        
+
         const style = document.createElement('style');
         style.id = 'ui-manager-styles';
         style.textContent = `
@@ -480,7 +480,7 @@ class UIManager {
                 gap: 5px !important;
                 flex-wrap: wrap !important;
             }
-            
+
             .profile-actions button {
                 background: linear-gradient(135deg, #6366f1, #818cf8) !important;
                 color: #fff !important;
@@ -636,7 +636,7 @@ class UIManager {
     resetBackground() {
         const bgInput = document.getElementById('bg-url-input');
         if (bgInput) bgInput.value = '';
-        
+
         if (window.ProfileManager) {
             window.ProfileManager.resetBackgroundElements();
         }
@@ -653,7 +653,7 @@ class UIManager {
     resetProfilePicture() {
         const pfpInput = document.getElementById('pfp-url-input');
         if (pfpInput) pfpInput.value = '';
-        
+
         if (window.ProfileManager) {
             window.ProfileManager.resetProfilePicElements();
         }
@@ -661,7 +661,7 @@ class UIManager {
 
     toggleSettingsPopup() {
         if (!this.settingsPopup) return;
-        
+
         if (this.settingsPopup.classList.contains('show')) {
             this.hideSettingsPopup();
         } else {
@@ -671,14 +671,14 @@ class UIManager {
 
     showSettingsPopup() {
         if (!this.settingsPopup) return;
-        
+
         this.settingsPopup.classList.add('show');
         window.ProfileManager.loadProfilesList();
-        
+
         const bgInput = document.getElementById('bg-url-input');
         const pfpInput = document.getElementById('pfp-url-input');
         const defaultProfileId = window.ProfileManager.getDefaultProfile();
-        
+
         if (defaultProfileId) {
             const profileData = localStorage.getItem(`${Better42Config.STORAGE_KEYS.PROFILE_DATA_PREFIX}${defaultProfileId}`);
             if (profileData) {
@@ -694,7 +694,7 @@ class UIManager {
 
     hideSettingsPopup() {
         if (!this.settingsPopup) return;
-        
+
         this.settingsPopup.classList.remove('show');
     }
 }

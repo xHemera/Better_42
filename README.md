@@ -84,9 +84,66 @@ make install-chrome   # Instructions d'installation Chrome
 
 ## 🎨 Fonctionnalités
 
-- Système de thèmes personnalisés
-- Partage de thèmes
-- Styles pour différentes pages de l'intranet 42 :
+### Système de Thèmes Avancé
+
+L'extension propose **deux types de thèmes** :
+
+#### 📦 Thèmes Prédéfinis (20 thèmes disponibles)
+
+**Thèmes de base :**
+- 🟣 Purple (par défaut)
+- ⚪ White
+- 🔵 Blue
+- 🩷 Pink
+- 🟢 Green
+- 🟠 Orange
+- 🔴 Red
+- 🔵 Cyan
+
+**Thèmes populaires :**
+- 🌙 **Catppuccin Mocha** - Palette pastel avec accent violet
+- ☕ **Catppuccin Latte** - Version claire de Catppuccin
+- 🥤 **Catppuccin Frappé** - Palette moyenne avec violet doux
+- 🍵 **Catppuccin Macchiato** - Palette sombre avec violet élégant
+- 🌃 **Tokyo Night** - Inspiré de l'esthétique de Tokyo
+- 🧛 **Dracula** - Thème sombre avec violet vibrant
+- ❄️ **Nord** - Palette froide et épurée
+- 🟤 **Gruvbox** - Rétro avec tons chauds
+- 🌑 **One Dark** - Inspiré d'Atom
+- 🌅 **Solarized Dark** - Palette scientifiquement optimisée
+- 💎 **Material** - Design Material de Google
+- 🎨 **Monokai** - Classique coloré
+- 🌊 **Ayu** - Palette claire et aérée
+- 🌆 **Synthwave** - Aesthetic années 80
+- 🐙 **GitHub Dark** - Style GitHub
+
+#### ✨ Thèmes Personnalisés
+
+Créez vos propres thèmes avec :
+- 🎨 Sélecteur de couleur personnalisé
+- 💾 Sauvegarde locale de vos créations
+- 📤 Export/Import de thèmes
+- 🗑️ Gestion facile (suppression, modification)
+- 🎭 Emoji personnalisable pour chaque thème
+
+**Comment créer un thème personnalisé :**
+1. Cliquez sur le bouton "⚙️ Settings"
+2. Allez dans la section "🎨 Color Themes"
+3. Cliquez sur "➕ Create Custom"
+4. Choisissez votre couleur de base
+5. Donnez un nom et un emoji à votre thème
+6. Le thème sera automatiquement appliqué !
+
+> 📚 **Documentation complète :**
+> - [Guide des Thèmes](THEMES_GUIDE.md) - Tutoriel détaillé
+> - [Gallery de Thèmes](THEMES_GALLERY.md) - Aperçu visuel de tous les thèmes
+> - [Changelog](CHANGELOG.md) - Historique des mises à jour
+
+### Autres Fonctionnalités
+
+- **Mode Sombre Optimisé** - Texte blanc/clair automatique pour une lisibilité maximale
+- **Partage de thèmes** - Exportez et partagez vos créations avec la communauté
+- **Styles pour différentes pages** de l'intranet 42 :
   - Profile V3
   - Meta
   - Companies

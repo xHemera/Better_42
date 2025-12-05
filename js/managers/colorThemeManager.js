@@ -2,94 +2,28 @@ class ColorThemeManager {
     constructor() {
         this.logtimeObserver = null;
         this.themes = {
-            violet: {
-                name: 'Violet',
-                primary: '#5c058f',
-                primaryLight: '#7d1aaa',
-                primaryLighter: '#9d2acc',
-                primaryDark: '#430169',
-                primaryDarker: '#2a0241',
-                primaryAlpha: 'rgba(92, 5, 143, 0.3)',
-                primaryAlphaLight: 'rgba(92, 5, 143, 0.1)'
-            },
-            blanc: {
-                name: 'Blanc',
-                primary: '#e5e5e5',
-                primaryLight: '#f0f0f0',
-                primaryLighter: '#f8f8f8',
-                primaryDark: '#d0d0d0',
-                primaryDarker: '#b8b8b8',
-                primaryAlpha: 'rgba(229, 229, 229, 0.3)',
-                primaryAlphaLight: 'rgba(229, 229, 229, 0.1)'
-            },
-            bleu: {
-                name: 'Bleu',
-                primary: '#1e40af',
-                primaryLight: '#3b82f6',
-                primaryLighter: '#60a5fa',
-                primaryDark: '#1e3a8a',
-                primaryDarker: '#1d2f5a',
-                primaryAlpha: 'rgba(30, 64, 175, 0.3)',
-                primaryAlphaLight: 'rgba(30, 64, 175, 0.1)'
-            },
-            rose: {
-                name: 'Rose',
-                primary: '#be185d',
-                primaryLight: '#ec4899',
-                primaryLighter: '#f472b6',
-                primaryDark: '#9d174d',
-                primaryDarker: '#6b1138',
-                primaryAlpha: 'rgba(190, 24, 93, 0.3)',
-                primaryAlphaLight: 'rgba(190, 24, 93, 0.1)'
-            },
-            vert: {
-                name: 'Vert',
-                primary: '#059669',
-                primaryLight: '#10b981',
-                primaryLighter: '#34d399',
-                primaryDark: '#047857',
-                primaryDarker: '#064e3b',
-                primaryAlpha: 'rgba(5, 150, 105, 0.3)',
-                primaryAlphaLight: 'rgba(5, 150, 105, 0.1)'
-            },
-            orange: {
-                name: 'Orange',
-                primary: '#ea580c',
-                primaryLight: '#f97316',
-                primaryLighter: '#fb923c',
-                primaryDark: '#c2410c',
-                primaryDarker: '#9a3412',
-                primaryAlpha: 'rgba(234, 88, 12, 0.3)',
-                primaryAlphaLight: 'rgba(234, 88, 12, 0.1)'
-            },
-            rouge: {
-                name: 'Rouge',
-                primary: '#dc2626',
-                primaryLight: '#ef4444',
-                primaryLighter: '#f87171',
-                primaryDark: '#b91c1c',
-                primaryDarker: '#991b1b',
-                primaryAlpha: 'rgba(220, 38, 38, 0.3)',
-                primaryAlphaLight: 'rgba(220, 38, 38, 0.1)'
-            },
-            cyan: {
-                name:  'Cyan',
-                primary: '#0891b2',
-                primaryLight: '#06b6d4',
-                primaryLighter: '#22d3ee',
-                primaryDark: '#0e7490',
-                primaryDarker: '#164e63',
-                primaryAlpha: 'rgba(8, 145, 178, 0.3)',
-                primaryAlphaLight: 'rgba(8, 145, 178, 0.1)'
+            catppuccinMacchiato: {
+                name: '🍵 Catppuccin Macchiato',
+                primary: '#c6a0f6',
+                primaryLight: '#d2b1f9',
+                primaryLighter: '#ddc3fc',
+                primaryDark: '#b38fe8',
+                primaryDarker: '#a07ed9',
+                primaryAlpha: 'rgba(198, 160, 246, 0.3)',
+                primaryAlphaLight: 'rgba(198, 160, 246, 0.1)',
+                bgDark: '#24273a',
+                bgSecondary: '#363a4f',
+                textLight: '#cad3f5',
+                textWhite: '#f4dbd6'
             }
         };
-        
-        this.currentTheme = 'violet';
+
+        this.currentTheme = 'catppuccinMacchiato';
     }
 
     // GET CURRENT ACTIVE THEME NAME
     getCurrentTheme() {
-        const theme = localStorage.getItem('better42-color-theme') || 'violet';
+        const theme = localStorage.getItem('better42-color-theme') || 'catppuccinMacchiato';
         return theme;
     }
 
@@ -140,7 +74,7 @@ class ColorThemeManager {
     updateLogtimeColors(theme) {
         const primaryRgb = theme.primary.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).join(', ');
         const allLogtimeCases = document.querySelectorAll('.bg-slate-50.w-4.h-4[style*="background-color"]');
-        
+
         allLogtimeCases.forEach(el => {
             const style = el.getAttribute('style');
             if (style && style.includes('background-color')) {
@@ -149,11 +83,11 @@ class ColorThemeManager {
                     .replace(/rgba\(0, 186, 188, ([0-9.]+)\)/g, `rgba(${primaryRgb}, $1)`)
                     .replace(/background-color: rgb\([0-9, ]+\)/g, `background-color: rgb(${primaryRgb})`)
                     .replace(/background-color: rgba\([0-9, ]+, ([0-9.]+)\)/g, `background-color: rgba(${primaryRgb}, $1)`);
-                
+
                 el.setAttribute('style', newStyle);
             }
         });
-        
+
     }
 
     // GENERATE CSS FOR THEME
@@ -167,6 +101,10 @@ class ColorThemeManager {
                 --better42-primary-darker: ${theme.primaryDarker} !important;
                 --better42-primary-dark-alpha: ${theme.primaryAlpha} !important;
                 --better42-primary-alpha-dark: ${theme.primaryAlphaLight} !important;
+                ${theme.bgDark ? `--better42-bg-dark: ${theme.bgDark} !important;` : ''}
+                ${theme.bgSecondary ? `--better42-bg-secondary: ${theme.bgSecondary} !important;` : ''}
+                ${theme.textLight ? `--better42-text-light: ${theme.textLight} !important;` : ''}
+                ${theme.textWhite ? `--better42-text-white: ${theme.textWhite} !important;` : ''}
             }
 
             body.dark-theme .text-center.text-legacy-main.bg-transparent.border.border-legacy-main.py-1\\.5.px-2.cursor-pointer.text-xs.uppercase,
@@ -256,7 +194,7 @@ class ColorThemeManager {
                     `;
                 }).join('')}
             </div>
-            
+
             <div class="custom-color-section">
                 <h5>🎨 Couleur Personnalisée</h5>
                 <div class="custom-color-row">
@@ -404,7 +342,7 @@ class ColorThemeManager {
                     flex-direction: column !important;
                     gap: 8px !important;
                 }
-                
+
                 .custom-color-row > * {
                     width: 100% !important;
                     max-width: 200px !important;
@@ -462,18 +400,18 @@ class ColorThemeManager {
     // ATTACH EVENT LISTENERS TO COLOR SELECTOR
     attachColorSelectorEvents(colorSection) {
         const colorButtons = colorSection.querySelectorAll('.color-theme-btn');
-        
+
         const currentTheme = this.getCurrentTheme();
         colorButtons.forEach(btn => {
             if (btn.dataset.theme === currentTheme) {
                 btn.classList.add('active');
             }
-            
+
             btn.addEventListener('click', (e) => {
                 colorButtons.forEach(b => b.classList.remove('active'));
-                
+
                 e.target.classList.add('active');
-                
+
                 const themeName = e.target.dataset.theme;
                 this.applyTheme(themeName);
             });
@@ -490,18 +428,18 @@ class ColorThemeManager {
 
         applyBtn.addEventListener('click', () => {
             const selectedColor = colorPicker.value;
-            
+
             this.applyCustomColor(selectedColor);
-            
+
             colorButtons.forEach(b => b.classList.remove('active'));
-            
+
             setTimeout(() => {
                 const hex = selectedColor.replace('#', '');
                 const r = parseInt(hex.substring(0, 2), 16);
                 const g = parseInt(hex.substring(2, 4), 16);
                 const b = parseInt(hex.substring(4, 6), 16);
                 const tempColor = `${r}, ${g}, ${b}`;
-                
+
                 if (window.LogtimeStatsManager) {
                     document.querySelectorAll('.monthly-stats-btn').forEach(btn => {
                         btn.style.background = `rgba(${tempColor}, 0.1)`;
@@ -514,11 +452,11 @@ class ColorThemeManager {
                         btn.style.color = `rgb(${tempColor})`;
                     });
                 }
-                
+
                 if (window.ThemeManager && window.ThemeManager.updateButtonColors) {
                     window.ThemeManager.updateButtonColors();
                 }
-                
+
                 const themeBtn = document.getElementById('theme-switcher');
                 const settingsBtn = document.getElementById('settings-btn');
                 if (themeBtn) {
@@ -560,7 +498,7 @@ class ColorThemeManager {
     // APPLY CUSTOM COLOR THEME
     applyCustomColor(hexColor) {
         const customTheme = this.generateCustomTheme(hexColor);
-        
+
         const oldStyleElement = document.getElementById('dynamic-color-theme');
         if (oldStyleElement) {
             oldStyleElement.remove();
@@ -665,9 +603,9 @@ class ColorThemeManager {
             this.startLogtimeObserver();
             return;
         }
-        
+
         const currentTheme = this.getCurrentTheme();
-        
+
         if (currentTheme === 'custom') {
             const savedCustomColor = localStorage.getItem('better42-custom-color');
             if (savedCustomColor) {
@@ -676,21 +614,21 @@ class ColorThemeManager {
         } else {
             this.loadSavedTheme();
         }
-        
+
         this.startLogtimeObserver();
-        
+
         this.forceInitialLogtimeCheck();
     }
-    
+
     // START OBSERVING LOGTIME CHANGES
     startLogtimeObserver() {
         if (this.logtimeObserver) {
             this.logtimeObserver.disconnect();
         }
-        
+
         this.logtimeObserver = new MutationObserver((mutations) => {
             let needsUpdate = false;
-            
+
             mutations.forEach((mutation) => {
                 if (mutation.type === 'childList') {
                     mutation.addedNodes.forEach((node) => {
@@ -706,13 +644,13 @@ class ColorThemeManager {
                     }
                 }
             });
-            
+
             if (needsUpdate) {
                 setTimeout(() => {
                     if (!window.ThemeManager || !window.ThemeManager.isDark) {
                         return;
                     }
-                    
+
                     const currentTheme = this.getCurrentTheme();
                     if (currentTheme === 'custom') {
                         const savedCustomColor = localStorage.getItem('better42-custom-color');
@@ -728,7 +666,7 @@ class ColorThemeManager {
                 }, 100);
             }
         });
-        
+
         this.logtimeObserver.observe(document.body, {
             childList: true,
             subtree: true,
@@ -736,39 +674,39 @@ class ColorThemeManager {
             attributeFilter: ['style']
         });
     }
-    
+
     // CHECK IF ELEMENT HAS LOGTIME COLORS
     hasLogtimeColors(element) {
         if (!element.getAttribute) return false;
-        
+
         const style = element.getAttribute('style');
         if (!style) return false;
-        
+
         if (style.includes('rgb(0, 186, 188)') || style.includes('rgba(0, 186, 188,')) {
-            if (element.classList.contains('bg-slate-50') && 
-                element.classList.contains('w-4') && 
+            if (element.classList.contains('bg-slate-50') &&
+                element.classList.contains('w-4') &&
                 element.classList.contains('h-4')) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     // FORCE INITIAL LOGTIME COLOR CHECK
     forceInitialLogtimeCheck() {
         const delays = [500, 1000, 2000, 3000];
-        
+
         delays.forEach(delay => {
             setTimeout(() => {
                 // Ne pas changer les couleurs si on n'est pas en mode sombre
                 if (!window.ThemeManager || !window.ThemeManager.isDark) {
                     return;
                 }
-                
+
                 const currentTheme = this.getCurrentTheme();
                 let theme;
-                
+
                 if (currentTheme === 'custom') {
                     const savedCustomColor = localStorage.getItem('better42-custom-color');
                     if (savedCustomColor) {
@@ -779,7 +717,7 @@ class ColorThemeManager {
                 } else {
                     theme = this.themes['violet'];
                 }
-                
+
                 if (theme) {
                     this.updateLogtimeColors(theme);
                 }
@@ -797,7 +735,7 @@ class ColorThemeManager {
     // GET CURRENT THEME AS RGB STRING
     getCurrentThemeRgb() {
         const currentTheme = this.getCurrentTheme();
-        
+
         if (currentTheme === 'custom') {
             const savedCustomColor = localStorage.getItem('better42-custom-color');
             if (savedCustomColor) {
@@ -807,27 +745,27 @@ class ColorThemeManager {
                 }
             }
         }
-        
+
         const theme = this.themes[currentTheme];
         if (!theme) return '92, 5, 143';
-        
+
         const hex = theme.primary.replace('#', '');
         const r = parseInt(hex.substr(0, 2), 16);
         const g = parseInt(hex.substr(2, 2), 16);
         const b = parseInt(hex.substr(4, 2), 16);
-        
+
         return `${r}, ${g}, ${b}`;
     }
 
     // RESET THEME TO DEFAULT VALUES
     resetToDefaults() {
         localStorage.removeItem('better42-color-theme');
-        
+
         this.currentTheme = 'violet';
         this.applyTheme('violet');
-        
+
         alert('🎨 Couleurs remises par défaut (Violet) !');
-        
+
         return true;
     }
 
