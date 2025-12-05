@@ -3,6 +3,7 @@
 /* -----=====BODY=====----- */
 body {
     background-color: var(--better42-bg-dark) !important;
+    color: var(--better42-text-light) !important;
 }
 
 .container-item.project-home {
@@ -57,7 +58,7 @@ a:hover [class*=" icon-"]::before {
 
 
 .project-status-icon {
-    color: var(--better42-text-light)!important;   
+    color: var(--better42-text-light)!important;
 }
 
 .project-item {

@@ -5,12 +5,14 @@ body.dark-theme html,
 body.dark-theme #root,
 body.dark-theme .App {
     background-color: var(--better42-bg-dark) !important;
+    color: var(--better42-text-light) !important;
     min-height: 100vh !important;
 }
 
 /* CONTENEUR PRINCIPAL */
 body.dark-theme .content.md\:pl-20.pt-16.content-animation {
     background-color: var(--better42-bg-dark) !important;
+    color: var(--better42-text-light) !important;
 }
 
 /* GRILLE PRINCIPALE */

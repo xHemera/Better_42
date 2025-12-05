@@ -1,5 +1,51 @@
 /* -----=====TEXT COLOR=====----- */
 
+/* GENERAL TEXT COLORS FOR DARK MODE */
+body.dark-theme {
+    color: var(--better42-text-light) !important;
+}
+
+body.dark-theme p,
+body.dark-theme span,
+body.dark-theme div,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6,
+body.dark-theme li,
+body.dark-theme td,
+body.dark-theme th,
+body.dark-theme label {
+    color: var(--better42-text-light) !important;
+}
+
+/* TEXT BLACK/GRAY OVERRIDES */
+body.dark-theme .text-black,
+body.dark-theme .text-gray-500,
+body.dark-theme .text-gray-600,
+body.dark-theme .text-gray-700,
+body.dark-theme .text-gray-800,
+body.dark-theme .text-gray-900,
+body.dark-theme .text-stone-500,
+body.dark-theme .text-stone-600,
+body.dark-theme .text-stone-700,
+body.dark-theme .text-zinc-500,
+body.dark-theme .text-zinc-600,
+body.dark-theme .text-zinc-700 {
+    color: var(--better42-text-light) !important;
+}
+
+/* LINKS */
+body.dark-theme a:not([class*="text-legacy-main"]) {
+    color: var(--better42-text-white) !important;
+}
+
+body.dark-theme a:not([class*="text-legacy-main"]):hover {
+    color: var(--better42-primary) !important;
+}
+
 /* LITTLE TEXTE */
 body.dark-theme .bg-slate-50.w-4.h-4.flex.justify-center.text-center.leading-5 {
     color: var(--better42-text-light) !important;
